@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>小媛的食堂指南 · 媛味食集</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="welcome-splash" id="welcomeSplash">
+        <div class="splash-glass">
+            <div class="splash-logo"><i class="fas fa-utensils"></i></div>
+            <h1 class="splash-title">媛味食集</h1>
+            <p class="splash-greeting">你好，小媛 🌸</p>
+            <p class="splash-subtitle">今天想吃点什么？</p>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+    <div class="container">
+        <header class="header">
+            <div class="header-inner">
+                <h1 class="title">媛味食集</h1>
+                <p class="subtitle">小媛的食堂指南</p>
+            </div>
+        </header>
+        <main class="main-content">
+            <div class="food-display">
+                <div class="food-card" id="foodCard">
+                    <div class="food-icon"><i class="fas fa-question"></i></div>
+                    <h2 class="food-name" id="foodName">点击开始</h2>
+                    <p class="food-description" id="foodDescription">让美食来找你</p>
+                    <div class="food-category-badge" id="foodCategoryBadge" style="display:none;"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn btn-primary" id="randomBtn"><i class="fas fa-wand-magic-sparkles"></i><span>帮我选一个</span></button>
+            </div>
+            <div class="secondary-controls">
+                <button class="btn btn-ghost" id="addFoodBtn"><i class="fas fa-plus"></i><span>添加菜品</span></button>
+                <button class="btn btn-ghost" id="resetBtn"><i class="fas fa-rotate-left"></i><span>恢复默认</span></button>
+            </div>
+            <div class="food-list-section">
+                <div class="section-header"><h3>食堂菜单</h3><span class="item-count" id="itemCount">0 道菜</span></div>
+                <div class="food-list" id="foodList"></div>
+            </div>
+        </main>
+        <div class="modal" id="addFoodModal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <div class="modal-header"><h3>添加新菜品</h3><button class="close-btn" id="closeModal"><i class="fas fa-xmark"></i></button></div>
+                <div class="modal-body">
+                    <div class="form-group"><label>菜名</label><input type="text" id="foodNameInput" placeholder="例如：红烧肉"></div>
+                    <div class="form-group"><label>描述</label><textarea id="foodDescriptionInput" placeholder="简单描述一下..."></textarea></div>
+                    <div class="form-group"><label>分类</label><select id="foodCategoryInput"><option value="">选择分类</option><option value="主食">主食</option><option value="炒菜">炒菜</option><option value="汤品">汤品</option><option value="凉菜">凉菜</option><option value="特色">特色</option></select></div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-ghost" id="cancelAdd">取消</button><button class="btn btn-primary" id="confirmAdd">添加</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
