@@ -18,6 +18,7 @@
             <div class="splash-dots-bottom"><span></span><span></span><span></span><span></span><span></span></div>
         </div>
     </div>
+    <div class="loading"><div class="loading-spinner"></div></div>
     <div class="container">
         <header class="header">
             <h1 class="title"><i class="fas fa-utensils"></i>小媛的食堂</h1>
@@ -41,6 +42,17 @@
                 <div class="food-list" id="foodList"></div>
             </div>
         </main>
+        <div class="modal" id="addFoodModal">
+            <div class="modal-content">
+                <div class="modal-header"><h3>添加新食物</h3><button class="close-btn" id="closeModal"><i class="fas fa-times"></i></button></div>
+                <div class="modal-body">
+                    <div class="form-group"><label>食物名称</label><input type="text" id="foodNameInput" placeholder="例如：宫保鸡丁"></div>
+                    <div class="form-group"><label>描述（可选）</label><textarea id="foodDescriptionInput" placeholder="例如：经典川菜，酸甜微辣"></textarea></div>
+                    <div class="form-group"><label>分类（可选）</label><select id="foodCategoryInput"><option value="">选择分类</option><option value="主食">主食</option><option value="炒菜">炒菜</option><option value="汤品">汤品</option><option value="凉菜">凉菜</option><option value="特色">特色</option></select></div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-secondary" id="cancelAdd">取消</button><button class="btn btn-primary" id="confirmAdd">添加</button></div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
