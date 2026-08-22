@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案二 · 媛味食集 — 小媛的专属食堂</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #F7F2F4; font-family: -apple-system, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif; }
+
+  /* ============ 展示板 ============ */
+  .board { max-width: 1860px; margin: 0 auto; padding: 52px 48px 72px; }
+  .board-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .12em; color: #C25E7E; text-transform: uppercase; margin-bottom: 10px; }
+  .board-tag::before { content: ""; width: 28px; height: 2px; background: #FF9EB8; border-radius: 2px; }
+  .board h1 { font-size: 40px; font-weight: 800; color: #1D1D1F; letter-spacing: -0.02em; }
+  .board-desc { font-size: 15px; line-height: 1.7; color: #86868B; max-width: 760px; margin-top: 10px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .chip { font-size: 12px; font-weight: 600; color: #C25E7E; background: #fff; border: 1px solid #F2DDE5; padding: 6px 12px; border-radius: 999px; }
+
+  .phones { display: flex; gap: 40px; justify-content: center; margin-top: 44px; flex-wrap: wrap; }
+  .phone-unit { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .phone-caption { font-size: 13.5px; font-weight: 700; color: #6E6E73; }
+  .phone-caption span { color: #AEA7AC; font-weight: 500; margin-left: 6px; }
+
+  .phone {
+    width: 390px; height: 844px; border-radius: 58px; position: relative; overflow: hidden;
+    background: #FBF6F8;
+    box-shadow: 0 0 0 13px #17181C, 0 0 0 15px #3A3C42, 0 40px 80px -20px rgba(60,40,50,.3);
+    flex-shrink: 0;
+  }
+  .notch { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 118px; height: 33px; background: #000; border-radius: 20px; z-index: 60; }
+  .screen { position: absolute; inset: 0; overflow: hidden; background: #FBF6F8; }
+
+  .statusbar { position: absolute; top: 0; left: 0; right: 0; height: 54px; display: flex; justify-content: space-between; align-items: center; padding: 14px 32px 0; z-index: 50; color: #1D1D1F; font-size: 15px; font-weight: 600; }
+  .statusbar.onhero { color: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .sig { display: flex; align-items: flex-end; gap: 2px; }
+  .sig i { width: 3px; background: currentColor; border-radius: 1px; display: block; }
+  .sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:8px}.sig i:nth-child(4){height:10px}
+  .batt { width: 25px; height: 13px; border: 1.5px solid currentColor; border-radius: 4px; position: relative; padding: 1.5px; opacity: .9; }
+  .batt::after { content: ""; position: absolute; right: -4px; top: 3.5px; width: 2px; height: 5px; background: currentColor; border-radius: 1px; opacity: .5; }
+  .batt i { display: block; height: 100%; width: 72%; background: currentColor; border-radius: 2px; }
+  .homebar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(29,29,31,.35); z-index: 30; }
+
+  .ios-search { display: flex; align-items: center; gap: 8px; height: 40px; background: rgba(120,80,100,.08); border-radius: 12px; padding: 0 12px; color: #8E8E93; font-size: 14.5px; font-weight: 400; }
+
+  /* iOS 分段控件 */
+  .seg-ctrl { display: flex; background: rgba(120,80,100,.1); border-radius: 11px; padding: 2.5px; }
+  .seg-ctrl .s { flex: 1; text-align: center; font-size: 13.5px; font-weight: 600; color: #8E6E7E; padding: 6.5px 0; border-radius: 9px; }
+  .seg-ctrl .s.on { background: #fff; color: #1D1D1F; box-shadow: 0 1.5px 5px rgba(60,40,50,.14), 0 0 0 .5px rgba(60,40,50,.04); }
+
+  .group { background: #fff; border-radius: 16px; overflow: hidden; }
+  .gheader { display: flex; justify-content: space-between; align-items: baseline; margin: 26px 16px 9px; }
+  .gheader b { font-size: 20px; font-weight: 800; color: #1D1D1F; letter-spacing: -0.01em; }
+  .gheader span { font-size: 13.5px; font-weight: 600; color: #FF7B9C; }
+
+  .cell { display: flex; align-items: center; gap: 13px; padding: 11px 16px; position: relative; }
+  .cell + .cell::before { content: ""; position: absolute; top: 0; left: 101px; right: 0; height: .5px; background: rgba(60,40,50,.08); }
+  .cell .thumb { width: 56px; height: 56px; border-radius: 13px; overflow: hidden; flex-shrink: 0; }
+  .cell .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .cell .meta { flex: 1; min-width: 0; }
+  .cell .meta .n { font-size: 16px; font-weight: 600; color: #1D1D1F; letter-spacing: -0.01em; }
+  .cell .meta .d { font-size: 12.5px; color: #8E8E93; margin-top: 2.5px; }
+  .cell .meta .r { display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 11.5px; font-weight: 600; color: #FF7B9C; }
+  .cell .price { font-size: 16px; font-weight: 700; color: #1D1D1F; }
+  .cell .chev { color: rgba(60,40,50,.22); margin-left: 2px; }
+
+  .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 86px; background: rgba(251,246,248,.86); -webkit-backdrop-filter: blur(24px) saturate(1.8); backdrop-filter: blur(24px) saturate(1.8); border-top: .5px solid rgba(60,40,50,.1); display: flex; padding-bottom: 20px; z-index: 40; }
+  .itab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-size: 10px; font-weight: 600; color: #8E8E93; letter-spacing: 0; }
+  .itab.on { color: #FF7B9C; }
+
+  /* ============ 屏幕 1：欢迎页 ============ */
+  .w-content { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 150px 44px 54px; text-align: center; background: radial-gradient(90% 60% at 50% 0%, #FFE9F0 0%, #FBF6F8 60%); }
+  .appicon { width: 118px; height: 118px; border-radius: 30px; background: linear-gradient(160deg, #FFAFC6, #FF7B9C); box-shadow: 0 22px 50px rgba(255,123,156,.38); display: flex; align-items: center; justify-content: center; position: relative; }
+  .appicon::after { content: ""; position: absolute; inset: 0; border-radius: 30px; border: .5px solid rgba(255,255,255,.55); background: linear-gradient(180deg, rgba(255,255,255,.3), transparent 45%); }
+  .w-title { font-size: 32px; font-weight: 800; color: #1D1D1F; margin-top: 30px; letter-spacing: -0.02em; }
+  .w-sub { font-size: 15px; color: #8E8E93; margin-top: 9px; line-height: 1.65; }
+  .w-continue { margin-top: auto; width: 100%; height: 54px; border-radius: 27px; background: #1D1D1F; color: #fff; font-size: 16.5px; font-weight: 600; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 30px rgba(29,29,31,.28); }
+  .w-foot { margin-top: 16px; font-size: 12px; color: #AEA7AC; font-weight: 500; }
+
+  /* ============ 屏幕 2：首页 ============ */
+  .h-scroll { position: absolute; inset: 0; padding: 96px 16px 100px; overflow: hidden; }
+  .h-nav { display: flex; justify-content: space-between; align-items: center; }
+  .h-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(160deg, #FFAFC6, #FF7B9C); color: #fff; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .h-large { font-size: 34px; font-weight: 800; color: #1D1D1F; letter-spacing: -0.025em; margin-top: 8px; }
+  .h-sub { font-size: 14px; color: #8E8E93; margin-top: 4px; }
+
+  .banner { margin-top: 18px; border-radius: 20px; overflow: hidden; position: relative; height: 128px; }
+  .banner img { width: 100%; height: 100%; object-fit: cover; }
+  .banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(95deg, rgba(40,16,28,.55), transparent 65%); }
+  .banner .bt { position: absolute; left: 18px; bottom: 16px; color: #fff; z-index: 2; }
+  .banner .bt .s { font-size: 10.5px; font-weight: 700; letter-spacing: .16em; opacity: .85; }
+  .banner .bt .n { font-size: 19px; font-weight: 800; margin-top: 3px; letter-spacing: -0.01em; }
+
+  /* ============ 屏幕 3：详情 ============ */
+  .d-hero { position: absolute; top: 0; left: 0; right: 0; height: 420px; overflow: hidden; background: #E8D5DC; }
+  .d-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .d-nav { position: absolute; top: 58px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 16px; z-index: 20; }
+  .d-navbtn { width: 38px; height: 38px; border-radius: 50%; background: rgba(251,246,248,.9); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(60,40,50,.16); }
+  .d-sheet { position: absolute; top: 396px; left: 0; right: 0; bottom: 0; background: #FBF6F8; border-radius: 22px 22px 0 0; padding: 22px 22px 96px; }
+  .d-sheet h2 { font-size: 28px; font-weight: 800; color: #1D1D1F; letter-spacing: -0.02em; }
+  .d-meta { display: flex; align-items: center; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+  .d-meta .m { font-size: 12px; font-weight: 600; color: #8E6E7E; background: rgba(120,80,100,.08); padding: 4.5px 10px; border-radius: 999px; }
+  .d-price { display: flex; align-items: baseline; gap: 9px; margin-top: 14px; }
+  .d-price .p { font-size: 27px; font-weight: 800; color: #FF7B9C; letter-spacing: -0.02em; }
+  .d-price .s { font-size: 13px; color: #8E8E93; font-weight: 500; }
+  .d-desc { margin-top: 13px; font-size: 14.5px; line-height: 1.75; color: #515154; }
+  .d-facts { display: flex; gap: 10px; margin-top: 18px; }
+  .d-facts .f { flex: 1; background: #fff; border-radius: 14px; padding: 12px 8px; text-align: center; }
+  .d-facts .f b { display: block; font-size: 14px; font-weight: 700; color: #1D1D1F; }
+  .d-facts .f span { font-size: 11px; color: #8E8E93; margin-top: 2px; display: block; }
+  .d-cta { position: absolute; left: 16px; right: 16px; bottom: 22px; display: flex; gap: 10px; }
+  .d-cta .heart { width: 54px; height: 54px; border-radius: 27px; background: #fff; box-shadow: 0 6px 18px rgba(60,40,50,.14); display: flex; align-items: center; justify-content: center; }
+  .d-cta .main { flex: 1; height: 54px; border-radius: 27px; background: #FF7B9C; color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 26px rgba(255,123,156,.4); }
+
+  /* ============ 屏幕 4：今天吃什么 ============ */
+  .r-scroll { position: absolute; inset: 0; padding: 96px 16px 100px; overflow: hidden; }
+  .r-card { margin-top: 18px; background: #fff; border-radius: 22px; padding: 22px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 30px rgba(255,123,156,.1); }
+  .r-img { width: 150px; height: 150px; border-radius: 75px; overflow: hidden; border: 4px solid #FFE9F0; }
+  .r-img img { width: 100%; height: 100%; object-fit: cover; }
+  .r-lab { margin-top: 15px; font-size: 11px; font-weight: 700; letter-spacing: .2em; color: #FF7B9C; }
+  .r-name { font-size: 24px; font-weight: 800; color: #1D1D1F; margin-top: 5px; letter-spacing: -0.01em; }
+  .r-sub { font-size: 13px; color: #8E8E93; margin-top: 4px; }
+  .r-price { margin-top: 10px; font-size: 19px; font-weight: 800; color: #FF7B9C; }
+
+  .r-toggle-group { margin-top: 16px; background: #fff; border-radius: 16px; overflow: hidden; }
+  .r-trow { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; position: relative; }
+  .r-trow + .r-trow::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: .5px; background: rgba(60,40,50,.08); }
+  .r-trow .t { font-size: 15px; font-weight: 600; color: #1D1D1F; }
+  .r-trow .s { font-size: 12px; color: #8E8E93; margin-top: 1px; display: block; font-weight: 400; }
+  .switch { width: 50px; height: 30px; border-radius: 15px; background: #34C759; position: relative; flex-shrink: 0; }
+  .switch.off { background: rgba(120,80,100,.16); }
+  .switch::after { content: ""; position: absolute; top: 2px; width: 26px; height: 26px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.18); }
+  .switch::after { right: 2px; }
+  .switch.off::after { right: auto; left: 2px; }
+
+  .r-btn { margin-top: 18px; height: 56px; border-radius: 28px; background: #FF7B9C; color: #fff; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 12px 28px rgba(255,123,156,.4); }
+  .r-hist { margin-top: 16px; }
+  .r-hist .gheader { margin: 0 16px 9px; }
+  .r-hist .gheader b { font-size: 19px; }
+  .rh-cell { display: flex; justify-content: space-between; align-items: center; padding: 11px 16px; position: relative; }
+  .rh-cell + .rh-cell::before { content: ""; position: absolute; top: 0; left: 16px; right: 0; height: .5px; background: rgba(60,40,50,.08); }
+  .rh-cell .l { font-size: 15px; font-weight: 500; color: #1D1D1F; }
+  .rh-cell .l small { color: #8E8E93; font-size: 12.5px; margin-left: 7px; }
+  .rh-cell .p { font-size: 15px; font-weight: 600; color: #FF7B9C; }
+
+  .board-foot { margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .note { background: #fff; border: 1px solid #F2DDE5; border-radius: 18px; padding: 20px 22px; }
+  .note b { font-size: 14px; color: #1D1D1F; display: block; margin-bottom: 8px; }
+  .note p { font-size: 13px; line-height: 1.7; color: #86868B; }
+
+  /* ============ 手机端适配 ============ */
+  @media (max-width: 768px) {
+    .board { padding: 32px 20px 48px; }
+    .board h1 { font-size: 28px; }
+    .board-desc { font-size: 14px; }
+    .phones { gap: 32px; margin-top: 32px; }
+    .phone-unit { width: 100%; }
+    .phone { 
+      width: 100%; 
+      max-width: 390px;
+      height: auto; 
+      aspect-ratio: 390 / 844;
+      margin: 0 auto;
+      border-radius: 32px;
+      box-shadow: 0 0 0 8px #17181C, 0 0 0 10px #3A3C42, 0 20px 40px -10px rgba(60,40,50,.3);
+    }
+    .notch { width: 80px; height: 22px; top: 6px; }
+    .statusbar { height: 36px; padding: 8px 18px 0; font-size: 12px; }
+    .batt { width: 18px; height: 10px; }
+    .homebar { width: 90px; height: 3px; bottom: 4px; }
+    .phone-caption { font-size: 12px; }
+    .board-foot { grid-template-columns: 1fr; gap: 12px; }
+    .note { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="board-head">
+    <div>
+      <div class="board-tag">Design Direction 2 · Apple Minimal</div>
+      <h1>媛味食集 · Yuan's Table</h1>
+      <p class="board-desc">严格遵循 Apple 的设计语言：大标题导航、原生分段控件、分组列表、毛玻璃标签栏，只在关键处使用一点淡粉（#FF7B9C）。整体像 iOS 自带应用一样干净、轻盈、耐看。</p>
+      <div class="chips">
+        <span class="chip">iOS 原生设计语言</span><span class="chip">大标题导航</span><span class="chip">分组列表布局</span><span class="chip">淡粉点缀 + 大量留白</span><span class="chip">系统动效习惯</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phones">
+
+    <!-- ===== 屏幕 1：欢迎页 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="w-content">
+            <div class="appicon">
+              <svg width="58" height="58" viewBox="0 0 120 120">
+                <path d="M28 62 A32 32 0 0 0 92 62 Z" fill="#fff"/>
+                <ellipse cx="60" cy="62" rx="32" ry="7" fill="#FFE9F0"/>
+                <path d="M48 38 c-4 5 4 7 0 12 M72 38 c-4 5 4 7 0 12" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="w-title">你好，小媛</div>
+            <p class="w-sub">这是为你一个人定制的食堂指南<br>吃好每一顿，是头等大事</p>
+            <div class="w-continue">继续</div>
+            <div class="w-foot">一份来自朋友的心意</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">① 欢迎页<span>Apple 启动页式极简 + 专属问候</span></div>
+    </div>
+
+    <!-- ===== 屏幕 2：首页 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="h-scroll">
+            <div class="h-nav">
+              <div class="ios-search" style="width:230px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                搜索菜品
+              </div>
+              <div class="h-avatar">媛</div>
+            </div>
+            <div class="h-large">食堂</div>
+            <div class="h-sub">中午好，今天有两道新菜</div>
+
+            <div class="banner">
+              <img src="images/strawberry-cake.jpg" alt="">
+              <div class="bt">
+                <div class="s">今日上新</div>
+                <div class="n">草莓奶油蛋糕 · 甜品窗口</div>
+              </div>
+            </div>
+
+            <div class="seg-ctrl" style="margin-top:16px">
+              <div class="s on">一楼 · 大众菜</div>
+              <div class="s">二楼 · 特色档</div>
+            </div>
+
+            <div class="gheader"><b>为小媛推荐</b><span>查看全部</span></div>
+            <div class="group">
+              <div class="cell">
+                <div class="thumb"><img src="images/pork-rice.jpg" alt=""></div>
+                <div class="meta"><div class="n">红烧肉盖饭</div><div class="d">二楼 · 8 号档口</div><div class="r"><svg width="11" height="11" viewBox="0 0 24 24" fill="#FF7B9C"><path d="M12 2l2.9 6.3L21.5 9.3l-4.7 4.4 1.2 6.7L12 17l-6 3.4 1.2-6.7L2.5 9.3l6.6-1z"/></svg>好评率 98%</div></div>
+                <div class="price">¥12</div>
+                <svg class="chev" width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
+              </div>
+              <div class="cell">
+                <div class="thumb"><img src="images/strawberry-milk.jpg" alt=""></div>
+                <div class="meta"><div class="n">草莓鲜奶</div><div class="d">二楼 · 甜品窗口</div><div class="r">上新 · 少冰可选</div></div>
+                <div class="price">¥6</div>
+                <svg class="chev" width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
+              </div>
+            </div>
+
+            <div class="gheader"><b>人气榜单</b><span>实时</span></div>
+            <div class="group">
+              <div class="cell">
+                <div class="thumb"><img src="images/beef-noodle.jpg" alt=""></div>
+                <div class="meta"><div class="n">兰州牛肉面</div><div class="d">一楼 · 面食窗口</div></div>
+                <div class="price">¥10</div>
+                <svg class="chev" width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
+              </div>
+              <div class="cell">
+                <div class="thumb"><img src="images/tomato-egg.jpg" alt=""></div>
+                <div class="meta"><div class="n">西红柿炒蛋</div><div class="d">一楼 · 大众菜</div></div>
+                <div class="price">¥6</div>
+                <svg class="chev" width="8" height="14" viewBox="0 0 8 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l6 6-6 6"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <div class="itab on">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>
+              菜单
+            </div>
+            <div class="itab">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/></svg>
+              随机
+            </div>
+            <div class="itab">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>
+              管理
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">② 首页 · 菜单<span>大标题 + 原生分组列表 + 推荐流</span></div>
+    </div>
+
+    <!-- ===== 屏幕 3：详情 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="d-hero">
+            <img src="images/pork-rice.jpg" alt="">
+          </div>
+          <div class="statusbar onhero"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+          <div class="d-nav">
+            <div class="d-navbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
+            <div class="d-navbtn"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1D1D1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7M2.5 8.5h19l-1.5-4h-16z"/><path d="M9.5 12.5v4M14.5 12.5v4"/></svg></div>
+          </div>
+
+          <div class="d-sheet">
+            <h2>红烧肉盖饭</h2>
+            <div class="d-meta">
+              <span class="m">二楼 · 8 号档口</span>
+              <span class="m">微辣</span>
+              <span class="m">平均出餐 3 分钟</span>
+            </div>
+            <div class="d-price"><span class="p">¥12</span><span class="s">今日已售 328 份 · 好评率 98%</span></div>
+            <p class="d-desc">精选肥瘦相间的五花肉，冰糖炒色后小火慢焖 90 分钟，肥而不腻、入口即化，浇在热腾腾的东北大米上，是二楼当之无愧的排队王。</p>
+            <div class="d-facts">
+              <div class="f"><b>620 kcal</b><span>能量参考</span></div>
+              <div class="f"><b>高蛋白</b><span>营养标签</span></div>
+              <div class="f"><b>不辣/微辣</b><span>辣度可选</span></div>
+            </div>
+            <div class="d-cta">
+              <div class="heart"><svg width="20" height="20" viewBox="0 0 24 24" fill="#FF7B9C"><path d="M12 21s-7.5-4.6-9.5-9C1 8.5 3 5 6.5 5c2 0 3.6 1.2 5.5 3.4C13.9 6.2 15.5 5 17.5 5 21 5 23 8.5 21.5 12c-2 4.4-9.5 9-9.5 9z"/></svg></div>
+              <div class="main">加入想吃清单</div>
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+      <div class="phone-caption">③ 菜品详情<span>系统式信息层级 + 底部悬浮操作栏</span></div>
+    </div>
+
+    <!-- ===== 屏幕 4：今天吃什么 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="r-scroll">
+            <div class="h-large">今天吃什么</div>
+            <div class="h-sub">让硬币替你决定，30 秒搞定</div>
+
+            <div class="r-card">
+              <div class="r-img"><img src="images/bibimbap.jpg" alt=""></div>
+              <div class="r-lab">THIS TIME</div>
+              <div class="r-name">石锅拌饭</div>
+              <div class="r-sub">二楼 · 6 号档口 · 锅巴加量</div>
+              <div class="r-price">¥12</div>
+            </div>
+
+            <div class="r-toggle-group">
+              <div class="r-trow">
+                <div><span class="t">只看二楼</span><span class="s">随机池更聚焦</span></div>
+                <div class="switch"></div>
+              </div>
+              <div class="r-trow">
+                <div><span class="t">避开香菜</span><span class="s">根据小媛的口味记录</span></div>
+                <div class="switch"></div>
+              </div>
+              <div class="r-trow">
+                <div><span class="t">¥10 以内</span><span class="s">穷学生的自我修养</span></div>
+                <div class="switch off"></div>
+              </div>
+            </div>
+
+            <div class="r-btn">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+              换一个
+            </div>
+
+            <div class="r-hist">
+              <div class="gheader"><b>最近记录</b><span>全部</span></div>
+              <div class="group">
+                <div class="rh-cell"><span class="l">黄焖鸡米饭<small>昨天 12:02</small></span><span class="p">¥13</span></div>
+                <div class="rh-cell"><span class="l">草莓鲜奶<small>昨天 15:30</small></span><span class="p">¥6</span></div>
+                <div class="rh-cell"><span class="l">煎饼果子<small>周一 08:10</small></span><span class="p">¥7</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <div class="itab">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>
+              菜单
+            </div>
+            <div class="itab on">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.2" fill="currentColor"/></svg>
+              随机
+            </div>
+            <div class="itab">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>
+              管理
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">④ 今天吃什么<span>随机结果卡 + iOS 开关过滤 + 记录</span></div>
+    </div>
+
+  </div>
+
+  <div class="board-foot">
+    <div class="note"><b>原汁原味的 iOS 感</b><p>大标题随滚动收起、分组列表的分隔线从文字对齐处开始、返回按钮带上一页标题、底部操作栏悬浮——全部照搬 Apple HIG 的细节习惯，iPhone 用户零学习成本。</p></div>
+    <div class="note"><b>粉色的克制用法</b><p>粉色只出现在四类地方：主按钮、价格与强调文字、选中态、头像。其余全部交给白与浅灰底，保证「淡粉 + 白」的干净气质，久用不腻。</p></div>
+    <div class="note"><b>诚实的功能密度</b><p>不堆装饰：随机页就是一张结果卡 + 三个开关（只看二楼 / 避开香菜 / 价格区间），开关状态直接改变随机池，所见即所得。</p></div>
+  </div>
+</div>
+</body>
+</html>
