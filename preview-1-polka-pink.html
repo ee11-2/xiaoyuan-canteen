@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案一 · 波点食光 — 小媛的专属食堂</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #FFF3F7; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+
+  /* ============ 展示板 ============ */
+  .board { max-width: 1860px; margin: 0 auto; padding: 52px 48px 72px; }
+  .board-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .12em; color: #E8447C; text-transform: uppercase; margin-bottom: 10px; }
+  .board-tag::before { content: ""; width: 28px; height: 2px; background: #FF7FA8; border-radius: 2px; }
+  .board h1 { font-size: 40px; font-weight: 800; color: #4A2233; letter-spacing: -0.02em; }
+  .board-desc { font-size: 15px; line-height: 1.7; color: #A6768C; max-width: 760px; margin-top: 10px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .chip { font-size: 12px; font-weight: 600; color: #E8447C; background: #fff; border: 1px solid #FFD1E0; padding: 6px 12px; border-radius: 999px; }
+
+  .phones { display: flex; gap: 40px; justify-content: center; margin-top: 44px; flex-wrap: wrap; }
+  .phone-unit { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .phone-caption { font-size: 13.5px; font-weight: 700; color: #B27A93; }
+  .phone-caption span { color: #D9A9BE; font-weight: 500; margin-left: 6px; }
+
+  .phone {
+    width: 390px; height: 844px; border-radius: 58px; position: relative; overflow: hidden;
+    background: #FFEDF3;
+    box-shadow: 0 0 0 13px #17181C, 0 0 0 15px #3A3C42, 0 40px 80px -20px rgba(160,60,110,.28);
+    flex-shrink: 0;
+  }
+  .notch { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 118px; height: 33px; background: #000; border-radius: 20px; z-index: 60; }
+  .screen { position: absolute; inset: 0; overflow: hidden; }
+
+  .statusbar { position: absolute; top: 0; left: 0; right: 0; height: 54px; display: flex; justify-content: space-between; align-items: center; padding: 14px 32px 0; z-index: 50; color: #4A2233; font-size: 15px; font-weight: 600; }
+  .statusbar.light { color: #fff; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .sig { display: flex; align-items: flex-end; gap: 2px; }
+  .sig i { width: 3px; background: currentColor; border-radius: 1px; display: block; }
+  .sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:8px}.sig i:nth-child(4){height:10px}
+  .batt { width: 25px; height: 13px; border: 1.5px solid currentColor; border-radius: 4px; position: relative; padding: 1.5px; opacity: .9; }
+  .batt::after { content: ""; position: absolute; right: -4px; top: 3.5px; width: 2px; height: 5px; background: currentColor; border-radius: 1px; opacity: .5; }
+  .batt i { display: block; height: 100%; width: 72%; background: currentColor; border-radius: 2px; }
+  .homebar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(74,34,51,.35); z-index: 30; }
+  .homebar.light { background: rgba(255,255,255,.5); }
+
+  /* 波点背景 */
+  .dots { background-color: #FFEDF3; background-image: radial-gradient(#FFC9DB 2.8px, transparent 3px); background-size: 30px 30px; }
+  .dots-lg { background-color: #FF9FBE; background-image: radial-gradient(rgba(255,255,255,.35) 4.5px, transparent 5px); background-size: 42px 42px; }
+
+  /* ============ 屏幕 1：欢迎页 ============ */
+  .w-content { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; padding: 110px 34px 46px; text-align: center; }
+  .w-mascot { width: 150px; height: 150px; border-radius: 50%; background: #fff; box-shadow: 0 18px 44px rgba(232,68,124,.22), inset 0 0 0 3px #FFD9E5; display: flex; align-items: center; justify-content: center; position: relative; }
+  .w-mascot::before { content: ""; position: absolute; inset: -14px; border-radius: 50%; border: 2.5px dashed #FFB3CC; animation: none; }
+  .w-badge { margin-top: 30px; font-size: 12px; font-weight: 800; letter-spacing: .3em; color: #E8447C; text-transform: uppercase; }
+  .w-title { font-size: 46px; font-weight: 900; color: #4A2233; margin-top: 12px; letter-spacing: .02em; }
+  .w-title em { font-style: normal; color: #FF5C99; }
+  .w-sub { font-size: 14.5px; color: #A6768C; margin-top: 10px; line-height: 1.7; }
+  .w-start { margin-top: auto; width: 100%; height: 58px; border-radius: 29px; background: linear-gradient(150deg, #FF8FB3, #F0568D); color: #fff; font-size: 17px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 14px 30px rgba(240,86,141,.4), inset 0 1px 0 rgba(255,255,255,.5); }
+  .w-skip { margin-top: 16px; font-size: 12.5px; color: #C490A8; font-weight: 600; }
+
+  /* ============ 屏幕 2：首页 ============ */
+  .h-top { position: absolute; top: 0; left: 0; right: 0; height: 300px; padding: 64px 20px 0; z-index: 2; }
+  .h-greet { display: flex; align-items: center; justify-content: space-between; }
+  .h-hi { font-size: 12px; font-weight: 800; letter-spacing: .2em; color: rgba(255,255,255,.9); }
+  .h-title { font-size: 27px; font-weight: 800; color: #fff; margin-top: 6px; text-shadow: 0 2px 14px rgba(200,70,120,.35); }
+  .h-avatar { width: 46px; height: 46px; border-radius: 50%; background: #fff; box-shadow: 0 6px 16px rgba(200,70,120,.3); display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 900; color: #F0568D; border: 2.5px solid #FFD9E5; }
+  .h-search { margin-top: 18px; height: 46px; border-radius: 23px; background: #fff; box-shadow: 0 8px 22px rgba(200,70,120,.16); display: flex; align-items: center; gap: 10px; padding: 0 18px; color: #C490A8; font-size: 14px; font-weight: 500; }
+
+  .h-body { position: absolute; top: 208px; left: 0; right: 0; bottom: 0; background: #FFF7FA; border-radius: 34px 34px 0 0; padding: 18px 20px 110px; z-index: 3; }
+  .floor-seg { display: flex; background: #FFE3ED; border-radius: 22px; padding: 5px; gap: 5px; }
+  .floor-seg .seg { flex: 1; text-align: center; padding: 9px 0; border-radius: 17px; font-size: 13.5px; font-weight: 700; color: #B27A93; }
+  .floor-seg .seg small { display: block; font-size: 10px; font-weight: 600; margin-top: 1px; opacity: .8; }
+  .floor-seg .seg.on { background: #fff; color: #F0568D; box-shadow: 0 4px 12px rgba(200,70,120,.16); }
+
+  .cats { display: flex; gap: 8px; margin-top: 16px; }
+  .cat { font-size: 12.5px; font-weight: 700; color: #B27A93; padding: 8px 14px; border-radius: 999px; background: #fff; border: 1.5px solid #FFDCE8; white-space: nowrap; }
+  .cat.on { background: linear-gradient(150deg, #FF8FB3, #F0568D); color: #fff; border-color: transparent; box-shadow: 0 6px 16px rgba(240,86,141,.3); }
+
+  .sec { display: flex; align-items: baseline; justify-content: space-between; margin-top: 20px; }
+  .sec b { font-size: 16.5px; font-weight: 800; color: #4A2233; }
+  .sec b::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #FF7FA8; margin-right: 7px; box-shadow: -11px 0 0 -2px #FFC9DB, 11px 0 0 -2.5px #FFDCE8; }
+  .sec span { font-size: 12px; font-weight: 600; color: #C490A8; }
+
+  .dish { display: flex; gap: 14px; align-items: center; background: #fff; border-radius: 24px; padding: 12px; margin-top: 12px; box-shadow: 0 8px 24px rgba(200,70,120,.09); border: 1.5px solid #FFE9F1; }
+  .dish .pic { width: 78px; height: 78px; border-radius: 19px; overflow: hidden; flex-shrink: 0; position: relative; }
+  .dish .pic img { width: 100%; height: 100%; object-fit: cover; }
+  .dish .pic .tag { position: absolute; top: 6px; left: 6px; font-size: 9px; font-weight: 800; color: #fff; background: rgba(240,86,141,.9); border-radius: 999px; padding: 3px 8px; letter-spacing: .04em; }
+  .dish .info { flex: 1; min-width: 0; }
+  .dish .info .n { font-size: 15.5px; font-weight: 800; color: #4A2233; }
+  .dish .info .d { font-size: 11.5px; color: #B27A93; font-weight: 600; margin-top: 4px; }
+  .dish .p { font-size: 17px; font-weight: 900; color: #F0568D; }
+  .dish .p em { font-style: normal; font-size: 11px; }
+
+  .tabbar { position: absolute; bottom: 22px; left: 20px; right: 20px; height: 72px; border-radius: 36px; background: rgba(255,255,255,.82); -webkit-backdrop-filter: blur(22px) saturate(1.8); backdrop-filter: blur(22px) saturate(1.8); border: 1.5px solid #fff; box-shadow: 0 12px 32px rgba(200,70,120,.22); display: flex; align-items: center; padding: 0 14px; z-index: 40; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; color: #C490A8; font-size: 10.5px; font-weight: 700; }
+  .tab.on { color: #F0568D; }
+  .tab-dice { width: 58px; height: 58px; border-radius: 50%; margin: 0 8px; background: linear-gradient(150deg, #FF8FB3, #F0568D); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 24px rgba(240,86,141,.45), inset 0 1px 0 rgba(255,255,255,.5); flex-shrink: 0; }
+
+  /* ============ 屏幕 3：详情 ============ */
+  .d-hero { position: absolute; top: 0; left: 0; right: 0; height: 420px; overflow: hidden; background: #FFC9DB; }
+  .d-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(74,34,51,.12), transparent 30%, transparent 62%, #FFF7FA 100%); }
+  .d-frame { position: absolute; top: 76px; left: 44px; right: 44px; height: 300px; border-radius: 40px; overflow: hidden; box-shadow: 0 24px 60px rgba(200,70,120,.35); border: 5px solid #fff; transform: rotate(-2deg); }
+  .d-frame img { width: 100%; height: 100%; object-fit: cover; }
+  .d-back { position: absolute; top: 64px; left: 18px; width: 46px; height: 46px; border-radius: 50%; background: #fff; box-shadow: 0 8px 20px rgba(200,70,120,.25); display: flex; align-items: center; justify-content: center; z-index: 20; }
+  .d-stamp { position: absolute; top: 68px; right: 20px; width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.92); border: 2.5px dashed #F0568D; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; color: #F0568D; transform: rotate(8deg); z-index: 20; line-height: 1.25; text-align: center; }
+
+  .d-sheet { position: absolute; top: 388px; left: 0; right: 0; bottom: 0; padding: 12px 26px 40px; z-index: 5; }
+  .d-pill-row { display: flex; gap: 8px; }
+  .dpill { font-size: 11.5px; font-weight: 700; padding: 6px 12px; border-radius: 999px; }
+  .dpill.p1 { background: #FFE3ED; color: #E8447C; }
+  .dpill.p2 { background: #FFF0F5; color: #B27A93; border: 1.5px solid #FFDCE8; }
+  .d-sheet h2 { font-size: 31px; font-weight: 900; color: #4A2233; margin-top: 13px; }
+  .d-price-row { display: flex; align-items: baseline; gap: 10px; margin-top: 5px; }
+  .d-price-row .p { font-size: 29px; font-weight: 900; color: #F0568D; }
+  .d-price-row .p em { font-style: normal; font-size: 15px; }
+  .d-price-row .sold { font-size: 12.5px; font-weight: 600; color: #B27A93; }
+  .d-sheet .desc { margin-top: 13px; font-size: 14px; line-height: 1.8; color: #8A5C74; }
+  .d-facts { display: flex; gap: 9px; margin-top: 16px; }
+  .d-facts .f { flex: 1; text-align: center; padding: 11px 6px; border-radius: 18px; background: #fff; border: 1.5px solid #FFE9F1; }
+  .d-facts .f b { display: block; font-size: 13.5px; color: #4A2233; font-weight: 800; }
+  .d-facts .f span { font-size: 10.5px; color: #C490A8; font-weight: 600; }
+  .d-cta { margin-top: 18px; height: 56px; border-radius: 28px; background: linear-gradient(150deg, #FF8FB3, #F0568D); color: #fff; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 12px 28px rgba(240,86,141,.4), inset 0 1px 0 rgba(255,255,255,.5); }
+
+  /* ============ 屏幕 4：扭蛋机 ============ */
+  .g-content { position: absolute; inset: 0; z-index: 2; padding: 70px 24px 0; display: flex; flex-direction: column; align-items: center; }
+  .g-kicker { font-size: 12px; font-weight: 800; letter-spacing: .26em; color: #E8447C; text-transform: uppercase; }
+  .g-title { font-size: 30px; font-weight: 900; color: #4A2233; margin-top: 8px; }
+  .g-sub { font-size: 13px; color: #A6768C; font-weight: 500; margin-top: 6px; }
+
+  .gasha { margin-top: 24px; width: 250px; }
+  .g-dome { height: 172px; border-radius: 30px 30px 90px 90px / 30px 30px 78px 78px; background: rgba(255,255,255,.55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 4px solid #fff; box-shadow: 0 14px 36px rgba(200,70,120,.25), inset 0 -6px 18px rgba(255,159,190,.25); position: relative; overflow: hidden; }
+  .cap { position: absolute; border-radius: 50%; box-shadow: inset 0 -4px 8px rgba(74,34,51,.12), 0 4px 10px rgba(200,70,120,.25); }
+  .cap::after { content: ""; position: absolute; left: 50%; top: 50%; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.9); transform: translate(-50%,-90%); }
+  .c1 { width: 52px; height: 52px; background: linear-gradient(160deg, #FF9FBE, #F0568D); left: 34px; top: 62px; }
+  .c2 { width: 44px; height: 44px; background: linear-gradient(160deg, #FFE3ED, #FFC9DB); left: 104px; top: 88px; }
+  .c3 { width: 48px; height: 48px; background: linear-gradient(160deg, #C9A7EB, #A87BD4); left: 158px; top: 52px; }
+  .c4 { width: 40px; height: 40px; background: linear-gradient(160deg, #FFD98E, #F5B942); left: 70px; top: 34px; }
+  .c5 { width: 42px; height: 42px; background: linear-gradient(160deg, #FF9FBE, #F0568D); left: 142px; top: 104px; }
+  .g-body { margin-top: -6px; height: 120px; background: linear-gradient(170deg, #FF8FB3, #F0568D); border-radius: 26px; box-shadow: 0 16px 36px rgba(240,86,141,.35), inset 0 2px 0 rgba(255,255,255,.4); position: relative; }
+  .g-knob { position: absolute; right: 20px; top: 20px; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: inset 0 -5px 10px rgba(200,70,120,.3); }
+  .g-knob::after { content: ""; position: absolute; left: 50%; top: 8px; bottom: 8px; width: 5px; background: #FFC9DB; border-radius: 3px; transform: translateX(-50%); }
+  .g-slot { position: absolute; left: 24px; right: 84px; bottom: 16px; height: 40px; background: rgba(74,34,51,.35); border-radius: 12px; border: 3px solid rgba(255,255,255,.5); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: .2em; }
+  .g-label { position: absolute; left: 0; right: 0; top: 34px; text-align: center; color: rgba(255,255,255,.95); font-size: 15px; font-weight: 900; letter-spacing: .12em; }
+
+  .g-result { margin-top: 22px; display: flex; align-items: center; gap: 14px; background: #fff; border-radius: 24px; padding: 12px 16px; box-shadow: 0 12px 30px rgba(200,70,120,.18); border: 1.5px solid #FFE9F1; width: 100%; }
+  .g-result .img { width: 58px; height: 58px; border-radius: 50%; overflow: hidden; border: 3px solid #FFD9E5; flex-shrink: 0; }
+  .g-result .img img { width: 100%; height: 100%; object-fit: cover; }
+  .g-result .m { flex: 1; }
+  .g-result .m .lab { font-size: 10px; font-weight: 800; letter-spacing: .22em; color: #F0568D; }
+  .g-result .m .n { font-size: 18px; font-weight: 900; color: #4A2233; margin-top: 3px; }
+  .g-result .m .s { font-size: 11px; color: #B27A93; font-weight: 600; margin-top: 2px; }
+  .g-result .p { font-size: 17px; font-weight: 900; color: #F0568D; }
+
+  .g-btn { margin-top: 18px; width: 100%; height: 58px; border-radius: 29px; background: linear-gradient(150deg, #FF8FB3, #F0568D); color: #fff; font-size: 17px; font-weight: 900; letter-spacing: .1em; display: flex; align-items: center; justify-content: center; gap: 9px; box-shadow: 0 14px 32px rgba(240,86,141,.42), inset 0 1px 0 rgba(255,255,255,.5); }
+  .g-hint { margin-top: 13px; font-size: 12px; color: #C490A8; font-weight: 600; }
+  .g-history { margin-top: 20px; width: 100%; background: rgba(255,255,255,.7); border: 1.5px solid #fff; border-radius: 22px; padding: 13px 16px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .g-history b { font-size: 12.5px; color: #4A2233; font-weight: 800; display: flex; justify-content: space-between; }
+  .g-history b span { color: #C490A8; font-weight: 600; font-size: 10.5px; }
+  .g-h-row { display: flex; justify-content: space-between; font-size: 12px; color: #B27A93; font-weight: 600; padding: 5px 0 0; }
+  .g-h-row em { font-style: normal; color: #F0568D; font-weight: 800; }
+
+  .board-foot { margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .note { background: #fff; border: 1.5px solid #FFDCE8; border-radius: 18px; padding: 20px 22px; }
+  .note b { font-size: 14px; color: #4A2233; display: block; margin-bottom: 8px; }
+  .note b::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #FF7FA8; margin-right: 8px; box-shadow: 14px 0 0 -2px #FFC9DB, 28px 0 0 -3px #FFDCE8; }
+  .note p { font-size: 13px; line-height: 1.7; color: #A6768C; margin-left: 22px; }
+
+  /* ============ 手机端适配 ============ */
+  @media (max-width: 768px) {
+    .board { padding: 32px 20px 48px; }
+    .board h1 { font-size: 28px; }
+    .board-desc { font-size: 14px; }
+    .phones { gap: 32px; margin-top: 32px; }
+    .phone-unit { width: 100%; }
+    .phone { 
+      width: 100%; 
+      max-width: 390px;
+      height: auto; 
+      aspect-ratio: 390 / 844;
+      margin: 0 auto;
+      border-radius: 32px;
+      box-shadow: 0 0 0 8px #17181C, 0 0 0 10px #3A3C42, 0 20px 40px -10px rgba(160,60,110,.28);
+    }
+    .notch { width: 80px; height: 22px; top: 6px; }
+    .statusbar { height: 36px; padding: 8px 18px 0; font-size: 12px; }
+    .batt { width: 18px; height: 10px; }
+    .homebar { width: 90px; height: 3px; bottom: 4px; }
+    .phone-caption { font-size: 12px; }
+    .board-foot { grid-template-columns: 1fr; gap: 12px; }
+    .note { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="board-head">
+    <div>
+      <div class="board-tag">Design Direction 1 · Pink Polka</div>
+      <h1>波点食光 · Dot Dot Café</h1>
+      <p class="board-desc">以小媛喜欢的粉白波点为核心视觉：波点铺底、波点点缀、波点印章，配一只波点小碗吉祥物。随机选餐做成「扭蛋机」——选择困难的时候，扭一个胶囊出来就好。</p>
+      <div class="chips">
+        <span class="chip">粉白波点主视觉</span><span class="chip">波点小碗吉祥物</span><span class="chip">扭蛋机随机选餐</span><span class="chip">圆润卡片 + 玻璃 Tab</span><span class="chip">小媛专属欢迎页</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phones">
+
+    <!-- ===== 屏幕 1：欢迎页 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen dots">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="w-content">
+            <div class="w-mascot">
+              <svg width="104" height="104" viewBox="0 0 120 120">
+                <path d="M44 30 c-5 7 5 9 0 16 M60 26 c-5 7 5 9 0 16 M76 30 c-5 7 5 9 0 16" stroke="#FFB3CC" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                <path d="M24 60 A36 36 0 0 0 96 60 Z" fill="#FF7FA8"/>
+                <circle cx="46" cy="74" r="4" fill="#fff"/>
+                <circle cx="74" cy="74" r="4" fill="#fff"/>
+                <circle cx="60" cy="86" r="3" fill="#fff"/>
+                <circle cx="52" cy="92" r="2.4" fill="#fff"/>
+                <circle cx="68" cy="92" r="2.4" fill="#fff"/>
+                <path d="M54 79 q6 5 12 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <ellipse cx="60" cy="60" rx="36" ry="7.5" fill="#FF9FBE"/>
+                <rect x="51" y="96" width="18" height="7" rx="3.5" fill="#F0568D"/>
+              </svg>
+            </div>
+            <div class="w-badge">Dot Dot Café</div>
+            <div class="w-title">嗨，<em>小媛</em></div>
+            <p class="w-sub">欢迎来到你的专属食堂小馆<br>今天也要好好吃饭呀</p>
+            <div class="w-start">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+              开始逛逛
+            </div>
+            <div class="w-skip">跳过</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">① 欢迎页<span>波点小碗吉祥物 + 小媛专属问候</span></div>
+    </div>
+
+    <!-- ===== 屏幕 2：首页 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="h-top dots-lg">
+            <div class="statusbar light"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+            <div class="h-greet" style="margin-top:14px">
+              <div>
+                <div class="h-hi">DOT DOT CAFÉ</div>
+                <div class="h-title">今天想吃点什么呀？</div>
+              </div>
+              <div class="h-avatar">媛</div>
+            </div>
+          </div>
+
+          <div class="h-body">
+            <div class="floor-seg">
+              <div class="seg on">一楼 · 大众菜<small>46 道</small></div>
+              <div class="seg">二楼 · 特色档<small>38 道</small></div>
+            </div>
+
+            <div class="cats">
+              <div class="cat on">全部</div>
+              <div class="cat">盖饭</div>
+              <div class="cat">面食</div>
+              <div class="cat">甜品饮品</div>
+            </div>
+
+            <div class="sec"><b>小媛可能喜欢</b><span>根据口味推荐</span></div>
+
+            <div class="dish">
+              <div class="pic"><img src="images/pork-rice.jpg" alt=""><span class="tag">人气第 1</span></div>
+              <div class="info"><div class="n">红烧肉盖饭</div><div class="d">二楼 · 8 号档口 · 微辣</div></div>
+              <div class="p"><em>¥</em>12</div>
+            </div>
+            <div class="dish">
+              <div class="pic"><img src="images/strawberry-cake.jpg" alt=""><span class="tag">新品</span></div>
+              <div class="info"><div class="n">草莓奶油蛋糕</div><div class="d">二楼 · 甜品窗口</div></div>
+              <div class="p"><em>¥</em>8</div>
+            </div>
+            <div class="dish">
+              <div class="pic"><img src="images/beef-noodle.jpg" alt=""></div>
+              <div class="info"><div class="n">兰州牛肉面</div><div class="d">一楼 · 面食窗口 · 加面免费</div></div>
+              <div class="p"><em>¥</em>10</div>
+            </div>
+            <div class="dish">
+              <div class="pic"><img src="images/strawberry-milk.jpg" alt=""></div>
+              <div class="info"><div class="n">草莓鲜奶</div><div class="d">二楼 · 甜品窗口 · 少冰</div></div>
+              <div class="p"><em>¥</em>6</div>
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <div class="tab on">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+              菜单
+            </div>
+            <div class="tab-dice">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4.5"/><circle cx="8.5" cy="8.5" r="1.4" fill="#fff"/><circle cx="15.5" cy="15.5" r="1.4" fill="#fff"/><circle cx="15.5" cy="8.5" r="1.4" fill="#fff"/><circle cx="8.5" cy="15.5" r="1.4" fill="#fff"/></svg>
+            </div>
+            <div class="tab">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>
+              管理
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">② 首页 · 菜单<span>波点头图 + 楼层切换 + 推荐卡片</span></div>
+    </div>
+
+    <!-- ===== 屏幕 3：详情 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen dots">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+          <div class="d-hero">
+            <div class="d-frame"><img src="images/pork-rice.jpg" alt=""></div>
+          </div>
+          <div class="d-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4A2233" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
+          <div class="d-stamp">人气<br>第 1</div>
+
+          <div class="d-sheet">
+            <div class="d-pill-row">
+              <span class="dpill p1">二楼 · 8 号档口</span>
+              <span class="dpill p2">微辣</span>
+              <span class="dpill p2">招牌菜</span>
+            </div>
+            <h2>红烧肉盖饭</h2>
+            <div class="d-price-row"><span class="p"><em>¥</em>12</span><span class="sold">今日已售 328 份</span></div>
+            <p class="desc">精选肥瘦相间的五花肉，冰糖炒色后小火慢焖 90 分钟，肥而不腻、入口即化，浇在热腾腾的东北大米上，是二楼当之无愧的排队王。</p>
+            <div class="d-facts">
+              <div class="f"><b>约 620 kcal</b><span>能量参考</span></div>
+              <div class="f"><b>高蛋白</b><span>营养标签</span></div>
+              <div class="f"><b>3 min</b><span>平均出餐</span></div>
+            </div>
+            <div class="d-cta">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              加入想吃清单
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+      <div class="phone-caption">③ 菜品详情<span>波点相框大图 + 虚线印章 + 营养参考</span></div>
+    </div>
+
+    <!-- ===== 屏幕 4：扭蛋机 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen dots">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="g-content">
+            <div class="g-kicker">Gashapon Time</div>
+            <div class="g-title">今天吃什么</div>
+            <div class="g-sub">选择困难的时候，扭一个就好</div>
+
+            <div class="gasha">
+              <div class="g-dome">
+                <span class="cap c1"></span><span class="cap c2"></span><span class="cap c3"></span><span class="cap c4"></span><span class="cap c5"></span>
+              </div>
+              <div class="g-body">
+                <div class="g-label">小媛扭蛋机</div>
+                <div class="g-knob"></div>
+                <div class="g-slot">CAPSULE OUT</div>
+              </div>
+            </div>
+
+            <div class="g-result">
+              <div class="img"><img src="images/chicken-rice.jpg" alt=""></div>
+              <div class="m">
+                <div class="lab">本次扭出</div>
+                <div class="n">黄焖鸡米饭</div>
+                <div class="s">二楼 · 3 号档口 · 微辣</div>
+              </div>
+              <div class="p">¥13</div>
+            </div>
+
+            <div class="g-btn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 3v6h-6"/></svg>
+              再扭一个
+            </div>
+            <div class="g-hint">已自动避开小媛不爱的香菜</div>
+
+            <div class="g-history">
+              <b>最近扭出<span>本周共 12 次</span></b>
+              <div class="g-h-row"><span>昨天 12:02 · 黄焖鸡米饭</span><em>¥13</em></div>
+              <div class="g-h-row"><span>昨天 18:40 · 草莓鲜奶</span><em>¥6</em></div>
+              <div class="g-h-row"><span>周一 08:10 · 煎饼果子</span><em>¥7</em></div>
+            </div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+      <div class="phone-caption">④ 今天吃什么 · 扭蛋机<span>扭出胶囊即出结果 + 口味过滤 + 记录</span></div>
+    </div>
+
+  </div>
+
+  <div class="board-foot">
+    <div class="note"><b>波点即系统</b><p>波点不只是背景花纹：标题前的引导点、虚线印章、吉祥物碗身的点点，全部来自同一套波点语言，让甜而不腻的粉色有统一的秩序感。</p></div>
+    <div class="note"><b>扭蛋机的仪式感</b><p>按下按钮 → 胶囊滚落 → 弹开露出菜品，把「随便吃啥」变成每天最期待的小仪式。扭出的结果自动记入历史，还能看到你和每道菜的缘分。</p></div>
+    <div class="note"><b>为小媛定制</b><p>欢迎页用「嗨，小媛」专属问候；推荐区是「小媛可能喜欢」；扭蛋机叫「小媛扭蛋机」——整个应用都是为她一个人做的。</p></div>
+  </div>
+</div>
+</body>
+</html>
