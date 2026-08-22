@@ -1,1 +1,613 @@
-placeholder
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background-color: #FFE4E8;
+    background-image: radial-gradient(circle, #FFFFFF 3px, transparent 3px),
+                      radial-gradient(circle, #FFFFFF 2px, transparent 2px);
+    background-size: 60px 60px, 30px 30px;
+    background-position: 0 0, 15px 15px;
+    min-height: 100vh;
+    color: #4A2028;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #4A2028;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #4A2028;
+    text-shadow: 2px 2px 4px rgba(255, 143, 163, 0.3);
+    animation: fadeInDown 1s ease-out;
+}
+
+.title i {
+    margin-right: 15px;
+    color: #FF6B8A;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #8B5A6B;
+    font-weight: 300;
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.food-display {
+    width: 100%;
+    max-width: 500px;
+}
+
+.food-card {
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(255, 107, 138, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: 2px solid #FFC2D1;
+}
+
+.food-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(255, 107, 138, 0.3);
+}
+
+.food-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 179, 197, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.food-card:hover::before {
+    left: 100%;
+}
+
+.food-icon {
+    font-size: 4rem;
+    color: #FF6B8A;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.food-card:hover .food-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.food-name {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #4A2028;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.food-description {
+    font-size: 1.1rem;
+    color: #8B5A6B;
+    line-height: 1.6;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.controls {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #FFB5C5 0%, #FF8FA3 100%);
+    color: #FFFFFF;
+    box-shadow: 0 10px 20px rgba(255, 143, 163, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(255, 143, 163, 0.5);
+}
+
+.btn-secondary {
+    background: #FFFFFF;
+    color: #FF6B8A;
+    border: 2px solid #FFB5C5;
+}
+
+.btn-secondary:hover {
+    background: #FFB5C5;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+.food-list-section {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(255, 107, 138, 0.15);
+    border: 2px solid #FFC2D1;
+}
+
+.food-list-section h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4A2028;
+    font-size: 1.5rem;
+}
+
+.food-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.food-item {
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(255, 107, 138, 0.15);
+    transition: all 0.3s ease;
+    position: relative;
+    border-left: 4px solid #FF6B8A;
+}
+
+.food-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 138, 0.25);
+}
+
+.food-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.food-item-name {
+    font-weight: 600;
+    color: #4A2028;
+    font-size: 1.1rem;
+}
+
+.food-item-category {
+    background: linear-gradient(135deg, #FFB5C5 0%, #FF8FA3 100%);
+    color: #FFFFFF;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.food-item-description {
+    color: #8B5A6B;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.delete-btn {
+    background: #FF6B8A;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+}
+
+.food-item:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background: #FF4D6D;
+    transform: scale(1.1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(74, 32, 40, 0.4);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #FFFFFF;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(255, 107, 138, 0.3);
+    animation: slideInUp 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    border-bottom: 1px solid #FFE4E8;
+}
+
+.modal-header h3 {
+    color: #4A2028;
+    font-size: 1.3rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #FF6B8A;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #4A2028;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4A2028;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #FFE4E8;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #FFB5C5;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding: 20px 30px;
+    border-top: 1px solid #FFE4E8;
+}
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #FFE4E8 0%, #FFC2D1 50%, #FFB5C5 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.splash-screen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-content {
+    text-align: center;
+    animation: splashBounce 1.5s ease-out;
+}
+
+.splash-dots,
+.splash-dots-bottom {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.splash-dots span,
+.splash-dots-bottom span {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    opacity: 0;
+    animation: dotPop 0.5s ease-out forwards;
+}
+
+.splash-dots span:nth-child(1),
+.splash-dots-bottom span:nth-child(1) { animation-delay: 0.1s; }
+.splash-dots span:nth-child(2),
+.splash-dots-bottom span:nth-child(2) { animation-delay: 0.2s; }
+.splash-dots span:nth-child(3),
+.splash-dots-bottom span:nth-child(3) { animation-delay: 0.3s; }
+.splash-dots span:nth-child(4),
+.splash-dots-bottom span:nth-child(4) { animation-delay: 0.4s; }
+.splash-dots span:nth-child(5),
+.splash-dots-bottom span:nth-child(5) { animation-delay: 0.5s; }
+
+.splash-icon {
+    font-size: 4rem;
+    color: #FF6B8A;
+    margin: 20px 0;
+    animation: iconSpin 2s ease-in-out infinite;
+}
+
+.splash-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #4A2028;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6);
+    animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+.splash-subtitle {
+    font-size: 1.3rem;
+    color: #8B5A6B;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    margin-top: 10px;
+}
+
+@keyframes splashBounce {
+    0% { opacity: 0; transform: scale(0.8); }
+    50% { transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dotPop {
+    0% { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes iconSpin {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(15deg) scale(1.1); }
+}
+
+@keyframes titleGlow {
+    0% { text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.6); }
+    100% { text-shadow: 2px 2px 12px rgba(255, 107, 138, 0.5), 0 0 20px rgba(255, 179, 197, 0.3); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinning { animation: spin 0.5s linear infinite; }
+
+@keyframes cardPulse {
+    0%, 100% { transform: scale(0.95) rotate(2deg); }
+    50% { transform: scale(1.02) rotate(-1deg); }
+}
+
+@keyframes celebrateCard {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1.05) rotate(-3deg); }
+    75% { transform: scale(1.08) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes iconBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-20px) scale(1.2); }
+    60% { transform: translateY(-10px) scale(1.1); }
+}
+
+@keyframes particleFloat {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+}
+
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    animation: particleFloat 2s ease-out forwards;
+}
+
+.food-name,
+.food-description { transition: all 0.3s ease; }
+
+.btn { position: relative; overflow: hidden; }
+
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to { transform: scale(4); opacity: 0; }
+}
+
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #FFB5C5 0%, #FF8FA3 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeOut 0.8s ease-out 2s forwards;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #FFFFFF;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
+
+.food-card { animation: slideInUp 0.8s ease-out 0.5s both; }
+.controls { animation: slideInUp 0.8s ease-out 0.7s both; }
+.food-list-section { animation: slideInUp 0.8s ease-out 0.9s both; }
+
+@media (max-width: 768px) {
+    .title { font-size: 2rem; }
+    .splash-title { font-size: 2rem; }
+    .splash-subtitle { font-size: 1rem; }
+    .splash-icon { font-size: 3rem; }
+    .food-card { padding: 30px 20px; }
+    .food-name { font-size: 1.5rem; }
+    .controls { flex-direction: column; align-items: center; }
+    .btn { width: 100%; max-width: 300px; justify-content: center; }
+    .food-list { grid-template-columns: 1fr; }
+    .modal-content { width: 95%; margin: 20px; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #FFE4E8; border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #FFB5C5, #FF8FA3); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #FF8FA3, #FF6B8A); }
