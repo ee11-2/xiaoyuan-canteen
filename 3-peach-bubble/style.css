@@ -1,0 +1,243 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background: linear-gradient(135deg, #FFDAB9 0%, #FFB6C1 50%, #DDA0DD 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #5a3a5a;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.bg-bubbles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+.bg-bubbles span {
+    position: absolute; bottom: -150px; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 182, 193, 0.2));
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 105, 180, 0.2);
+    animation: bubbleFloatUp linear infinite;
+}
+@keyframes bubbleFloatUp {
+    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+
+.welcome-splash {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #FFDAB9 0%, #FFB6C1 40%, #FF69B4 100%);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease; overflow: hidden;
+}
+.welcome-splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.splash-content { text-align: center; z-index: 2; position: relative; animation: splashFadeIn 1s ease-out; }
+.splash-peach { width: 100px; height: 100px; margin: 0 auto 20px; animation: peachWobble 2s ease-in-out infinite; filter: drop-shadow(0 10px 20px rgba(255, 105, 180, 0.4)); }
+.splash-peach svg { width: 100%; height: 100%; }
+@keyframes peachWobble { 0%, 100% { transform: rotate(-5deg) scale(1); } 50% { transform: rotate(5deg) scale(1.05); } }
+@keyframes splashFadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+.splash-title {
+    font-size: 2.8rem; font-weight: 700; color: white;
+    text-shadow: 2px 2px 10px rgba(255, 20, 147, 0.3);
+    margin-bottom: 10px; letter-spacing: 2px;
+}
+.splash-subtitle { font-size: 1.2rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 30px; font-weight: 300; }
+
+.splash-btn {
+    background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%);
+    color: white; border: none; padding: 16px 40px; border-radius: 50px;
+    font-size: 1.1rem; font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 10px;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4);
+    transition: all 0.3s ease; position: relative; overflow: hidden;
+    animation: btnBreathe 2s ease-in-out infinite;
+}
+@keyframes btnBreathe { 0%, 100% { box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4); } 50% { box-shadow: 0 15px 40px rgba(255, 20, 147, 0.6); } }
+.splash-btn:hover { transform: translateY(-3px) scale(1.05); }
+
+.splash-bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.splash-bubble {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 192, 203, 0.3));
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 105, 180, 0.3);
+    animation: splashBubbleFloat 4s ease-in-out infinite;
+}
+.splash-bubble.b1 { width: 40px; height: 40px; left: 10%; top: 20%; animation-delay: 0s; }
+.splash-bubble.b2 { width: 60px; height: 60px; left: 85%; top: 15%; animation-delay: 0.5s; }
+.splash-bubble.b3 { width: 30px; height: 30px; left: 20%; top: 70%; animation-delay: 1s; }
+.splash-bubble.b4 { width: 50px; height: 50px; left: 80%; top: 65%; animation-delay: 1.5s; }
+.splash-bubble.b5 { width: 25px; height: 25px; left: 50%; top: 10%; animation-delay: 2s; }
+.splash-bubble.b6 { width: 45px; height: 45px; left: 5%; top: 50%; animation-delay: 0.8s; }
+.splash-bubble.b7 { width: 35px; height: 35px; left: 90%; top: 40%; animation-delay: 1.3s; }
+.splash-bubble.b8 { width: 55px; height: 55px; left: 30%; top: 85%; animation-delay: 1.8s; }
+@keyframes splashBubbleFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.08); } }
+
+.header { text-align: center; margin-bottom: 40px; color: white; }
+.title { font-size: 3rem; font-weight: 700; margin-bottom: 10px; text-shadow: 2px 2px 10px rgba(255, 20, 147, 0.3); animation: fadeInDown 1s ease-out; letter-spacing: 2px; }
+.title-emoji { margin-right: 10px; display: inline-block; animation: emojiBounce 2s ease-in-out infinite; }
+@keyframes emojiBounce { 0%, 100% { transform: translateY(0) rotate(0deg); } 25% { transform: translateY(-8px) rotate(-10deg); } 75% { transform: translateY(-4px) rotate(10deg); } }
+.subtitle { font-size: 1.2rem; opacity: 0.95; font-weight: 300; animation: fadeInUp 1s ease-out 0.3s both; }
+
+.main-content { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.food-display { width: 100%; max-width: 500px; }
+
+.food-card {
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: 30px; padding: 40px; text-align: center;
+    box-shadow: 0 20px 60px rgba(255, 20, 147, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease; cursor: pointer; position: relative; overflow: hidden;
+}
+.food-card-glow {
+    position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255, 105, 180, 0.15) 0%, transparent 50%);
+    animation: glowPulse 4s ease-in-out infinite; pointer-events: none;
+}
+@keyframes glowPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.2); opacity: 0.8; } }
+.food-card-shine {
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shineSweep 3s ease-in-out infinite; pointer-events: none;
+}
+@keyframes shineSweep { 0% { left: -100%; } 50%, 100% { left: 100%; } }
+.food-card:hover { transform: translateY(-5px); box-shadow: 0 30px 70px rgba(255, 20, 147, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.5); }
+
+.food-icon { font-size: 4rem; color: #FF1493; margin-bottom: 20px; transition: transform 0.3s ease; filter: drop-shadow(0 5px 15px rgba(255, 20, 147, 0.4)); }
+.food-card:hover .food-icon { transform: scale(1.15) rotate(5deg); }
+.food-name { font-size: 2rem; font-weight: 700; margin-bottom: 15px; color: #8B1A5A; min-height: 60px; display: flex; align-items: center; justify-content: center; text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.5); }
+.food-description { font-size: 1.1rem; color: #6B3A5A; line-height: 1.6; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+
+.controls { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+.btn {
+    padding: 15px 30px; border: none; border-radius: 50px;
+    font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 10px; text-decoration: none; position: relative; overflow: hidden;
+}
+.btn::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transition: left 0.5s;
+}
+.btn:hover::before { left: 100%; }
+.btn-primary {
+    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%); color: white;
+    box-shadow: 0 10px 30px rgba(255, 20, 147, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 15px 40px rgba(255, 20, 147, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3); }
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.5); color: #FF1493;
+    border: 2px solid rgba(255, 105, 180, 0.5); backdrop-filter: blur(10px);
+}
+.btn-secondary:hover { background: rgba(255, 105, 180, 0.2); color: #D6006E; border-color: #FF1493; transform: translateY(-3px); }
+
+.food-list-section {
+    width: 100%; max-width: 800px;
+    background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-radius: 25px; padding: 30px;
+    box-shadow: 0 15px 40px rgba(255, 20, 147, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+.food-list-section h3 { text-align: center; margin-bottom: 20px; color: #8B1A5A; font-size: 1.5rem; }
+.food-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; }
+
+.food-item {
+    background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px);
+    border-radius: 15px; padding: 15px;
+    box-shadow: 0 8px 25px rgba(255, 20, 147, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease; position: relative;
+    border: 2px solid rgba(255, 255, 255, 0.4); border-left: 4px solid #FF69B4;
+}
+.food-item:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(255, 20, 147, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.6); }
+.food-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.food-item-name { font-weight: 600; color: #5a3a5a; font-size: 1.1rem; }
+.food-item-category { background: linear-gradient(135deg, #FF69B4, #FF1493); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 500; box-shadow: 0 3px 10px rgba(255, 20, 147, 0.3); }
+.food-item-description { color: #6B3A5A; font-size: 0.9rem; line-height: 1.4; }
+
+.delete-btn {
+    background: linear-gradient(135deg, #FF69B4, #FF1493); color: white; border: none; border-radius: 50%;
+    width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; transition: all 0.3s ease; position: absolute; top: 10px; right: 10px; opacity: 0;
+    box-shadow: 0 3px 10px rgba(255, 20, 147, 0.4);
+}
+.food-item:hover .delete-btn { opacity: 1; }
+.delete-btn:hover { background: linear-gradient(135deg, #D6006E, #B8005A); transform: scale(1.1); }
+
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 105, 180, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 1000; animation: fadeIn 0.3s ease; }
+.modal.show { display: flex; align-items: center; justify-content: center; }
+.modal-content {
+    background: linear-gradient(135deg, #fff9fc 0%, #fff0f5 100%);
+    border-radius: 25px; width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(255, 20, 147, 0.3); animation: slideInUp 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 30px; border-bottom: 1px solid rgba(255, 105, 180, 0.2); }
+.modal-header h3 { color: #8B1A5A; font-size: 1.3rem; }
+.close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #FF69B4; transition: color 0.3s ease; }
+.close-btn:hover { color: #FF1493; }
+.modal-body { padding: 30px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; color: #5a3a5a; font-weight: 500; }
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 12px 15px; border: 2px solid rgba(255, 105, 180, 0.3); border-radius: 12px;
+    font-size: 1rem; transition: all 0.3s ease; font-family: inherit;
+    background: rgba(255, 255, 255, 0.8); color: #5a3a5a;
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+    outline: none; border-color: #FF69B4; box-shadow: 0 0 15px rgba(255, 105, 180, 0.3);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 15px; padding: 20px 30px; border-top: 1px solid rgba(255, 105, 180, 0.2); }
+
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spinning { animation: spin 0.5s linear infinite; }
+@keyframes cardPulse { 0%, 100% { transform: scale(0.95) rotate(2deg); } 50% { transform: scale(1.02) rotate(-1deg); } }
+@keyframes celebrateCard { 0% { transform: scale(1) rotate(0deg); } 25% { transform: scale(1.1) rotate(5deg); } 50% { transform: scale(1.05) rotate(-3deg); } 75% { transform: scale(1.08) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
+@keyframes iconBounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-20px) scale(1.2); } 60% { transform: translateY(-10px) scale(1.1); } }
+@keyframes particleFloat { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-100px) scale(0.5); } }
+.particle { position: fixed; width: 8px; height: 8px; border-radius: 50%; pointer-events: none; z-index: 10000; animation: particleFloat 2s ease-out forwards; }
+.food-name, .food-description { transition: all 0.3s ease; }
+.btn { position: relative; overflow: hidden; }
+.ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.6); transform: scale(0); animation: ripple 0.6s linear; pointer-events: none; }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+@media (max-width: 768px) {
+    .title { font-size: 2rem; }
+    .splash-title { font-size: 2rem; }
+    .food-card { padding: 30px 20px; }
+    .food-name { font-size: 1.5rem; }
+    .controls { flex-direction: column; align-items: center; }
+    .btn { width: 100%; max-width: 300px; justify-content: center; }
+    .food-list { grid-template-columns: 1fr; }
+    .modal-content { width: 95%; margin: 20px; }
+    .splash-btn { padding: 14px 30px; font-size: 1rem; }
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(255, 192, 203, 0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #FF69B4, #FF1493); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #FF1493, #D6006E); }
+
+.loading {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #FFDAB9 0%, #FFB6C1 50%, #DDA0DD 100%);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 10000; animation: fadeOut 1s ease-out 1.5s forwards;
+}
+.loading-spinner { width: 50px; height: 50px; border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid #FF1493; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+
+.food-card { animation: slideInUp 0.8s ease-out 0.5s both; }
+.controls { animation: slideInUp 0.8s ease-out 0.7s both; }
+.food-list-section { animation: slideInUp 0.8s ease-out 0.9s both; }
