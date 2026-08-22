@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小媛的食堂指南 · 蜜桃气泡</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="welcome-splash" id="welcomeSplash">
+        <div class="splash-bubbles">
+            <span class="splash-bubble b1"></span>
+            <span class="splash-bubble b2"></span>
+            <span class="splash-bubble b3"></span>
+            <span class="splash-bubble b4"></span>
+            <span class="splash-bubble b5"></span>
+            <span class="splash-bubble b6"></span>
+            <span class="splash-bubble b7"></span>
+            <span class="splash-bubble b8"></span>
+        </div>
+        <div class="splash-content">
+            <div class="splash-peach">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="50" cy="58" rx="32" ry="35" fill="#FFB6C1"/>
+                    <ellipse cx="50" cy="58" rx="28" ry="30" fill="#FFC0CB" opacity="0.6"/>
+                    <ellipse cx="40" cy="48" rx="12" ry="15" fill="#FFDAB9" opacity="0.5"/>
+                    <path d="M50 28 Q45 15 55 10 Q60 20 58 28" fill="#90EE90"/>
+                    <path d="M50 28 Q48 18 52 12 Q55 20 53 28" fill="#7CCD7C"/>
+                </svg>
+            </div>
+            <h1 class="splash-title">小媛的食堂指南</h1>
+            <p class="splash-subtitle">蜜桃气泡 · 今天吃什么？</p>
+            <button class="splash-btn" id="splashBtn"><span>开始探索</span><i class="fas fa-utensils"></i></button>
+        </div>
+    </div>
+    <div class="loading"><div class="loading-spinner"></div></div>
+    <div class="bg-bubbles" id="bgBubbles"></div>
+    <div class="container">
+        <header class="header">
+            <h1 class="title"><span class="title-emoji">🍑</span>小媛的食堂指南</h1>
+            <p class="subtitle">蜜桃气泡 · 今天吃什么？</p>
+        </header>
+        <main class="main-content">
+            <div class="food-display">
+                <div class="food-card" id="foodCard">
+                    <div class="food-card-glow"></div>
+                    <div class="food-icon"><i class="fas fa-question"></i></div>
+                    <h2 class="food-name" id="foodName">点击开始随机</h2>
+                    <p class="food-description" id="foodDescription">准备好接受美食的召唤了吗？</p>
+                    <div class="food-card-shine"></div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn btn-primary" id="randomBtn"><i class="fas fa-random"></i>随机选择</button>
+                <button class="btn btn-secondary" id="addFoodBtn"><i class="fas fa-plus"></i>添加菜品</button>
+                <button class="btn btn-secondary" id="resetBtn"><i class="fas fa-redo"></i>重置列表</button>
+            </div>
+            <div class="food-list-section">
+                <h3>当前食堂菜单</h3>
+                <div class="food-list" id="foodList"></div>
+            </div>
+        </main>
+        <div class="modal" id="addFoodModal">
+            <div class="modal-content">
+                <div class="modal-header"><h3>添加新菜品</h3><button class="close-btn" id="closeModal"><i class="fas fa-times"></i></button></div>
+                <div class="modal-body">
+                    <div class="form-group"><label>菜品名称</label><input type="text" id="foodNameInput" placeholder="例如：宫保鸡丁"></div>
+                    <div class="form-group"><label>描述（可选）</label><textarea id="foodDescriptionInput" placeholder="例如：经典川菜，酸甜微辣"></textarea></div>
+                    <div class="form-group"><label>分类（可选）</label><select id="foodCategoryInput"><option value="">选择分类</option><option value="主食">主食</option><option value="炒菜">炒菜</option><option value="汤品">汤品</option><option value="凉菜">凉菜</option><option value="特色">特色</option></select></div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-secondary" id="cancelAdd">取消</button><button class="btn btn-primary" id="confirmAdd">添加</button></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
