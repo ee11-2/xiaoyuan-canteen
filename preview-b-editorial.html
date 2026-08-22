@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案 B · 食帖 — 专属食堂</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #E9E4D8; font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif; }
+  .serif { font-family: "Noto Serif SC", "Songti SC", "STSong", serif; }
+
+  /* ============ 展示板 ============ */
+  .board { max-width: 1560px; margin: 0 auto; padding: 56px 56px 72px; }
+  .board-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 14px; }
+  .board-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; letter-spacing: .12em; color: #8C4A3A; text-transform: uppercase; margin-bottom: 10px; }
+  .board-tag::before { content: ""; width: 28px; height: 2px; background: #D9381E; border-radius: 2px; }
+  .board h1 { font-family: "Noto Serif SC", "Songti SC", serif; font-size: 40px; font-weight: 900; color: #1A1815; letter-spacing: .04em; }
+  .board-desc { font-size: 15px; line-height: 1.7; color: #6B645A; max-width: 720px; margin-top: 10px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .chip { font-size: 12px; font-weight: 600; color: #8C4A3A; background: rgba(217,56,30,.08); border: 1px solid rgba(217,56,30,.25); padding: 6px 12px; border-radius: 999px; }
+
+  .phones { display: flex; gap: 44px; justify-content: center; margin-top: 44px; flex-wrap: wrap; }
+  .phone-unit { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+  .phone-caption { font-size: 13.5px; font-weight: 600; color: #55504B; }
+  .phone-caption span { color: #A39A90; font-weight: 500; margin-left: 6px; }
+
+  .phone {
+    width: 390px; height: 844px; border-radius: 58px; position: relative; overflow: hidden;
+    background: #FAF6EF;
+    box-shadow: 0 0 0 13px #17181C, 0 0 0 15px #3A3C42, 0 40px 80px -20px rgba(28,25,23,.45);
+    flex-shrink: 0;
+  }
+  .notch { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 118px; height: 33px; background: #000; border-radius: 20px; z-index: 60; }
+  .screen { position: absolute; inset: 0; overflow: hidden; background: #FAF6EF; }
+
+  .statusbar { position: absolute; top: 0; left: 0; right: 0; height: 54px; display: flex; justify-content: space-between; align-items: center; padding: 14px 32px 0; z-index: 50; color: #1A1815; font-size: 15px; font-weight: 600; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .sig { display: flex; align-items: flex-end; gap: 2px; }
+  .sig i { width: 3px; background: #1A1815; border-radius: 1px; display: block; }
+  .sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:8px}.sig i:nth-child(4){height:10px}
+  .batt { width: 25px; height: 13px; border: 1.5px solid #1A1815; border-radius: 4px; position: relative; padding: 1.5px; }
+  .batt::after { content: ""; position: absolute; right: -4px; top: 3.5px; width: 2px; height: 5px; background: rgba(26,24,21,.5); border-radius: 1px; }
+  .batt i { display: block; height: 100%; width: 72%; background: #1A1815; border-radius: 2px; }
+
+  .homebar { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(26,24,21,.35); z-index: 30; }
+
+  /* 纸纹理 */
+  .paper::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5; background-image: radial-gradient(rgba(140,110,70,.06) 1px, transparent 1px); background-size: 5px 5px; z-index: 1; }
+
+  /* ============ 屏幕 1：首页 ============ */
+  .s1-content { position: absolute; inset: 0; padding: 60px 22px 96px; overflow: hidden; z-index: 2; }
+
+  .masthead { text-align: center; margin-top: 8px; }
+  .masthead .meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 10px; font-weight: 700; color: #8C8478; letter-spacing: .08em; border-top: 1.5px solid #1A1815; border-bottom: 1.5px solid #1A1815; padding: 5px 2px; }
+  .masthead h1 { font-family: "Noto Serif SC", "Songti SC", serif; font-size: 46px; font-weight: 900; color: #1A1815; letter-spacing: .18em; margin: 14px 0 4px; text-indent: .18em; }
+  .masthead .sub { font-size: 11px; letter-spacing: .5em; color: #8C8478; font-weight: 600; text-indent: .5em; }
+
+  .floor-tabs { display: flex; margin-top: 18px; border-bottom: 1.5px solid #1A1815; }
+  .ftab { flex: 1; text-align: center; padding: 10px 0 12px; font-family: "Noto Serif SC", "Songti SC", serif; font-size: 16px; font-weight: 700; color: #B3AA9A; letter-spacing: .2em; position: relative; }
+  .ftab small { display: block; font-family: -apple-system, "PingFang SC", sans-serif; font-size: 9.5px; letter-spacing: .15em; color: #B3AA9A; margin-top: 3px; font-weight: 600; }
+  .ftab.on { color: #D9381E; }
+  .ftab.on small { color: #D9381E; }
+  .ftab.on::after { content: ""; position: absolute; left: 50%; bottom: -1.5px; transform: translateX(-50%); width: 56px; height: 3.5px; background: #D9381E; border-radius: 2px 2px 0 0; }
+
+  .polaroid { margin: 20px auto 0; width: 300px; background: #fff; padding: 10px 10px 14px; box-shadow: 0 10px 26px rgba(60,45,25,.16); transform: rotate(-2.4deg); position: relative; }
+  .polaroid .ph { height: 168px; overflow: hidden; background: linear-gradient(140deg, #E8D9BE, #C9B088); position: relative; }
+  .polaroid .ph img { width: 100%; height: 100%; object-fit: cover; }
+  .polaroid .stamp { position: absolute; right: 10px; bottom: 36px; width: 44px; height: 44px; border: 2.5px solid rgba(217,56,30,.85); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: "Noto Serif SC", serif; font-size: 13px; font-weight: 900; color: rgba(217,56,30,.85); letter-spacing: .05em; transform: rotate(-8deg); background: rgba(250,246,239,.25); }
+  .polaroid .cap { font-family: "Noto Serif SC", serif; text-align: center; font-size: 13px; color: #55504B; margin-top: 10px; letter-spacing: .25em; }
+
+  .toc { margin-top: 22px; }
+  .toc-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .toc-head .cn { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 900; color: #1A1815; letter-spacing: .12em; }
+  .toc-head .line { flex: 1; height: 1px; background: #D8D0C0; }
+  .toc-head .no { font-size: 10px; font-weight: 700; color: #B3AA9A; letter-spacing: .1em; }
+  .toc-item { display: flex; align-items: baseline; gap: 10px; padding: 11px 2px; border-bottom: 1px dashed #D8D0C0; }
+  .toc-item .num { font-family: "Noto Serif SC", serif; font-size: 15px; font-weight: 900; color: #D9381E; font-style: italic; width: 26px; flex-shrink: 0; }
+  .toc-item .name { font-family: "Noto Serif SC", serif; font-size: 18.5px; font-weight: 700; color: #1A1815; letter-spacing: .04em; }
+  .toc-item .tag { font-size: 10px; font-weight: 700; color: #8C8478; letter-spacing: .06em; border: 1px solid #CFC6B4; padding: 2px 7px; border-radius: 3px; white-space: nowrap; }
+  .toc-item .dots { flex: 1; border-bottom: 1.5px dotted #B3AA9A; transform: translateY(-4px); min-width: 14px; }
+  .toc-item .price { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 900; color: #1A1815; }
+  .toc-item .price em { font-style: normal; font-size: 11px; color: #D9381E; margin-right: 1px; }
+
+  .tabbar { position: absolute; bottom: 0; left: 0; right: 0; height: 84px; background: rgba(250,246,239,.88); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); border-top: 1.5px solid #1A1815; display: flex; z-index: 40; padding-bottom: 18px; }
+  .btab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 10.5px; font-weight: 700; color: #B3AA9A; letter-spacing: .1em; }
+  .btab.on { color: #1A1815; }
+  .btab.on .ic { color: #D9381E; }
+
+  /* ============ 屏幕 2：详情 ============ */
+  .s2-content { position: absolute; inset: 0; overflow: hidden; z-index: 2; }
+  .s2 .hero { position: absolute; top: 0; left: 0; right: 0; height: 400px; overflow: hidden; background: linear-gradient(140deg, #E8D9BE, #C9B088); }
+  .s2 .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(26,24,21,.18), transparent 26%, transparent 70%, #FAF6EF); }
+  .back-btn { position: absolute; top: 62px; left: 18px; width: 44px; height: 44px; border-radius: 50%; background: rgba(250,246,239,.9); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border: 1.5px solid rgba(26,24,21,.85); display: flex; align-items: center; justify-content: center; z-index: 20; box-shadow: 0 6px 18px rgba(60,45,25,.2); }
+  .hero-stamp { position: absolute; top: 66px; right: 20px; z-index: 20; width: 52px; height: 52px; border: 2.5px solid #D9381E; border-radius: 9px; background: rgba(250,246,239,.85); display: flex; align-items: center; justify-content: center; flex-direction: column; transform: rotate(7deg); }
+  .hero-stamp b { font-family: "Noto Serif SC", serif; font-size: 12px; font-weight: 900; color: #D9381E; line-height: 1.15; }
+
+  .s2-body { position: absolute; top: 372px; left: 0; right: 0; bottom: 0; padding: 8px 26px 40px; }
+  .s2-body .kicker { display: flex; align-items: center; gap: 10px; font-size: 10.5px; font-weight: 800; letter-spacing: .3em; color: #D9381E; }
+  .s2-body .kicker::after { content: ""; flex: 1; height: 1px; background: #D8D0C0; }
+  .s2-body h2 { font-family: "Noto Serif SC", serif; font-size: 40px; font-weight: 900; color: #1A1815; letter-spacing: .06em; margin-top: 12px; }
+  .s2-body .sub-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 6px; }
+  .s2-body .sub-row .stall { font-size: 12px; font-weight: 700; color: #8C8478; letter-spacing: .12em; }
+  .s2-body .sub-row .big-price { font-family: "Noto Serif SC", serif; font-size: 30px; font-weight: 900; color: #D9381E; }
+  .s2-body .sub-row .big-price em { font-style: normal; font-size: 15px; }
+  .s2-body .lead { margin-top: 16px; font-family: "Noto Serif SC", serif; font-size: 14.5px; line-height: 1.9; color: #453F35; text-align: justify; }
+  .s2-body .lead::first-letter { font-size: 42px; font-weight: 900; color: #D9381E; float: left; line-height: 1.05; margin: 4px 8px 0 0; }
+  .facts { display: flex; gap: 0; margin-top: 18px; border: 1.5px solid #1A1815; }
+  .facts .f { flex: 1; text-align: center; padding: 10px 4px; border-right: 1.5px solid #1A1815; }
+  .facts .f:last-child { border-right: none; }
+  .facts .f b { display: block; font-family: "Noto Serif SC", serif; font-size: 15px; font-weight: 900; color: #1A1815; }
+  .facts .f span { font-size: 9.5px; font-weight: 700; color: #8C8478; letter-spacing: .15em; }
+  .cta { margin-top: 18px; height: 54px; display: flex; align-items: center; justify-content: center; gap: 10px; background: #1A1815; color: #FAF6EF; font-size: 15.5px; font-weight: 800; letter-spacing: .3em; text-indent: .3em; border-radius: 4px; }
+  .cta .dot { width: 7px; height: 7px; background: #D9381E; border-radius: 50%; }
+
+  /* ============ 屏幕 3：今天吃什么 ============ */
+  .s3-content { position: absolute; inset: 0; padding: 66px 22px 0; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+  .s3-title { font-family: "Noto Serif SC", serif; font-size: 30px; font-weight: 900; color: #1A1815; letter-spacing: .14em; text-indent: .14em; }
+  .s3-sub { font-size: 11px; font-weight: 700; color: #8C8478; letter-spacing: .28em; margin-top: 7px; }
+
+  .tube { margin-top: 22px; position: relative; width: 100%; height: 210px; background: #F2EADB; border: 1.5px solid #1A1815; overflow: hidden; }
+  .tube .scroll-hint { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #B3AA9A; font-family: "Noto Serif SC", serif; font-size: 13px; letter-spacing: .4em; text-indent: .4em; }
+  .tube .strip { position: absolute; top: 0; bottom: 0; width: 118px; left: 50%; transform: translateX(-50%); border-left: 1.5px solid #1A1815; border-right: 1.5px solid #1A1815; background: #FAF6EF; box-shadow: 0 8px 26px rgba(60,45,25,.22); display: flex; }
+  .tube .strip .cell { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+  .tube .strip .cell b { font-family: "Noto Serif SC", serif; font-size: 21px; font-weight: 900; color: #1A1815; letter-spacing: .1em; }
+  .tube .strip .cell span { font-size: 10px; font-weight: 700; color: #D9381E; letter-spacing: .2em; }
+  .tube .arrow-l, .tube .arrow-r { position: absolute; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 9px solid transparent; border-bottom: 9px solid transparent; }
+  .tube .arrow-l { left: 14px; border-right: 12px solid #D9381E; }
+  .tube .arrow-r { right: 14px; border-left: 12px solid #D9381E; }
+
+  .result { margin-top: 26px; width: 100%; display: flex; gap: 16px; align-items: stretch; }
+  .result .rimg { width: 128px; height: 128px; flex-shrink: 0; border: 1.5px solid #1A1815; padding: 6px; background: #fff; box-shadow: 6px 6px 0 rgba(26,24,21,.85); }
+  .result .rimg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .result .rmeta { flex: 1; display: flex; flex-direction: column; }
+  .result .rlab { font-size: 10px; font-weight: 800; letter-spacing: .3em; color: #D9381E; }
+  .result .rname { font-family: "Noto Serif SC", serif; font-size: 30px; font-weight: 900; color: #1A1815; letter-spacing: .05em; margin-top: 6px; }
+  .result .rdes { font-size: 12px; color: #6B645A; line-height: 1.75; margin-top: 8px; }
+  .result .rfoot { margin-top: auto; display: flex; justify-content: space-between; align-items: baseline; border-top: 1px dashed #CFC6B4; padding-top: 9px; }
+  .result .rfoot .rp { font-family: "Noto Serif SC", serif; font-size: 19px; font-weight: 900; color: #D9381E; }
+  .result .rfoot .rs { font-size: 10.5px; font-weight: 700; color: #8C8478; letter-spacing: .1em; }
+
+  .verdict { margin-top: 22px; width: 100%; background: #1A1815; color: #FAF6EF; padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
+  .verdict .vstamp { width: 40px; height: 40px; border: 2px solid #D9381E; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: "Noto Serif SC", serif; font-size: 11px; font-weight: 900; color: #D9381E; flex-shrink: 0; }
+  .verdict p { font-family: "Noto Serif SC", serif; font-size: 13.5px; line-height: 1.7; }
+  .verdict p em { font-style: normal; color: #F0A48E; }
+
+  .again { margin-top: 18px; width: 100%; height: 56px; background: #D9381E; color: #FAF6EF; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; letter-spacing: .5em; text-indent: .5em; font-family: "Noto Serif SC", serif; border-radius: 4px; box-shadow: 0 12px 26px rgba(217,56,30,.32); }
+
+  .board-foot { margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .note { background: #FAF6EF; border: 1px solid #DDD5C4; border-radius: 18px; padding: 20px 22px; }
+  .note b { font-size: 14px; color: #1A1815; display: block; margin-bottom: 8px; font-family: "Noto Serif SC", serif; }
+  .note p { font-size: 13px; line-height: 1.7; color: #6B645A; }
+
+  /* ============ 手机端适配 ============ */
+  @media (max-width: 768px) {
+    .board { padding: 32px 20px 48px; }
+    .board h1 { font-size: 28px; }
+    .board-desc { font-size: 14px; }
+    .phones { gap: 32px; margin-top: 32px; }
+    .phone-unit { width: 100%; }
+    .phone { 
+      width: 100%; 
+      max-width: 390px;
+      height: auto; 
+      aspect-ratio: 390 / 844;
+      margin: 0 auto;
+      border-radius: 32px;
+      box-shadow: 0 0 0 8px #17181C, 0 0 0 10px #3A3C42, 0 20px 40px -10px rgba(26,24,21,.85);
+    }
+    .notch { width: 80px; height: 22px; top: 6px; }
+    .statusbar { height: 36px; padding: 8px 18px 0; font-size: 12px; }
+    .batt { width: 18px; height: 10px; }
+    .homebar { width: 90px; height: 3px; bottom: 4px; }
+    .phone-caption { font-size: 12px; }
+    .board-foot { grid-template-columns: 1fr; gap: 12px; }
+    .note { padding: 16px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="board">
+  <div class="board-head">
+    <div>
+      <div class="board-tag">Design Direction B</div>
+      <h1>食帖 · The Canteen Post</h1>
+      <p class="board-desc">把菜单做成一本「美食杂志」：米白纸感、衬线大标题、编号目录与虚线引导，像在读一份食堂周报。玻璃只在悬浮按钮与底部栏克制地出现，整体安静、耐看、有人文味。</p>
+      <div class="chips">
+        <span class="chip">杂志编辑排版</span><span class="chip">衬线中文字体</span><span class="chip">编号目录式菜单</span><span class="chip">印章与拍立得元素</span><span class="chip">克制使用玻璃</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="phones">
+
+    <!-- ===== 屏幕 1：首页 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen paper">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="s1-content">
+            <div class="masthead">
+              <div class="meta-row"><span>第 42 期</span><span>EST. 2026</span><span>农历七月初十</span></div>
+              <h1>山医食堂</h1>
+              <div class="sub">一周食帖 · 双楼层菜单</div>
+            </div>
+
+            <div class="floor-tabs">
+              <div class="ftab on">壹楼<small>大众菜 · 46 道</small></div>
+              <div class="ftab">贰楼<small>特色档 · 38 道</small></div>
+            </div>
+
+            <div class="polaroid">
+              <div class="ph">
+                <img src="images/mala-hotpot.jpg" alt="">
+                <div class="stamp">人气<br>第一</div>
+              </div>
+              <div class="cap">贰楼五号档 · 麻辣香锅</div>
+            </div>
+
+            <div class="toc">
+              <div class="toc-head"><span class="cn">今日目录</span><span class="line"></span><span class="no">CONTENTS</span></div>
+              <div class="toc-item"><span class="num">01</span><span class="name">兰州牛肉面</span><span class="tag">一楼面食</span><span class="dots"></span><span class="price"><em>¥</em>10</span></div>
+              <div class="toc-item"><span class="num">02</span><span class="name">西红柿炒蛋</span><span class="tag">今日半价</span><span class="dots"></span><span class="price"><em>¥</em>6</span></div>
+              <div class="toc-item"><span class="num">03</span><span class="name">黄焖鸡米饭</span><span class="tag">二楼招牌</span><span class="dots"></span><span class="price"><em>¥</em>13</span></div>
+              <div class="toc-item"><span class="num">04</span><span class="name">煎饼果子</span><span class="tag">早点限定</span><span class="dots"></span><span class="price"><em>¥</em>7</span></div>
+            </div>
+          </div>
+
+          <div class="tabbar">
+            <div class="btab on"><span class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5.5h16v4H4zM6 9.5v10h12v-10M10 19.5v-5h4v5"/></svg></span>食帖</div>
+            <div class="btab"><span class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4.5"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/></svg></span>求签</div>
+            <div class="btab"><span class="ic"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></span>编辑</div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">① 首页 · 食帖目录<span>报头 + 楼层书签 + 拍立得 + 编号目录</span></div>
+    </div>
+
+    <!-- ===== 屏幕 2：详情 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen paper s2">
+          <div class="hero">
+            <img class="food-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" src="images/pork-rice.jpg" alt="">
+          </div>
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+          <div class="back-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1A1815" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></div>
+          <div class="hero-stamp"><b>招牌</b></div>
+
+          <div class="s2-body">
+            <div class="kicker">贰楼 · 八号档口</div>
+            <h2>红烧肉盖饭</h2>
+            <div class="sub-row">
+              <span class="stall">今日已售 328 份 · 微辣 · 现做</span>
+              <span class="big-price"><em>¥</em>12</span>
+            </div>
+            <p class="lead">精选肥瘦相间的五花肉，冰糖炒色，小火慢焖足九十分钟。肥而不腻，入口即化，浇在热腾腾的东北大米上——贰楼当之无愧的排队王。</p>
+            <div class="facts">
+              <div class="f"><b>620<span style="font-size:10px"> kcal</span></b><span>能量参考</span></div>
+              <div class="f"><b>高蛋白</b><span>营养标签</span></div>
+              <div class="f"><b>3 min</b><span>平均出餐</span></div>
+            </div>
+            <div class="cta"><span class="dot"></span>收进想吃本<span class="dot"></span></div>
+            <div class="homebar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="phone-caption">② 菜品详情页<span>杂志内页式排版 + 首字下沉 + 印章</span></div>
+    </div>
+
+    <!-- ===== 屏幕 3：今天吃什么 ===== -->
+    <div class="phone-unit">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen paper">
+          <div class="statusbar"><span>9:41</span><span class="status-icons"><span class="sig"><i></i><i></i><i></i><i></i></span><span class="batt"><i></i></span></span></div>
+
+          <div class="s3-content">
+            <div class="s3-title">今日食签</div>
+            <div class="s3-sub">选择困难 · 一抽便知</div>
+
+            <div class="tube">
+              <div class="scroll-hint">食 堂 签 筒<br>↓ 拨动抽取</div>
+              <div class="strip"><div class="cell"><b>麻辣香锅</b><span>¥15 起</span></div></div>
+              <div class="arrow-l"></div>
+              <div class="arrow-r"></div>
+            </div>
+
+            <div class="result">
+              <div class="rimg"><img src="images/mala-hotpot.jpg" alt=""></div>
+              <div class="rmeta">
+                <div class="rlab">今日宜食</div>
+                <div class="rname">麻辣香锅</div>
+                <p class="rdes">荤素随心搭，锅气十足，医学生的深夜救赎。</p>
+                <div class="rfoot"><span class="rp">¥15 起</span><span class="rs">贰楼 · 5 号档</span></div>
+              </div>
+            </div>
+
+            <div class="verdict">
+              <div class="vstamp">签<br>文</div>
+              <p>今日忌纠结。<em>微辣多麻</em>，宜与室友同行，二两米饭打底，方为圆满。</p>
+            </div>
+
+            <div class="again">再求一签</div>
+          </div>
+          <div class="homebar"></div>
+        </div>
+      </div>
+      <div class="phone-caption">③ 今天吃什么 · 食签<span>签筒拨动抽取 + 今日宜食 + 签文彩蛋</span></div>
+    </div>
+
+  </div>
+
+  <div class="board-foot">
+    <div class="note"><b>排版语言</b><p>菜单即目录：中文数字楼层（壹楼/贰楼）、编号 01–04、虚线引导至右对齐价格，是老菜单与现代阅读习惯的折中。详情页用首字下沉与两栏事实表，像杂志内页。</p></div>
+    <div class="note"><b>玻璃的克制用法</b><p>只在返回按钮、底部栏等悬浮元素上使用玻璃模糊，主体保持纸感不反光——既满足 iPhone 液态玻璃的期待，又不破坏杂志气质。</p></div>
+    <div class="note"><b>彩蛋交互</b><p>「今天吃什么」变成求签：拨动签筒抽取，附赠一条「签文」式用餐建议。管理入口叫「编辑」，像给周报投稿一样增删菜品。</p></div>
+  </div>
+</div>
+</body>
+</html>
