@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
 <!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
-<link rel="manifest" href="manifest.webmanifest?v=v6-ultra-mobile-20260823">
+<link rel="manifest" href="manifest.webmanifest?v=v7-search-fav-notes-20260823">
 <!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
-<meta name="app-version" content="6.0.0-ultra-mobile-wide-area-20260823">
+<meta name="app-version" content="7.0.0-search-fav-notes-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -266,13 +266,31 @@ body > .blob-b{
 #app{
   position:fixed;inset:0;display:none;flex-direction:column;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:calc(env(safe-area-inset-bottom) + 62px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 82px);
 }
 
 /* ---- Top Header（液态玻璃顶栏 V2 · 极致紧凑移动端优化 V5） ---- */
 .head{
   padding:7px 10px 9px;flex-shrink:0;position:relative;z-index:1;overflow:visible;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
+}
+.edit-btn{
+  width:30px;height:30px;border-radius:50%;position:relative;flex-shrink:0;
+  background:rgba(255,255,255,.72);
+  backdrop-filter:blur(22px) saturate(1.95);-webkit-backdrop-filter:blur(22px) saturate(1.95);
+  border:1px solid rgba(255,255,255,.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
+    0 7px 16px rgba(160,40,90,.22),
+    0 0 0 1px rgba(255,159,190,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--pink-600);font-size:14px;transition:transform .15s ease;
+}
+.edit-btn:active{transform:scale(.92)}
+.edit-btn.on{
+  background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
+  color:#fff;
 }
 .head::before,.head::after{display:none}
 .greet{display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative;z-index:2}
@@ -337,24 +355,36 @@ body > .blob-b{
   transition:transform .18s ease, box-shadow .22s ease;
 }
 .search::before{
-  /* 顶部彩虹高光条 */
   content:"";position:absolute;top:2.5px;left:18px;right:18px;height:11px;border-radius:11px;
   background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0) 80%);
   opacity:.88;pointer-events:none;
 }
 .search::after{
-  /* 底部粉紫内发光 */
   content:"";position:absolute;left:20px;right:20px;bottom:4px;height:8px;border-radius:50%;
   background:radial-gradient(50% 100% at 50% 100%, rgba(255,180,210,.45), rgba(255,180,210,0) 70%);
   filter:blur(2px);opacity:.75;pointer-events:none;
 }
-.search:active{
-  transform:scale(.992);
+.search svg{flex-shrink:0}
+.search input{
+  flex:1;border:none;background:transparent;outline:none;
+  font-size:11.5px;font-weight:600;color:var(--ink-900);
+  font-family:inherit;min-width:0;
+}
+.search input::placeholder{color:var(--ink-300);font-weight:600}
+.search .clear-btn{
+  width:16px;height:16px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--pink-200);color:var(--pink-700);font-size:10px;font-weight:800;
+  display:none;align-items:center;justify-content:center;flex-shrink:0;
+  line-height:1;padding:0;
+}
+.search.has-text .clear-btn{display:flex}
+.search:focus-within{
+  transform:scale(.995);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.98),
     inset 0 -1.5px 0 rgba(255,210,228,.5),
     0 12px 28px rgba(160,40,90,.20),
-    0 0 0 1px rgba(255,159,190,.16);
+    0 0 0 1px rgba(255,159,190,.25);
 }
 
 /* ---- Content Card（液态玻璃"浮出"效果 V2 · 极致紧凑移动端优化 V5） ---- */
@@ -631,25 +661,25 @@ body > .blob-b{
 /* Group separator */
 .gap{height:2px}
 
-/* ================== Tabbar (波点方案风格 — 胶囊 + 中间扭蛋) V2 · 极致紧凑移动端优化 V5 ================== */
+/* ================== Tabbar (新设计 · 72px 高 · 4 项布局 · 更厚毛玻璃) ================== */
 .tabbar{
-  position:fixed;left:10px;right:10px;
+  position:fixed;left:8px;right:8px;
   bottom:calc(env(safe-area-inset-bottom) + 8px);
-  height:48px;border-radius:24px;z-index:80;
+  height:72px;border-radius:36px;z-index:80;
   background:
     var(--glass-aurora),
-    rgba(255,255,255,.82);
-  backdrop-filter:blur(28px) saturate(2.0);-webkit-backdrop-filter:blur(28px) saturate(2.0);
-  border:1.1px solid var(--white);
+    rgba(255,255,255,.88);
+  backdrop-filter:blur(40px) saturate(2.3);-webkit-backdrop-filter:blur(40px) saturate(2.3);
+  border:1.5px solid rgba(255,255,255,.95);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.98),
-    inset 0 -1px 0 rgba(255,210,228,.55),
+    inset 0 1.5px 0 rgba(255,255,255,.98),
+    inset 0 -1.5px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.4),
     inset -1px 0 0 rgba(255,255,255,.4),
-    0 10px 28px rgba(200,60,110,.16),
-    0 1px 7px rgba(200,60,110,.05),
-    0 0 0 1px rgba(255,159,190,.16);
-  display:flex;align-items:center;padding:0 7px;
+    0 18px 44px rgba(200,60,110,.22),
+    0 4px 14px rgba(200,60,110,.08),
+    0 0 0 1px rgba(255,159,190,.20);
+  display:flex;align-items:center;padding:0 8px;
   animation:tbFloat 7s ease-in-out infinite;
 }
 @keyframes tbFloat{
@@ -657,39 +687,221 @@ body > .blob-b{
   50%    { transform:translateY(-1.5px); }
 }
 .tb-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
-  color:var(--ink-300);font-size:7.5px;font-weight:700;cursor:pointer;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
+  color:var(--ink-300);font-size:10px;font-weight:700;cursor:pointer;
   transition:transform .2s ease, color .2s ease;
+  padding:4px 0;
 }
-.tb-item svg{width:16px;height:16px}
+.tb-item svg{width:26px;height:26px}
 .tb-item.on{
   color:var(--pink-600);
-  transform:translateY(-0.5px);
+  transform:translateY(-2px);
 }
+.tb-item.on svg{filter:drop-shadow(0 4px 8px rgba(240,86,141,.3))}
+.tb-item .tb-lbl{font-size:10px;font-weight:700;margin-top:1px}
 .tb-gacha{
-  width:42px;height:42px;border-radius:50%;margin:0 5px;flex-shrink:0;
+  width:58px;height:58px;border-radius:50%;margin:0 4px;flex-shrink:0;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.55),
-    inset 0 -1.5px 0 rgba(160,40,90,.22),
+    inset 0 2px 0 rgba(255,255,255,.55),
+    inset 0 -2px 0 rgba(160,40,90,.22),
     inset 0 0 0 1px rgba(255,255,255,.2),
-    0 9px 22px rgba(240,86,141,.40);
+    0 12px 28px rgba(240,86,141,.40);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform .18s ease, box-shadow .2s ease;
   position:relative;
 }
 .tb-gacha::before{
-  content:"";position:absolute;inset:-3.5px;border-radius:50%;
+  content:"";position:absolute;inset:-4px;border-radius:50%;
   background:radial-gradient(circle, rgba(255,180,210,.55), rgba(255,180,210,0) 65%);
   z-index:-1;opacity:.8;
 }
 .tb-gacha:active{transform:scale(.93)}
-.tb-gacha svg{animation:bob 3s ease-in-out infinite}
+.tb-gacha svg{width:32px;height:32px;animation:bob 3s ease-in-out infinite}
+.tb-gacha .tb-badge{
+  position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;
+  background:var(--white);color:var(--pink-600);font-size:9px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 10px rgba(240,86,141,.3);
+}
+
+/* Gacha 专属底部栏 */
+.g-tabbar{
+  position:absolute;left:8px;right:8px;
+  bottom:calc(env(safe-area-inset-bottom) + 8px);
+  height:60px;border-radius:30px;z-index:85;
+  background:
+    var(--glass-aurora),
+    rgba(255,255,255,.88);
+  backdrop-filter:blur(40px) saturate(2.3);-webkit-backdrop-filter:blur(40px) saturate(2.3);
+  border:1.5px solid rgba(255,255,255,.95);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255,255,255,.98),
+    inset 0 -1.5px 0 rgba(255,210,228,.55),
+    0 18px 44px rgba(200,60,110,.22);
+  display:flex;align-items:center;padding:0 10px;gap:8px;
+}
+.g-tabbar button{
+  flex:1;height:44px;border-radius:22px;border:none;cursor:pointer;
+  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:transform .15s ease, opacity .2s ease;
+}
+.g-tabbar button:active{transform:scale(.96)}
+.g-tabbar .g-btn-view{
+  background:linear-gradient(150deg,var(--pink-400),var(--pink-600));color:#fff;
+  box-shadow:0 8px 20px rgba(240,86,141,.32),inset 0 1px 0 rgba(255,255,255,.5);
+}
+.g-tabbar .g-btn-clear{
+  background:rgba(255,255,255,.92);color:var(--pink-600);
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(255,200,220,.5),0 4px 12px rgba(160,40,90,.12);
+}
+
+/* 收藏按钮（详情页） */
+.fav-btn{
+  position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.95);border:2px solid rgba(255,255,255,.98);
+  backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);
+  box-shadow:0 8px 20px rgba(200,60,110,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:4;
+  transition:transform .2s ease, background .2s ease;
+}
+.fav-btn:active{transform:scale(.9)}
+.fav-btn.on{
+  background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
+  border-color:rgba(255,255,255,.5);
+}
+.fav-btn svg{width:22px;height:22px;color:var(--pink-300)}
+.fav-btn.on svg{color:#fff;fill:#fff}
+
+/* 备注区域（详情页） */
+.notes-section{margin-top:18px}
+.notes-section h{
+  font-size:13px;font-weight:800;color:var(--ink-900);margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.notes-section h .nc{font-size:10px;color:var(--ink-300);font-weight:600}
+.note-tags{display:flex;flex-wrap:wrap;gap:6px}
+.note-tag{
+  padding:6px 11px;border-radius:var(--radius-full);font-size:11.5px;font-weight:700;
+  background:var(--pink-50);color:var(--ink-500);border:1.5px solid var(--pink-100);
+  cursor:pointer;transition:all .15s ease;display:flex;align-items:center;gap:3px;
+}
+.note-tag.on{
+  background:linear-gradient(150deg,var(--pink-400),var(--pink-600));color:#fff;
+  border-color:transparent;box-shadow:0 4px 12px rgba(240,86,141,.25);
+}
+.note-textarea{
+  margin-top:10px;width:100%;min-height:60px;padding:10px 12px;
+  border-radius:14px;border:1.5px solid var(--pink-100);
+  font-size:12.5px;background:var(--pink-50);font-family:inherit;color:var(--ink-900);
+  outline:none;resize:none;transition:border-color .2s ease;line-height:1.6;
+}
+.note-textarea:focus{border-color:var(--pink-400)}
+.note-textarea::placeholder{color:var(--ink-300)}
+
+/* 收藏清单页 */
+.fav-list{padding:0 10px 8px}
+.fav-item{
+  display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:6px;border-radius:14px;
+  background:
+    var(--glass-aurora),
+    rgba(255,255,255,.66);
+  backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);
+  border:1px solid rgba(255,255,255,.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.52),
+    0 5px 15px rgba(160,40,90,.07),
+    0 0 0 1px rgba(255,159,190,.12);
+  cursor:pointer;transition:transform .18s ease;
+}
+.fav-item:active{transform:scale(.985)}
+.fav-item .fi-note{
+  font-size:9px;color:var(--pink-600);font-weight:700;margin-top:2px;
+  display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
+}
+.fav-item .fi-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.fav-item .fi-tag{
+  font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:var(--radius-full);
+  background:var(--pink-100);color:var(--pink-700);
+}
+.fav-item .fi-del{
+  width:24px;height:24px;border-radius:50%;border:none;cursor:pointer;flex-shrink:0;
+  background:rgba(240,86,141,.15);color:var(--pink-600);
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+}
+
+/* 我的页面 */
+.profile-page{padding:12px 14px}
+.prof-card{
+  background:
+    var(--glass-aurora),
+    rgba(255,255,255,.72);
+  backdrop-filter:blur(30px) saturate(2.0);-webkit-backdrop-filter:blur(30px) saturate(2.0);
+  border:1px solid rgba(255,255,255,.88);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
+    0 10px 28px rgba(160,40,90,.10);
+  border-radius:22px;padding:18px;margin-bottom:14px;
+  display:flex;align-items:center;gap:14px;
+}
+.prof-ava{
+  width:64px;height:64px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 10px 24px rgba(240,86,141,.28);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:900;color:#fff;
+}
+.prof-info{flex:1}
+.prof-info h{font-size:17px;font-weight:900;color:var(--ink-900)}
+.prof-info p{font-size:12px;color:var(--ink-500);margin-top:3px}
+.prof-stats{display:flex;gap:6px;margin-bottom:14px}
+.prof-stat{
+  flex:1;text-align:center;padding:14px 8px;border-radius:16px;
+  background:
+    var(--glass-aurora),
+    rgba(255,255,255,.66);
+  backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);
+  border:1px solid rgba(255,255,255,.86);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.98),
+    0 5px 15px rgba(160,40,90,.07);
+}
+.prof-stat b{display:block;font-size:18px;font-weight:900;color:var(--pink-600)}
+.prof-stat span{display:block;font-size:10px;color:var(--ink-300);font-weight:600;margin-top:2px}
+.prof-menu{display:flex;flex-direction:column;gap:6px}
+.prof-menu-item{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;cursor:pointer;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);
+  border:1px solid rgba(255,255,255,.86);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 4px 12px rgba(160,40,90,.06);
+  font-size:13px;font-weight:700;color:var(--ink-700);
+  transition:transform .15s ease;
+}
+.prof-menu-item:active{transform:scale(.98)}
+.prof-menu-item .pi-icon{font-size:18px}
+.prof-menu-item .pi-val{margin-left:auto;font-size:11px;color:var(--ink-300);font-weight:600}
+
+/* TabBar 隐藏（扭蛋机页面） */
+.tabbar.hidden-tabbar{
+  transform:translateY(calc(100% + 20px));
+  transition:transform .35s cubic-bezier(.2,.9,.2,1);
+  pointer-events:none;
+}
+
+/* 搜索无结果提示 */
+.search-empty{
+  padding:30px 20px;text-align:center;color:var(--ink-300);
+}
+.search-empty .se-icon{font-size:36px;margin-bottom:8px}
+.search-empty p{font-size:13px;line-height:1.6}
 
 /* Dock (5 results) · 极致紧凑移动端优化 V5 */
 .pickbar{
   position:fixed;left:10px;right:10px;
-  bottom:calc(env(safe-area-inset-bottom) + 64px);
+  bottom:calc(env(safe-area-inset-bottom) + 84px);
   padding:5px 7px;border-radius:14px;z-index:75;
   background:rgba(255,255,255,.88);
   backdrop-filter:blur(15px) saturate(1.6);-webkit-backdrop-filter:blur(15px) saturate(1.6);
@@ -1004,9 +1216,10 @@ body > .blob-b{
 @media(min-width:768px){
   #app,#welcome,#gacha{max-width:480px;margin:0 auto;left:50%;right:auto;transform:translateX(-50%);box-shadow:0 40px 100px rgba(200,60,110,.15)}
   #gacha.open{transform:translateX(-50%) translateY(0)}
-  .tabbar{max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%);right:auto}
-  .pickbar{max-width:440px;margin:0 auto;left:50%;transform:translateX(-50%) translateY(140%);right:auto}
+  .tabbar{max-width:460px;margin:0 auto;left:50%;transform:translateX(-50%);right:auto}
+  .pickbar{max-width:460px;margin:0 auto;left:50%;transform:translateX(-50%) translateY(140%);right:auto}
   .pickbar.show{transform:translateX(-50%) translateY(0)}
+  .g-tabbar{max-width:460px;margin:0 auto;left:50%;transform:translateX(-50%);right:auto}
 }
 </style>
 </head>
@@ -1053,53 +1266,80 @@ body > .blob-b{
     <div class="greet">
       <div>
         <div class="g-lbl">DOT DOT CAFÉ</div>
-        <div class="g-title">今天想吃点什么呀？</div>
+        <div class="g-title" id="pageTitle">今天想吃点什么呀？</div>
       </div>
-      <div class="ava" onclick="toggleEdit()" title="编辑">呆</div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="edit-btn" id="editBtn" onclick="toggleEdit()" title="编辑">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
+        </div>
+        <div class="ava" title="呆呆大王">呆</div>
+      </div>
     </div>
-    <div class="search">
+    <div class="search" id="searchBox">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      搜一道喜欢的菜…
+      <input id="searchInput" type="text" placeholder="搜一道喜欢的菜…" autocomplete="off">
+      <button class="clear-btn" id="searchClear" onclick="clearSearch()" title="清除">×</button>
     </div>
   </div>
 
   <!-- Body Card -->
-  <div class="body">
-    <!-- Seg -->
-    <div class="seg-wrap">
-      <div class="seg" id="seg"></div>
-    </div>
-    <!-- Chips -->
-    <div class="chips" id="chips"></div>
-
-    <!-- Edit banner -->
-    <div class="edit-banner" id="eb" style="display:none">
-      <span>编辑模式已开启</span>
-      <div style="display:flex;gap:8px">
-        <button class="b-add" onclick="showAdd()">＋ 添加菜品</button>
-        <button class="b-done" onclick="toggleEdit()">完成 ✓</button>
+  <div class="body" id="bodyCard">
+    <!-- 菜单视图 -->
+    <div id="viewMenu" style="display:flex;flex-direction:column;flex:1;min-height:0">
+      <!-- Seg -->
+      <div class="seg-wrap">
+        <div class="seg" id="seg"></div>
       </div>
+      <!-- Chips -->
+      <div class="chips" id="chips"></div>
+
+      <!-- Edit banner -->
+      <div class="edit-banner" id="eb" style="display:none">
+        <span>编辑模式已开启</span>
+        <div style="display:flex;gap:8px">
+          <button class="b-add" onclick="showAdd()">＋ 添加菜品</button>
+          <button class="b-done" onclick="toggleEdit()">完成 ✓</button>
+        </div>
+      </div>
+
+      <!-- Sec head -->
+      <div class="sec-head">
+        <b><span class="dot-trio"><i></i><i></i><i></i></span><span id="secName">菜单</span></b>
+        <span id="secStat"></span>
+      </div>
+
+      <!-- List -->
+      <div class="list" id="list"></div>
     </div>
 
-    <!-- Sec head -->
-    <div class="sec-head">
-      <b><span class="dot-trio"><i></i><i></i><i></i></span><span id="secName">菜单</span></b>
-      <span id="secStat"></span>
+    <!-- 收藏清单视图 -->
+    <div id="viewFavorites" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
+      <div class="sec-head" style="margin-top:4px">
+        <b><span class="dot-trio"><i></i><i></i><i></i></span><span>我的收藏</span></b>
+        <span id="favCount"></span>
+      </div>
+      <div class="fav-list" id="favList"></div>
     </div>
 
-    <!-- List -->
-    <div class="list" id="list"></div>
+    <!-- 我的页面视图 -->
+    <div id="viewProfile" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
+      <div class="profile-page" id="profilePage"></div>
+    </div>
   </div>
 </div>
 
 <!-- Tabbar -->
 <div class="tabbar" id="tb">
   <div class="tb-item on" data-v="menu" onclick="switchTab('menu')">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
-    菜单
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+    <span class="tb-lbl">菜单</span>
+  </div>
+  <div class="tb-item" data-v="favorites" onclick="switchTab('favorites')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span class="tb-lbl">收藏</span>
   </div>
   <div class="tb-gacha" onclick="openGacha()" title="今天吃什么">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M7 3h10a3 3 0 0 1 3 3v2H4V6a3 3 0 0 1 3-3Z"/>
       <rect x="3" y="8" width="18" height="10" rx="3"/>
       <circle cx="8.5" cy="13" r="1.3" fill="#fff"/>
@@ -1107,10 +1347,11 @@ body > .blob-b{
       <circle cx="15.5" cy="12" r="1.3" fill="#fff"/>
       <path d="M12 18v2M9 20h6"/>
     </svg>
+    <span class="tb-badge" id="gachaBadge" style="display:none">0</span>
   </div>
-  <div class="tb-item" data-v="edit" onclick="toggleEdit()">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19l-4 1 1-4 12.5-12.5Z"/></svg>
-    编辑
+  <div class="tb-item" data-v="profile" onclick="switchTab('profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span class="tb-lbl">我的</span>
   </div>
 </div>
 
@@ -1173,7 +1414,20 @@ body > .blob-b{
         <h>扭蛋记录<s id="gHistN"></s></h>
         <div id="gHistRows"></div>
       </div>
+      <div style="height:72px"></div>
     </div>
+  </div>
+
+  <!-- 扭蛋机专属底部栏（固定在 gacha 页面底部） -->
+  <div class="g-tabbar" id="gTabbar">
+    <button class="g-btn-view" onclick="viewResults()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      查看结果
+    </button>
+    <button class="g-btn-clear" onclick="clearGacha()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+      清空重扭
+    </button>
   </div>
 </div>
 
@@ -1236,9 +1490,11 @@ function imgOf(d){
 }
 
 let MENU=null; let CUSTOM=[]; let DEL=new Set();
+let FAVORITES=new Set(); let NOTES={};
+let favDishes = [];
 let S = {
   view:'menu', sub:'1F', edit:false, tab:'floor',
-  picks:[]
+  picks:[], search:''
 };
 
 /* ========== INIT ========== */
@@ -1248,10 +1504,12 @@ let S = {
   try{
     CUSTOM = JSON.parse(localStorage.getItem('dot_custom')||'[]');
     DEL = new Set(JSON.parse(localStorage.getItem('dot_del')||'[]'));
+    FAVORITES = new Set(JSON.parse(localStorage.getItem('dot_favorites')||'[]'));
+    NOTES = JSON.parse(localStorage.getItem('dot_notes')||'{}');
   }catch(e){}
   // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
   if('serviceWorker' in navigator){
-    const SW_VER = '?v=v6-ultra-mobile-20260823';
+    const SW_VER = '?v=v7-search-fav-notes-20260823';
     navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
       // 发现更新后立即激活（跳过等待），下次访问就是新版本
       if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
@@ -1276,7 +1534,7 @@ let S = {
       if (!refreshing) { refreshing = true; try { location.reload(); } catch(e) {} }
     });
   }
-  renderSeg(); renderChips(); renderList();
+  renderSeg(); renderChips(); renderList(); renderFavorites(); renderProfile(); bindSearch(); updateTabbar(); updateGachaBadge();
 })();
 
 /* ========== HELPERS ========== */
@@ -1312,22 +1570,21 @@ function toast(msg){
 }
 function updateTabbar(){
   document.querySelectorAll('.tb-item').forEach(el=>{
-    el.classList.toggle('on', el.dataset.v===S.view && !S.edit || S.view==='edit' && el.dataset.v==='edit' && S.edit);
+    el.classList.toggle('on', el.dataset.v===S.view);
   });
-  // 如果处于编辑模式，给 tabbar 手动标记
   if(S.edit){
-    document.querySelectorAll('.tb-item').forEach(el=>{
-      if(el.dataset.v==='menu') el.classList.remove('on');
-      if(el.dataset.v==='edit') el.classList.add('on');
-    });
+    document.getElementById('editBtn').classList.add('on');
+  } else {
+    document.getElementById('editBtn').classList.remove('on');
   }
+  updateGachaBadge();
 }
 function enter(){
   document.getElementById('welcome').classList.add('fade');
   setTimeout(()=>{
     document.getElementById('welcome').style.display='none';
     document.getElementById('app').style.display='flex';
-    document.getElementById('tb').style.transform='translateY(0)';
+    document.getElementById('tb').classList.remove('hidden-tabbar');
   },550);
 }
 
@@ -1395,12 +1652,38 @@ function switchTab(v){
   if(v==='menu'){
     if(S.edit)return toggleEdit();
     S.view='menu';S.tab='floor';S.sub='1F';
+    document.getElementById('pageTitle').textContent='今天想吃点什么呀？';
+    showView('viewMenu');
     document.getElementById('app').scrollTop=0;
-  } else if(v==='edit'){
-    toggleEdit();return;
+    renderSeg();renderChips();renderList();
+  } else if(v==='favorites'){
+    if(S.edit)toggleEdit();
+    S.view='favorites';
+    document.getElementById('pageTitle').textContent='我的收藏清单 💗';
+    showView('viewFavorites');
+    renderFavorites();
+  } else if(v==='profile'){
+    if(S.edit)toggleEdit();
+    S.view='profile';
+    document.getElementById('pageTitle').textContent='呆呆大王的小馆';
+    showView('viewProfile');
+    renderProfile();
   }
   updateTabbar();
-  renderSeg();renderChips();renderList();
+}
+function showView(id){
+  ['viewMenu','viewFavorites','viewProfile'].forEach(v=>{
+    document.getElementById(v).style.display = v===id?'':'none';
+  });
+}
+function updateGachaBadge(){
+  const b = document.getElementById('gachaBadge');
+  if(S.picks.length>0){
+    b.style.display='flex';
+    b.textContent = S.picks.length;
+  } else {
+    b.style.display='none';
+  }
 }
 
 /* ========== LIST ========== */
@@ -1411,26 +1694,38 @@ function renderList(){
   let pool = all();
   let filtered = [];
   let grouped = null;
+  const searchQ = S.search.trim().toLowerCase();
 
   if(S.tab==='floor'){
     if(S.sub.length<=3){
-      // 整个楼层，按档口分组
       const f = MENU.floors.find(x=>x.id===S.sub);
       sn.textContent = f ? f.name+'菜单' : '菜单';
       filtered = pool.filter(d=>d.floor===S.sub);
+      if(searchQ){
+        filtered = filtered.filter(d=>{
+          const n = (d.name||'').toLowerCase();
+          const s = (d.shopName||'').toLowerCase();
+          return n.includes(searchQ) || s.includes(searchQ);
+        });
+        sn.textContent = '"'+S.search+'" 的搜索结果';
+      }
       ss.textContent = filtered.length+' 道';
       const g = {};
       filtered.forEach(d=>{ (g[d.shopId]??=[]).push(d); });
-      const order = MENU.floors.flatMap(f=>f.shops.filter(s=>!s.name.includes('暂停营业')).map(s=>s.id));
-      grouped = Object.keys(g).sort((a,b)=>order.indexOf(a)-order.indexOf(b)).map(id=>({
-        id,
-        title:g[id][0].shopName.replace(/^[一二三四五六七八九十0-9]+号\s*/,''),
-        idx: (id.match(/_(\d+)$/)||[])[1] || '',
-        list:g[id]
-      }));
+      if(!searchQ){
+        const order = MENU.floors.flatMap(f=>f.shops.filter(s=>!s.name.includes('暂停营业')).map(s=>s.id));
+        grouped = Object.keys(g).sort((a,b)=>order.indexOf(a)-order.indexOf(b)).map(id=>({
+          id,
+          title:g[id][0].shopName.replace(/^[一二三四五六七八九十0-9]+号\s*/,''),
+          idx: (id.match(/_(\d+)$/)||[])[1] || '',
+          list:g[id]
+        }));
+      }
     } else {
-      // 具体档口
       filtered = pool.filter(d=>d.shopId===S.sub);
+      if(searchQ){
+        filtered = filtered.filter(d=>(d.name||'').toLowerCase().includes(searchQ));
+      }
       sn.textContent = filtered[0]?.shopName.replace(/^[一二三四五六七八九十0-9]+号\s*/,'') || '';
       ss.textContent = filtered.length+' 道';
     }
@@ -1438,6 +1733,10 @@ function renderList(){
     const c = CATS.find(x=>x.name===S.sub) || {name:S.sub};
     sn.textContent = c.name;
     filtered = pool.filter(d=>catOf(d).name===S.sub);
+    if(searchQ){
+      filtered = filtered.filter(d=>(d.name||'').toLowerCase().includes(searchQ));
+      sn.textContent = '"'+S.search+'" 的搜索结果';
+    }
     ss.textContent = filtered.length+' 道';
   } else {
     const t = PRICE_TIERS.find(x=>x.name===S.sub);
@@ -1448,12 +1747,20 @@ function renderList(){
       if(t.min!==undefined && p<t.min)return false;
       return true;
     });
+    if(searchQ){
+      filtered = filtered.filter(d=>(d.name||'').toLowerCase().includes(searchQ));
+      sn.textContent = '"'+S.search+'" 的搜索结果';
+    }
     ss.textContent = filtered.length+' 道';
   }
 
   let html='';
   if(filtered.length===0){
-    html = `<div class="empty"><div class="ei">🫧</div><p>这里还没有菜品<br/>点右上角「呆」头像进入编辑模式添加吧～</p></div>`;
+    if(searchQ){
+      html = `<div class="search-empty"><div class="se-icon">🔍</div><p>没有找到"<b style="color:var(--pink-600)">${S.search}</b>"相关的菜<br/>换个关键词试试？</p></div>`;
+    } else {
+      html = `<div class="empty"><div class="ei">🫧</div><p>这里还没有菜品<br/>点顶栏铅笔图标进入编辑模式添加吧～</p></div>`;
+    }
   } else if(grouped){
     grouped.forEach(g=>{
       html += `<div class="shop-h">
@@ -1516,10 +1823,17 @@ function bindCards(){
 /* ========== EDIT ========== */
 function toggleEdit(){
   S.edit=!S.edit;
-  S.view = S.edit?'edit':'menu';
+  if(S.edit){
+    S.view='menu';
+    showView('viewMenu');
+    document.getElementById('pageTitle').textContent='今天想吃点什么呀？';
+  }
   document.getElementById('eb').style.display = S.edit?'flex':'none';
   document.getElementById('app').classList.toggle('edit-mode',S.edit);
   updateTabbar();
+  if(S.edit){
+    renderSeg();renderChips();renderList();
+  }
   toast(S.edit?'编辑模式已开启 ✏️':'已保存 💾');
 }
 function delDish(id,custom){
@@ -1592,8 +1906,21 @@ function showDetail(d){
   const heroHTML = img
     ? `<img src="${img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;display:block">`
     : `${c.emoji}`;
+  const isFav = FAVORITES.has(d.id);
+  const note = NOTES[d.id] || {tags:[], text:''};
+  const safeNoteText = (note.text||'').replace(/</g,'&lt;').replace(/>/g,'&gt');
+  const PRESET_TAGS = [
+    {key:'good', label:'好吃👍', cls:'on'},
+    {key:'bad', label:'难吃👎', cls:'on'},
+    {key:'ok', label:'一般😐', cls:'on'},
+    {key:'rec', label:'推荐🌟', cls:'on'},
+    {key:'norec', label:'不推荐💔', cls:'on'}
+  ];
   sheetHTML(`
     <div class="shero">${heroHTML}
+      <button class="fav-btn ${isFav?'on':''}" id="favBtn" onclick="toggleFav('${d.id}','${d.custom?1:0}')">
+        <svg viewBox="0 0 24 24" fill="${isFav?'currentColor':'none'}" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
       <div class="stamp">呆呆<br>推荐</div>
     </div>
     <div class="pill-row">
@@ -1612,10 +1939,23 @@ function showDetail(d){
       <div class="f"><b>${c.name}</b><span>菜品分类</span></div>
       <div class="f"><b>${floorName}</b><span>所在楼层</span></div>
     </div>
+
+    <div class="notes-section">
+      <h>我的备注 <span class="nc" id="noteCount"></span></h>
+      <div class="note-tags" id="noteTags">
+        ${PRESET_TAGS.map(t=>{
+          const active = note.tags.includes(t.key);
+          return `<div class="note-tag ${active?'on':''}" data-key="${t.key}" onclick="toggleNoteTag('${d.id}','${t.key}','${d.custom?1:0}')">${t.label}</div>`;
+        }).join('')}
+      </div>
+      <textarea class="note-textarea" id="noteText" placeholder="写下你的想法…" oninput="saveNoteText('${d.id}','${d.custom?1:0}',this.value)">${safeNoteText}</textarea>
+    </div>
+
     <div class="srow">
       <button class="b-cancel" onclick="closeSheet()">关闭</button>
       <button class="b-ok" onclick="pickDirect('${d.id}',${d.custom?1:0})">加入候选 ✨</button>
     </div>`);
+  updateNoteCount(d.id);
 }
 function pickDirect(id,custom){
   if(S.picks.length>=5){toast('5 次机会用完啦，去结果栏选吧～');return;}
@@ -1703,9 +2043,13 @@ function chooseW(d){
 /* ========== GACHA ========== */
 function openGacha(){
   document.getElementById('gacha').classList.add('open');
+  document.getElementById('tb').classList.add('hidden-tabbar');
   refreshGacha();
 }
-function closeGacha(){document.getElementById('gacha').classList.remove('open')}
+function closeGacha(){
+  document.getElementById('gacha').classList.remove('open');
+  document.getElementById('tb').classList.remove('hidden-tabbar');
+}
 
 function refreshGacha(){
   document.getElementById('gc').textContent = S.picks.length;
@@ -1777,6 +2121,223 @@ function spinGacha(){
     caps.forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove('pop');});
     updatePicks();refreshGacha();
   },900);
+}
+
+/* ========== SEARCH ========== */
+function bindSearch(){
+  const input = document.getElementById('searchInput');
+  const box = document.getElementById('searchBox');
+  input.addEventListener('input', e=>{
+    S.search = e.target.value;
+    if(S.search.length>0){
+      box.classList.add('has-text');
+    } else {
+      box.classList.remove('has-text');
+    }
+    if(S.view==='menu'){
+      renderList();
+    }
+  });
+  input.addEventListener('keydown', e=>{
+    if(e.key==='Enter') e.preventDefault();
+  });
+}
+function clearSearch(){
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  S.search = '';
+  document.getElementById('searchBox').classList.remove('has-text');
+  if(S.view==='menu'){
+    renderList();
+  }
+  input.focus();
+}
+
+/* ========== FAVORITES ========== */
+function toggleFav(id,custom){
+  if(FAVORITES.has(id)){
+    FAVORITES.delete(id);
+    toast('已取消收藏 💔');
+  } else {
+    FAVORITES.add(id);
+    toast('已加入收藏 💗');
+  }
+  localStorage.setItem('dot_favorites', JSON.stringify([...FAVORITES]));
+  const d = custom? CUSTOM.find(x=>x.id===id):all().find(x=>x.id===id);
+  if(d) showDetail(d);
+  updateGachaBadge();
+  if(S.view==='favorites') renderFavorites();
+}
+function isFav(id){ return FAVORITES.has(id); }
+
+/* ========== NOTES ========== */
+const NOTE_TAG_LABELS = {good:'好吃👍',bad:'难吃👎',ok:'一般😐',rec:'推荐🌟',norec:'不推荐💔'};
+function toggleNoteTag(id,key,custom){
+  if(!NOTES[id]) NOTES[id] = {tags:[], text:''};
+  const idx = NOTES[id].tags.indexOf(key);
+  if(idx>=0){
+    NOTES[id].tags.splice(idx,1);
+  } else {
+    NOTES[id].tags.push(key);
+  }
+  localStorage.setItem('dot_notes', JSON.stringify(NOTES));
+  showDetail(custom? CUSTOM.find(x=>x.id===id):all().find(x=>x.id===id));
+}
+function saveNoteText(id,custom,val){
+  if(!NOTES[id]) NOTES[id] = {tags:[], text:''};
+  NOTES[id].text = val;
+  localStorage.setItem('dot_notes', JSON.stringify(NOTES));
+  updateNoteCount(id);
+}
+function updateNoteCount(id){
+  const el = document.getElementById('noteCount');
+  if(!el) return;
+  const n = NOTES[id];
+  let parts = [];
+  if(n && n.tags && n.tags.length>0) parts.push(n.tags.length+' 标签');
+  if(n && n.text && n.text.trim()) parts.push('有文字');
+  el.textContent = parts.length>0 ? '· '+parts.join(' · ') : '';
+}
+
+/* ========== FAVORITES PAGE ========== */
+function renderFavorites(){
+  const list = document.getElementById('favList');
+  const count = document.getElementById('favCount');
+  const favArr = [...FAVORITES];
+  count.textContent = favArr.length>0? favArr.length+' 道' : '';
+
+  if(favArr.length===0){
+    list.innerHTML = `<div class="empty" style="padding:40px 20px"><div class="ei">💗</div><p>还没有收藏的菜品<br/>去菜单页爱心收藏喜欢的菜吧～</p></div>`;
+    favDishes = [];
+    return;
+  }
+
+  const allPool = all();
+  favDishes = [];
+  let html = '';
+  favArr.forEach(id=>{
+    const d = CUSTOM.find(x=>x.id===id) || allPool.find(x=>x.id===id);
+    if(!d) return;
+    favDishes.push(d);
+    const c = catOf(d);
+    const note = NOTES[id];
+    const noteText = note?.text || '';
+    const noteTags = (note?.tags||[]).map(k=>NOTE_TAG_LABELS[k]||k);
+    const price = d.price?.display || '';
+    const shopShort = (d.shopName||'').replace(/^[一二三四五六七八九十0-9]+号\s*/,'').slice(0,8);
+    const idx = favDishes.length - 1;
+    html += `<div class="fav-item" onclick="showDetail(favDishes[${idx}])">
+      <div class="thumb" style="width:44px;height:44px;font-size:19px">${c.emoji}</div>
+      <div class="info" style="flex:1;min-width:0">
+        <div class="dname">${d.name}</div>
+        <div class="ddesc">${d.floor==='1F'?'一楼':'二楼'} · ${shopShort} · ¥${price.replace('元','')}</div>
+        ${noteTags.length>0? `<div class="fi-tags">${noteTags.map(t=>`<span class="fi-tag">${t}</span>`).join('')}</div>`:''}
+        ${noteText? `<div class="fi-note">📝 ${noteText}</div>`:''}
+      </div>
+      <button class="fi-del" onclick="event.stopPropagation();removeFav('${id}')">×</button>
+    </div>`;
+  });
+  list.innerHTML = html;
+}
+function removeFav(id){
+  FAVORITES.delete(id);
+  localStorage.setItem('dot_favorites', JSON.stringify([...FAVORITES]));
+  toast('已从收藏中移除 💔');
+  renderFavorites();
+  updateGachaBadge();
+}
+
+/* ========== PROFILE PAGE ========== */
+function renderProfile(){
+  const el = document.getElementById('profilePage');
+  const totalDishes = all().length;
+  const favCount = FAVORITES.size;
+  const noteCount = Object.values(NOTES).filter(n=>n.text||(n.tags&&n.tags.length>0)).length;
+  const customCount = CUSTOM.length;
+
+  el.innerHTML = `
+    <div class="prof-card">
+      <div class="prof-ava">呆</div>
+      <div class="prof-info">
+        <h>呆呆大王</h>
+        <p>今天也要好好吃饭呀 💗</p>
+      </div>
+    </div>
+
+    <div class="prof-stats">
+      <div class="prof-stat"><b>${totalDishes}</b><span>总菜品</span></div>
+      <div class="prof-stat"><b>${favCount}</b><span>已收藏</span></div>
+      <div class="prof-stat"><b>${noteCount}</b><span>有备注</span></div>
+      <div class="prof-stat"><b>${customCount}</b><span>我添加的</span></div>
+    </div>
+
+    <div class="prof-menu">
+      <div class="prof-menu-item" onclick="switchTab('favorites')">
+        <span class="pi-icon">💗</span>
+        我的收藏清单
+        <span class="pi-val">${favCount} 道</span>
+      </div>
+      <div class="prof-menu-item" onclick="exportData()">
+        <span class="pi-icon">📤</span>
+        导出我的数据
+      </div>
+      <div class="prof-menu-item" onclick="clearAllData()">
+        <span class="pi-icon">🗑️</span>
+        清除所有本地数据
+      </div>
+    </div>
+  `;
+}
+function exportData(){
+  const data = {
+    favorites: [...FAVORITES],
+    notes: NOTES,
+    custom: CUSTOM,
+    exportTime: new Date().toISOString()
+  };
+  const str = JSON.stringify(data, null, 2);
+  navigator.clipboard.writeText(str).then(()=>{
+    toast('数据已复制到剪贴板 📋');
+  }).catch(()=>{
+    sheetHTML(`<h2 style="font-size:18px;font-weight:900;margin-bottom:12px">导出数据</h2>
+      <textarea readonly style="width:100%;min-height:200px;padding:10px;border-radius:12px;border:1.5px solid var(--pink-100);font-size:11px;font-family:monospace;background:var(--pink-50)">${str}</textarea>
+      <div class="srow" style="margin-top:12px"><button class="b-ok" onclick="closeSheet()">关闭</button></div>`);
+  });
+}
+function clearAllData(){
+  if(!confirm('确定要清除所有本地数据吗？\n（收藏、备注、自定义菜品都将清除）'))return;
+  FAVORITES.clear();
+  NOTES = {};
+  CUSTOM = [];
+  localStorage.setItem('dot_favorites','[]');
+  localStorage.setItem('dot_notes','{}');
+  localStorage.setItem('dot_custom','[]');
+  toast('已清除所有数据 🧹');
+  renderProfile();
+  updateGachaBadge();
+}
+
+/* ========== GACHA BOTTOM BAR ========== */
+function viewResults(){
+  if(S.picks.length===0){
+    toast('还没扭任何菜哦，先扭一扭吧～');
+    return;
+  }
+  closeGacha();
+  finalView();
+}
+function clearGacha(){
+  if(S.picks.length===0){
+    toast('还没有扭任何菜哦～');
+    return;
+  }
+  if(!confirm('确定要清空已扭的结果吗？'))return;
+  S.picks=[];
+  updatePicks();
+  document.getElementById('gResult').classList.remove('show');
+  document.getElementById('gHist').style.display='none';
+  refreshGacha();
+  toast('已清空，重新开始 🎀');
 }
 </script>
 </body>

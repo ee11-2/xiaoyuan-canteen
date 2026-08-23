@@ -2,7 +2,7 @@
  * 根作用域 — 防止旧缓存一直卡住
  * V5 极致紧凑移动端版本 — 安装时清理所有历史缓存，HTML 走 network-first
  */
-const CACHE = 'dotdotcafe-root-v20260823-ultra-mobile-v6';
+const CACHE = 'dotdotcafe-root-v20260823-search-fav-notes-v7';
 
 self.addEventListener('install', e => {
   e.waitUntil(
