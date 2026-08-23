@@ -1,12 +1,10 @@
 /* 根 Service Worker for 呆呆大王的食堂小馆 · Dot Dot Café
- * 根作用域 — 防止旧缓存一直卡住
- * V5 极致紧凑移动端版本 — 安装时清理所有历史缓存，HTML 走 network-first
+ * V12 5-tab layout with search fix and collection view
  */
-const CACHE = 'dotdotcafe-root-v20260823-search-fav-notes-tabbar-v11';
+const CACHE = 'dotdotcafe-root-v20260823-5tab-search-fav-notes-v12';
 
 self.addEventListener('install', e => {
   e.waitUntil(
-    // 立刻删除所有旧缓存（peach-canteen-v1 / dotdotcafe-v1 / 任何历史版本）
     caches.keys().then(keys =>
       Promise.all(keys
         .filter(k => k !== CACHE)
@@ -43,7 +41,6 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
-// 对所有 HTML / navigate 请求强制 network-first：防止旧页面一直显示
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
@@ -69,7 +66,6 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // 其他资源 stale-while-revalidate
   e.respondWith(
     caches.match(req).then(hit => {
       const fetchPromise = fetch(req).then(res => {
