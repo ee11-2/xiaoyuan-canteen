@@ -1,8 +1,8 @@
 /* 根 Service Worker for 呆呆大王的食堂小馆 · Dot Dot Café
  * 根作用域 — 防止旧缓存一直卡住
- * V8 搜索+TabBar改版 — 全屏搜索覆盖层 + 更大底栏
+ * V5 极致紧凑移动端版本 — 安装时清理所有历史缓存，HTML 走 network-first
  */
-const CACHE = 'dotdotcafe-root-v20260823-search-overlay-tabbar-v8';
+const CACHE = 'dotdotcafe-root-v20260823-search-fav-notes-tabbar-v11';
 
 self.addEventListener('install', e => {
   e.waitUntil(

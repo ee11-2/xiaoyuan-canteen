@@ -1,7 +1,7 @@
 /* Service Worker for 呆呆大王的食堂小馆 · Dot Dot Café
- * V8 搜索+TabBar改版 — 全屏搜索覆盖层 + 更大底栏
+ * V5 极致紧凑移动端版本 — 最大化菜单显示区域，扩充配图覆盖
  */
-const CACHE = 'dotdotcafe-app-v20260823-search-overlay-tabbar-v8';
+const CACHE = 'dotdotcafe-app-v20260823-search-fav-notes-tabbar-v11';
 
 self.addEventListener('install', e => {
   e.waitUntil(
