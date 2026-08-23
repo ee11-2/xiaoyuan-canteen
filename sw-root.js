@@ -1,7 +1,8 @@
-/* Service Worker for 呆呆大王的食堂小馆 · Dot Dot Café
- * V5 极致紧凑移动端版本 — 最大化菜单显示区域，扩充配图覆盖
+/* 根 Service Worker for 呆呆大王的食堂小馆 · Dot Dot Café
+ * 根作用域 — 防止旧缓存一直卡住
+ * V5 极致紧凑移动端版本 — 安装时清理所有历史缓存，HTML 走 network-first
  */
-const CACHE = 'dotdotcafe-app-v20260823-ultra-mobile-v6';
+const CACHE = 'dotdotcafe-root-v20260823-ultra-mobile-v6';
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -10,17 +11,21 @@ self.addEventListener('install', e => {
         .filter(k => k !== CACHE)
         .map(k => caches.delete(k))
       )
-    ).then(() => {
-      return caches.open(CACHE).then(c =>
+    ).then(() =>
+      caches.open(CACHE).then(c =>
         c.addAll([
           './',
           './index.html',
           './manifest.webmanifest',
           './sw.js',
-          './data/menu.json'
+          './app/',
+          './app/index.html',
+          './app/sw.js',
+          './app/manifest.webmanifest',
+          './app/data/menu.json'
         ]).catch(() => {})
-      );
-    })
+      )
+    )
   );
   self.skipWaiting();
 });
@@ -43,9 +48,13 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  if (req.mode === 'navigate' ||
-      (req.destination === 'document' && url.pathname.endsWith('.html')) ||
-      url.pathname.endsWith('/')) {
+  const isHtml =
+    req.mode === 'navigate' ||
+    req.destination === 'document' ||
+    url.pathname.endsWith('.html') ||
+    url.pathname.endsWith('/');
+
+  if (isHtml) {
     e.respondWith(
       fetch(req)
         .then(res => {
