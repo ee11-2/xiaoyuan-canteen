@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
 <!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
-<link rel="manifest" href="manifest.webmanifest?v=v2-liquidglass-20260823">
+<link rel="manifest" href="manifest.webmanifest?v=v6-ultra-mobile-20260823">
 <!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
-<meta name="app-version" content="2.0.0-liquidglass-20260823">
+<meta name="app-version" content="6.0.0-ultra-mobile-wide-area-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -266,75 +266,74 @@ body > .blob-b{
 #app{
   position:fixed;inset:0;display:none;flex-direction:column;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:calc(env(safe-area-inset-bottom) + 96px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 62px);
 }
 
-/* ---- Top Header（液态玻璃顶栏 V2） ---- */
+/* ---- Top Header（液态玻璃顶栏 V2 · 极致紧凑移动端优化 V5） ---- */
 .head{
-  padding:22px 20px 30px;flex-shrink:0;position:relative;z-index:1;overflow:visible;
-  /* 顶部再叠加一条玻璃边缘柔光 */
+  padding:7px 10px 9px;flex-shrink:0;position:relative;z-index:1;overflow:visible;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
 }
 .head::before,.head::after{display:none}
-.greet{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:2}
+.greet{display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative;z-index:2}
 .g-lbl{
-  font-size:10.5px;font-weight:800;letter-spacing:.30em;text-transform:uppercase;
+  font-size:7.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
   color:rgba(255,255,255,.98);
   text-shadow:0 1px 2px rgba(200,60,110,.28), 0 0 14px rgba(255,255,255,.25);
 }
 .g-title{
-  font-size:27px;font-weight:900;letter-spacing:-.015em;
-  color:#fff;margin-top:6px;
+  font-size:16.5px;font-weight:900;letter-spacing:-.015em;
+  color:#fff;margin-top:1px;
   text-shadow:
-    0 2px 18px rgba(160,40,90,.34),
-    0 0 28px rgba(255,255,255,.18);
+    0 2px 16px rgba(160,40,90,.34),
+    0 0 24px rgba(255,255,255,.18);
 }
 .ava{
-  width:50px;height:50px;border-radius:50%;position:relative;
+  width:30px;height:30px;border-radius:50%;position:relative;
   background:rgba(255,255,255,.72);
-  backdrop-filter:blur(26px) saturate(1.95);-webkit-backdrop-filter:blur(26px) saturate(1.95);
-  border:1.2px solid rgba(255,255,255,.88);
+  backdrop-filter:blur(22px) saturate(1.95);-webkit-backdrop-filter:blur(22px) saturate(1.95);
+  border:1px solid rgba(255,255,255,.88);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.55),
-    0 16px 36px rgba(160,40,90,.30),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
+    0 7px 16px rgba(160,40,90,.22),
     0 0 0 1px rgba(255,159,190,.18);
   display:flex;align-items:center;justify-content:center;
-  font-size:18px;font-weight:900;color:var(--pink-600);flex-shrink:0;
+  font-size:11px;font-weight:900;color:var(--pink-600);flex-shrink:0;
   animation:avaFloat 5.5s ease-in-out infinite;
 }
 @keyframes avaFloat{
   0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(-3px); }
+  50%    { transform:translateY(-2px); }
 }
 .ava::after{
-  content:"";position:absolute;top:6px;left:10px;width:16px;height:9px;border-radius:50%;
-  background:rgba(255,255,255,.98);filter:blur(1.5px);opacity:.82;
+  content:"";position:absolute;top:5px;left:8px;width:13px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.98);filter:blur(1.2px);opacity:.82;
 }
 /* 头像外圈柔和光晕 */
 .ava::before{
-  content:"";position:absolute;inset:-6px;border-radius:50%;
+  content:"";position:absolute;inset:-4px;border-radius:50%;
   background:radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 65%);
   pointer-events:none;z-index:-1;opacity:.9;
 }
 .search{
-  margin-top:20px;height:56px;border-radius:28px;position:relative;z-index:2;
+  margin-top:6px;height:36px;border-radius:18px;position:relative;z-index:2;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.70);
-  backdrop-filter:blur(34px) saturate(2.05) contrast(1.02);
-  -webkit-backdrop-filter:blur(34px) saturate(2.05) contrast(1.02);
-  border:1.2px solid rgba(255,255,255,.88);
+  backdrop-filter:blur(28px) saturate(2.05) contrast(1.02);
+  -webkit-backdrop-filter:blur(28px) saturate(2.05) contrast(1.02);
+  border:1px solid rgba(255,255,255,.88);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.55),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.35),
     inset -1px 0 0 rgba(255,255,255,.35),
-    0 20px 44px rgba(160,40,90,.26),
-    0 4px 12px rgba(160,40,90,.10),
+    0 8px 20px rgba(160,40,90,.16),
+    0 1px 5px rgba(160,40,90,.05),
     0 0 0 1px rgba(255,159,190,.16);
-  display:flex;align-items:center;gap:12px;
-  padding:0 22px;color:var(--ink-500);font-size:14.5px;font-weight:600;
+  display:flex;align-items:center;gap:6px;
+  padding:0 13px;color:var(--ink-500);font-size:11.5px;font-weight:600;
   transition:transform .18s ease, box-shadow .22s ease;
 }
 .search::before{
@@ -358,104 +357,104 @@ body > .blob-b{
     0 0 0 1px rgba(255,159,190,.16);
 }
 
-/* ---- Content Card（液态玻璃"浮出"效果 V2） ---- */
+/* ---- Content Card（液态玻璃"浮出"效果 V2 · 极致紧凑移动端优化 V5） ---- */
 .body{
-  flex:1;margin:0 14px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;
-  border-radius:34px 34px 30px 30px / 34px 34px 28px 28px;
+  flex:1;margin:0 7px 0;position:relative;overflow:hidden;display:flex;flex-direction:column;
+  border-radius:20px 20px 17px 17px / 20px 20px 15px 15px;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.66);
-  backdrop-filter:blur(38px) saturate(2.0) contrast(1.02);
-  -webkit-backdrop-filter:blur(38px) saturate(2.0) contrast(1.02);
-  border:1.2px solid rgba(255,255,255,.84);
+  backdrop-filter:blur(34px) saturate(2.0) contrast(1.02);
+  -webkit-backdrop-filter:blur(34px) saturate(2.0) contrast(1.02);
+  border:1px solid rgba(255,255,255,.84);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.55),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.3),
     inset -1px 0 0 rgba(255,255,255,.3),
-    0 -10px 46px rgba(160,40,90,.10),
-    0 26px 72px rgba(160,40,90,.18),
+    0 -4px 24px rgba(160,40,90,.06),
+    0 14px 38px rgba(160,40,90,.11),
     0 0 0 1px rgba(255,159,190,.14);
-  padding:22px 0 0;
+  padding:7px 0 0;
   animation:bodyFloat 9s ease-in-out infinite;
 }
 @keyframes bodyFloat{
   0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(-3px); }
+  50%    { transform:translateY(-2px); }
 }
 .body::before{
-  content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);
-  width:48px;height:5.5px;border-radius:5.5px;
+  content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);
+  width:34px;height:3.5px;border-radius:3.5px;
   background:linear-gradient(180deg,rgba(255,159,190,.7),rgba(255,159,190,.45));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.85), 0 1px 2px rgba(160,40,90,.12);
 }
 .body::after{
-  content:"";position:absolute;top:0;left:26px;right:26px;height:1px;border-radius:1px;
+  content:"";position:absolute;top:0;left:20px;right:20px;height:1px;border-radius:1px;
   background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.98) 20%,rgba(255,255,255,.98) 80%,transparent 100%);
   opacity:.75;pointer-events:none;
 }
 
-/* Floor Segmented Control（液态玻璃 V2） */
-.seg-wrap{padding:2px 20px 0;flex-shrink:0}
+/* Floor Segmented Control（液态玻璃 V2 · 极致紧凑移动端优化 V5） */
+.seg-wrap{padding:0 10px 0;flex-shrink:0}
 .seg{
   display:grid;grid-template-columns:1fr 1fr;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.50);
-  backdrop-filter:blur(28px) saturate(1.9);-webkit-backdrop-filter:blur(28px) saturate(1.9);
-  border:1.2px solid rgba(255,255,255,.8);
+  backdrop-filter:blur(24px) saturate(1.9);-webkit-backdrop-filter:blur(24px) saturate(1.9);
+  border:1px solid rgba(255,255,255,.8);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.96),
-    inset 0 -1.5px 0 rgba(255,210,228,.5),
-    0 10px 30px rgba(160,40,90,.12),
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -1px 0 rgba(255,210,228,.5),
+    0 4px 14px rgba(160,40,90,.07),
     0 0 0 1px rgba(255,159,190,.12);
-  border-radius:22px;padding:6px;gap:6px;
+  border-radius:14px;padding:3px;gap:3px;
 }
 .seg button{
-  border:none;padding:12px 0;border-radius:18px;background:transparent;
-  font-size:13.5px;font-weight:700;color:var(--ink-500);cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:3px;
+  border:none;padding:5px 0;border-radius:11px;background:transparent;
+  font-size:10.5px;font-weight:700;color:var(--ink-500);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:0.5px;
   transition:all .24s cubic-bezier(.2,.9,.2,1.12);
   position:relative;
 }
-.seg button small{font-size:10px;font-weight:600;opacity:.78}
+.seg button small{font-size:7.5px;font-weight:600;opacity:.78}
 .seg button.on{
   background:
     linear-gradient(180deg,rgba(255,255,255,.98),rgba(255,255,255,.90)),
     #fff;
   color:var(--pink-600);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,1),
-    inset 0 -1.5px 0 rgba(255,200,220,.6),
+    inset 0 1.2px 0 rgba(255,255,255,1),
+    inset 0 -1.2px 0 rgba(255,200,220,.6),
     inset 0 0 0 1px rgba(255,159,190,.12),
-    0 8px 22px rgba(240,86,141,.18);
-  transform:translateY(-1.5px) scale(1.01);
+    0 6px 18px rgba(240,86,141,.16);
+  transform:translateY(-1px) scale(1.005);
 }
 .seg button.on::after{
-  content:"";position:absolute;top:3px;left:14%;right:14%;height:7px;border-radius:7px;
+  content:"";position:absolute;top:2.5px;left:16%;right:16%;height:5.5px;border-radius:5.5px;
   background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));
   opacity:.9;pointer-events:none;
 }
 
-/* Chips（液态玻璃 pill V2） */
+/* Chips（液态玻璃 pill V2 · 极致紧凑移动端优化 V5） */
 .chips{
-  display:flex;gap:8px;padding:18px 20px 14px;overflow-x:auto;scrollbar-width:none;
+  display:flex;gap:5px;padding:6px 10px 5px;overflow-x:auto;scrollbar-width:none;
   flex-shrink:0;
 }
 .chips::-webkit-scrollbar{display:none}
 .chip{
-  padding:9.5px 16px;border-radius:var(--radius-full);flex-shrink:0;cursor:pointer;position:relative;
+  padding:4.5px 9px;border-radius:var(--radius-full);flex-shrink:0;cursor:pointer;position:relative;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.56);
-  backdrop-filter:blur(22px) saturate(1.85);-webkit-backdrop-filter:blur(22px) saturate(1.85);
-  border:1.1px solid rgba(255,255,255,.85);
+  backdrop-filter:blur(18px) saturate(1.85);-webkit-backdrop-filter:blur(18px) saturate(1.85);
+  border:1px solid rgba(255,255,255,.85);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.95),
-    inset 0 -1.5px 0 rgba(255,210,228,.5),
-    0 8px 20px rgba(160,40,90,.10),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(255,210,228,.5),
+    0 3px 10px rgba(160,40,90,.06),
     0 0 0 1px rgba(255,159,190,.10);
-  font-size:12.5px;font-weight:700;color:var(--ink-500);
+  font-size:9.5px;font-weight:700;color:var(--ink-500);
   transition:all .2s cubic-bezier(.2,.9,.2,1.12);white-space:nowrap;
 }
 .chip.on{
@@ -464,268 +463,269 @@ body > .blob-b{
     #fff;
   color:var(--pink-600);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,1),
-    inset 0 -1.5px 0 rgba(255,198,218,.55),
+    inset 0 1.2px 0 rgba(255,255,255,1),
+    inset 0 -1.2px 0 rgba(255,198,218,.55),
     inset 0 0 0 1px rgba(255,159,190,.18),
-    0 12px 28px rgba(240,86,141,.24);
-  transform:translateY(-1.5px);
+    0 9px 22px rgba(240,86,141,.22);
+  transform:translateY(-1px);
 }
 .chip.on::after{
-  content:"";position:absolute;left:10%;right:10%;top:3.5px;height:6.5px;border-radius:6.5px;
+  content:"";position:absolute;left:10%;right:10%;top:2.5px;height:5px;border-radius:5px;
   background:linear-gradient(180deg,#FFD7E6,rgba(255,215,230,0));opacity:.95;pointer-events:none;
 }
 
-/* Section header（液态玻璃标题条 V2） */
+/* Section header（液态玻璃标题条 V2 · 极致紧凑移动端优化 V5） */
 .sec-head{
-  margin:2px 20px 10px;padding:11px 15px;
-  border-radius:20px;flex-shrink:0;
+  margin:0px 10px 3px;padding:4px 8px;
+  border-radius:11px;flex-shrink:0;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.40);
-  backdrop-filter:blur(20px) saturate(1.8);-webkit-backdrop-filter:blur(20px) saturate(1.8);
-  border:1.1px solid rgba(255,255,255,.82);
+  backdrop-filter:blur(16px) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
+  border:1px solid rgba(255,255,255,.82);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.94),
-    inset 0 -1.5px 0 rgba(255,210,228,.48),
-    0 6px 18px rgba(160,40,90,.08);
+    inset 0 1px 0 rgba(255,255,255,.94),
+    inset 0 -1px 0 rgba(255,210,228,.48),
+    0 2px 7px rgba(160,40,90,.04);
   display:flex;align-items:baseline;justify-content:space-between;
 }
 .sec-head b{
-  font-size:14.5px;font-weight:800;color:var(--ink-900);display:flex;align-items:center;gap:9px;
+  font-size:10.5px;font-weight:800;color:var(--ink-900);display:flex;align-items:center;gap:4.5px;
 }
-.dot-trio{display:inline-flex;gap:4px;align-items:center}
+.dot-trio{display:inline-flex;gap:2px;align-items:center}
 .dot-trio i{display:block;border-radius:50%}
-.dot-trio i:nth-child(1){width:7px;height:7px;background:var(--pink-500);box-shadow:0 0 6px rgba(255,127,168,.5)}
-.dot-trio i:nth-child(2){width:5px;height:5px;background:var(--pink-300)}
-.dot-trio i:nth-child(3){width:4px;height:4px;background:var(--pink-200)}
-.sec-head span{font-size:11.5px;font-weight:700;color:var(--ink-300)}
+.dot-trio i:nth-child(1){width:4px;height:4px;background:var(--pink-500);box-shadow:0 0 4px rgba(255,127,168,.5)}
+.dot-trio i:nth-child(2){width:3px;height:3px;background:var(--pink-300)}
+.dot-trio i:nth-child(3){width:2px;height:2px;background:var(--pink-200)}
+.sec-head span{font-size:8.5px;font-weight:700;color:var(--ink-300)}
 
-/* Scroll area */
-.list{flex:1;overflow-y:auto;padding:6px 20px 24px;-webkit-overflow-scrolling:touch}
+/* Scroll area · 极致紧凑优化 V5 */
+.list{flex:1;overflow-y:auto;padding:0 10px 8px;-webkit-overflow-scrolling:touch}
 .list::-webkit-scrollbar{width:0}
 
-/* Edit banner（液态玻璃 V2） */
+/* Edit banner（液态玻璃 V2 · 极致紧凑优化 V5） */
 .edit-banner{
-  margin:4px 20px 12px;padding:12px 16px;border-radius:20px;
+  margin:0 10px 4px;padding:5px 8px;border-radius:11px;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.58);
-  backdrop-filter:blur(22px) saturate(1.85);-webkit-backdrop-filter:blur(22px) saturate(1.85);
-  border:1.1px solid rgba(255,255,255,.86);
+  backdrop-filter:blur(18px) saturate(1.85);-webkit-backdrop-filter:blur(18px) saturate(1.85);
+  border:1px solid rgba(255,255,255,.86);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.96),
-    inset 0 -1.5px 0 rgba(255,210,228,.5),
-    0 10px 28px rgba(160,40,90,.12);
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  font-size:12.5px;font-weight:700;color:var(--pink-700);flex-shrink:0;
+    inset 0 1px 0 rgba(255,255,255,.96),
+    inset 0 -1px 0 rgba(255,210,228,.5),
+    0 4px 14px rgba(160,40,90,.07);
+  display:flex;align-items:center;justify-content:space-between;gap:5px;
+  font-size:9.5px;font-weight:700;color:var(--pink-700);flex-shrink:0;
 }
 .edit-banner::before{
   content:"";position:absolute;display:none
 }
 .edit-banner button{
-  padding:7.5px 15px;border-radius:var(--radius-full);border:none;
-  font-size:12px;font-weight:800;cursor:pointer;position:relative;
+  padding:3.5px 8px;border-radius:var(--radius-full);border:none;
+  font-size:9px;font-weight:800;cursor:pointer;position:relative;
 }
 .b-add{
   background:rgba(255,255,255,.94);color:var(--pink-600);
   box-shadow:
     inset 0 1px 0 #fff,
     inset 0 -1px 0 rgba(255,200,220,.5),
-    0 5px 14px rgba(240,86,141,.16);
+    0 4px 12px rgba(240,86,141,.15);
 }
 .b-done{
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));color:#fff;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.52),
     inset 0 -1px 0 rgba(160,40,90,.18),
-    0 10px 22px rgba(240,86,141,.34);
+    0 8px 18px rgba(240,86,141,.32);
 }
 
-/* Dish row（液态玻璃卡片 V2） */
+/* Dish row（液态玻璃卡片 V2 · 极致紧凑移动端优化 V5） */
 .dish{
-  display:flex;align-items:center;gap:14px;padding:13px;margin-bottom:11px;position:relative;
+  display:flex;align-items:center;gap:8px;padding:6px;margin-bottom:4px;position:relative;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.66);
-  backdrop-filter:blur(26px) saturate(1.9);-webkit-backdrop-filter:blur(26px) saturate(1.9);
-  border-radius:24px;
-  border:1.1px solid rgba(255,255,255,.86);
+  backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.86);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.52),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.52),
     inset 1px 0 0 rgba(255,255,255,.3),
     inset -1px 0 0 rgba(255,255,255,.3),
-    0 14px 34px rgba(160,40,90,.12),
+    0 5px 15px rgba(160,40,90,.07),
     0 0 0 1px rgba(255,159,190,.12);
   transition:transform .18s ease, box-shadow .22s ease;
 }
 .dish:active{
   transform:scale(.985);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.45),
-    0 6px 20px rgba(160,40,90,.10),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.45),
+    0 3px 10px rgba(160,40,90,.06),
     0 0 0 1px rgba(255,159,190,.12);
 }
 .thumb{
-  width:74px;height:74px;border-radius:20px;flex-shrink:0;overflow:hidden;position:relative;
-  display:flex;align-items:center;justify-content:center;font-size:32px;
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;font-size:19px;
   background:linear-gradient(135deg,#FFF1F6,#FFF4E5);
   box-shadow:
     inset 0 0 0 1px rgba(255,255,255,.92),
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    0 6px 16px rgba(255,159,190,.20);
+    inset 0 1px 0 rgba(255,255,255,.98),
+    0 3px 9px rgba(255,159,190,.15);
 }
 .thumb::before{
-  content:"";position:absolute;top:5px;left:9px;right:9px;height:13px;border-radius:13px;
+  content:"";position:absolute;top:3px;left:5.5px;right:5.5px;height:8px;border-radius:8px;
   background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,0));
   opacity:.85;pointer-events:none;z-index:2;
 }
 .thumb::after{
-  content:"";position:absolute;inset:0;border-radius:20px;
-  background-image:radial-gradient(rgba(255,180,210,.42) 2px,transparent 2.2px);
-  background-size:14px 14px;background-position:8px 8px;opacity:.58;pointer-events:none;
+  content:"";position:absolute;inset:0;border-radius:14px;
+  background-image:radial-gradient(rgba(255,180,210,.42) 1.5px,transparent 1.7px);
+  background-size:10px 10px;background-position:5px 5px;opacity:.58;pointer-events:none;
 }
 .thumb .badge{
-  position:absolute;top:7px;left:7px;z-index:3;
-  font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--white);
-  background:linear-gradient(150deg,var(--pink-500),var(--pink-600));padding:4px 9px;border-radius:var(--radius-full);
+  position:absolute;top:3px;left:3px;z-index:3;
+  font-size:6.5px;font-weight:800;letter-spacing:.04em;color:var(--white);
+  background:linear-gradient(150deg,var(--pink-500),var(--pink-600));padding:2px 5px;border-radius:var(--radius-full);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.48),
     inset 0 -1px 0 rgba(160,40,90,.2),
-    0 5px 12px rgba(240,86,141,.36);
+    0 2px 6px rgba(240,86,141,.28);
 }
 .info{flex:1;min-width:0}
 .dname{
-  font-size:15.5px;font-weight:800;color:var(--ink-900);
-  line-height:1.35;
+  font-size:12px;font-weight:800;color:var(--ink-900);
+  line-height:1.2;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
 }
 .ddesc{
-  font-size:11.5px;font-weight:600;color:var(--ink-300);margin-top:5px;
+  font-size:8.5px;font-weight:600;color:var(--ink-300);margin-top:1.5px;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
 .price{
-  font-size:17px;font-weight:900;color:var(--pink-600);letter-spacing:-.01em;
+  font-size:12.5px;font-weight:900;color:var(--pink-600);letter-spacing:-.01em;
   flex-shrink:0;
 }
-.price em{font-style:normal;font-size:11px;margin-right:1px;font-weight:700}
+.price em{font-style:normal;font-size:8px;margin-right:0.5px;font-weight:700}
 .del-x{
-  position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;
+  position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;
   background:rgba(240,86,141,.92);color:var(--white);border:none;
-  font-size:13px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5;
+  font-size:10px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5;
 }
 .edit-mode .del-x{display:flex}
 
-/* Shop group heading */
+/* Shop group heading · 极致紧凑优化 V5 */
 .shop-h{
-  display:flex;align-items:center;gap:8px;padding:16px 4px 8px;
+  display:flex;align-items:center;gap:5px;padding:7px 3px 3px;
 }
 .shop-h b{
-  padding:4px 11px;border-radius:var(--radius-full);font-size:11.5px;font-weight:800;color:var(--white);
+  padding:2px 6.5px;border-radius:var(--radius-full);font-size:8.5px;font-weight:800;color:var(--white);
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
-  box-shadow:0 4px 10px rgba(240,86,141,.28);letter-spacing:.04em;
+  box-shadow:0 2px 6px rgba(240,86,141,.20);letter-spacing:.04em;
 }
-.shop-h .st{font-size:14px;font-weight:800;color:var(--ink-900);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.shop-h .sc{font-size:11px;font-weight:600;color:var(--ink-300)}
+.shop-h .st{font-size:10.5px;font-weight:800;color:var(--ink-900);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shop-h .sc{font-size:8px;font-weight:600;color:var(--ink-300)}
 
 /* Group separator */
-.gap{height:4px}
+.gap{height:2px}
 
-/* ================== Tabbar (波点方案风格 — 胶囊 + 中间扭蛋) V2 ================== */
+/* ================== Tabbar (波点方案风格 — 胶囊 + 中间扭蛋) V2 · 极致紧凑移动端优化 V5 ================== */
 .tabbar{
-  position:fixed;left:20px;right:20px;
-  bottom:calc(env(safe-area-inset-bottom) + 20px);
-  height:76px;border-radius:38px;z-index:80;
+  position:fixed;left:10px;right:10px;
+  bottom:calc(env(safe-area-inset-bottom) + 8px);
+  height:48px;border-radius:24px;z-index:80;
   background:
     var(--glass-aurora),
     rgba(255,255,255,.82);
-  backdrop-filter:blur(32px) saturate(2.0);-webkit-backdrop-filter:blur(32px) saturate(2.0);
-  border:1.3px solid var(--white);
+  backdrop-filter:blur(28px) saturate(2.0);-webkit-backdrop-filter:blur(28px) saturate(2.0);
+  border:1.1px solid var(--white);
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.98),
-    inset 0 -1.5px 0 rgba(255,210,228,.55),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 -1px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.4),
     inset -1px 0 0 rgba(255,255,255,.4),
-    0 18px 50px rgba(200,60,110,.24),
-    0 4px 14px rgba(200,60,110,.10),
+    0 10px 28px rgba(200,60,110,.16),
+    0 1px 7px rgba(200,60,110,.05),
     0 0 0 1px rgba(255,159,190,.16);
-  display:flex;align-items:center;padding:0 14px;
+  display:flex;align-items:center;padding:0 7px;
   animation:tbFloat 7s ease-in-out infinite;
 }
 @keyframes tbFloat{
   0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(-2px); }
+  50%    { transform:translateY(-1.5px); }
 }
 .tb-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-  color:var(--ink-300);font-size:10.5px;font-weight:700;cursor:pointer;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
+  color:var(--ink-300);font-size:7.5px;font-weight:700;cursor:pointer;
   transition:transform .2s ease, color .2s ease;
 }
+.tb-item svg{width:16px;height:16px}
 .tb-item.on{
   color:var(--pink-600);
-  transform:translateY(-1px);
+  transform:translateY(-0.5px);
 }
 .tb-gacha{
-  width:64px;height:64px;border-radius:50%;margin:0 10px;flex-shrink:0;
+  width:42px;height:42px;border-radius:50%;margin:0 5px;flex-shrink:0;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   box-shadow:
-    inset 0 1.5px 0 rgba(255,255,255,.55),
-    inset 0 -2px 0 rgba(160,40,90,.22),
+    inset 0 1px 0 rgba(255,255,255,.55),
+    inset 0 -1.5px 0 rgba(160,40,90,.22),
     inset 0 0 0 1px rgba(255,255,255,.2),
-    0 16px 38px rgba(240,86,141,.50);
+    0 9px 22px rgba(240,86,141,.40);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform .18s ease, box-shadow .2s ease;
   position:relative;
 }
 .tb-gacha::before{
-  content:"";position:absolute;inset:-4px;border-radius:50%;
+  content:"";position:absolute;inset:-3.5px;border-radius:50%;
   background:radial-gradient(circle, rgba(255,180,210,.55), rgba(255,180,210,0) 65%);
   z-index:-1;opacity:.8;
 }
 .tb-gacha:active{transform:scale(.93)}
 .tb-gacha svg{animation:bob 3s ease-in-out infinite}
 
-/* Dock (5 results) */
+/* Dock (5 results) · 极致紧凑移动端优化 V5 */
 .pickbar{
-  position:fixed;left:20px;right:20px;
-  bottom:calc(env(safe-area-inset-bottom) + 108px);
-  padding:10px 12px;border-radius:22px;z-index:75;
+  position:fixed;left:10px;right:10px;
+  bottom:calc(env(safe-area-inset-bottom) + 64px);
+  padding:5px 7px;border-radius:14px;z-index:75;
   background:rgba(255,255,255,.88);
-  backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);
-  border:1.5px solid var(--white);
-  box-shadow:0 12px 34px rgba(200,60,110,.16);
-  display:flex;align-items:center;gap:10px;
+  backdrop-filter:blur(15px) saturate(1.6);-webkit-backdrop-filter:blur(15px) saturate(1.6);
+  border:1.1px solid var(--white);
+  box-shadow:0 6px 20px rgba(200,60,110,.11);
+  display:flex;align-items:center;gap:5.5px;
   transform:translateY(140%);transition:transform .4s cubic-bezier(.2,.9,.25,1.1);
   pointer-events:none;
 }
 .pickbar.show{transform:translateY(0);pointer-events:auto}
 .picks{
-  display:flex;gap:7px;flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 0;
+  display:flex;gap:5px;flex:1;overflow-x:auto;scrollbar-width:none;padding:1.5px 0;
 }
 .picks::-webkit-scrollbar{display:none}
 .pick{
-  width:48px;height:48px;border-radius:16px;background:var(--white);
-  box-shadow:var(--shadow-sm);border:1.5px solid var(--pink-100);
-  display:flex;align-items:center;justify-content:center;font-size:22px;
+  width:37px;height:37px;border-radius:12px;background:var(--white);
+  box-shadow:var(--shadow-sm);border:1.1px solid var(--pink-100);
+  display:flex;align-items:center;justify-content:center;font-size:17px;
   position:relative;flex-shrink:0;cursor:pointer;
 }
 .pick.sel{border-color:var(--pink-500);box-shadow:0 0 0 2px rgba(255,127,168,.25)}
 .pick .pi{
-  position:absolute;bottom:-3px;right:-3px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;
-  background:var(--pink-600);color:var(--white);font-size:10px;font-weight:800;
+  position:absolute;bottom:-2.5px;right:-2.5px;min-width:16px;height:16px;padding:0 3.5px;border-radius:8px;
+  background:var(--pink-600);color:var(--white);font-size:9px;font-weight:800;
   display:flex;align-items:center;justify-content:center;
 }
 .pick .rm{
-  position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;
-  background:var(--pink-600);color:var(--white);font-size:12px;border:none;cursor:pointer;
+  position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;
+  background:var(--pink-600);color:var(--white);font-size:11px;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);
 }
 .pk-cta{
-  flex-shrink:0;padding:11px 16px;border-radius:18px;border:none;cursor:pointer;
+  flex-shrink:0;padding:9.5px 14px;border-radius:15px;border:none;cursor:pointer;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
-  color:var(--white);font-size:13px;font-weight:800;
-  box-shadow:0 8px 20px rgba(240,86,141,.35);
+  color:var(--white);font-size:11.5px;font-weight:800;
+  box-shadow:0 6px 16px rgba(240,86,141,.32);
   transition:transform .15s ease;
 }
 .pk-cta:active{transform:scale(.95)}
@@ -1207,6 +1207,33 @@ const GRADS = [
   ['#FFE4E9','#FFF4E5'],['#FFF0F5','#FFE9F0'],['#FFEFF4','#FFF0DD'],
   ['#FCEFF4','#FFF1DC'],['#FFF3F7','#FFEDE0'],['#FFEBF2','#FFF4E8']
 ];
+/* ========== 菜品配图映射（AI 生成 · 波点食光系列） ========== */
+const DISH_IMG_MAP = [
+  {kws:['掉渣饼','土家','公婆饼'], img:'./assets/dish-01-diaoza-bing.jpg'},
+  {kws:['淮南牛肉汤','牛肉汤','牛杂汤','羊汤','羊肉汤'], img:'./assets/dish-02-beef-soup.jpg'},
+  {kws:['锅盔','公安锅盔'], img:'./assets/dish-03-guokui.jpg'},
+  {kws:['肉夹馍','脆皮肉夹馍','肉夹蛋','蛋夹馍','腊汁'], img:'./assets/dish-04-roujiamo.jpg'},
+  {kws:['板面','手擀面','炸酱面','酸辣粉','刀削面','麻汁面','骨汤面','牛骨面','客家面','浇头面','拌面','汤面','米线','米粉','土豆粉','热干面','担担面','冷面','螺蛳粉'], img:'./assets/dish-05-banmian.jpg'},
+  {kws:['麦多馅饼','馅饼'], img:'./assets/dish-06-maiduo-pie.jpg'},
+  {kws:['包子','大包','生煎包','鲜肉包','馒头','花卷','油卷','蒸饺','饺子','馄饨','烧麦'], img:'./assets/dish-07-steamed-bun.jpg'},
+  {kws:['照烧鸡腿','鸡腿饭','双拼饭','烧肉饭','炖肉饭','咖喱鸡','黑椒鸡','糖醋鸡','孜然鸡','香辣鸭','藤椒','啤酒鸭','酸菜鸡','可乐鸡','干锅鸡','酱鸡腿','把子肉','肉丸','盖饭','盖浇饭','烤肉饭','黄焖','炒饭','炒面','炒饼','木桶饭','脆皮鸡','鸡排饭','鱼香','宫保','麻婆','红烧肉','回锅','米饭','套餐'], img:'./assets/dish-08-teriyaki-rice.jpg'},
+  {kws:['粥','豆浆','豆汁','黑米粥','小米粥','八宝粥','绿豆汤','南瓜粥','皮蛋瘦肉','椰奶','牛奶','酸奶','奶茶','饮品','饮料','果汁','咖啡','可乐','雪碧','柠檬','酸梅汤','冰粉','布丁','奶昔'], img:'./assets/dish-02-beef-soup.jpg'},
+  {kws:['火烧','泰安火烧','里脊饼','蛋肠饼','卷饼','卷煎饼','菜煎饼','烤冷面','月亮馍','鸡蛋灌饼','煎饼果子','杂粮煎饼','手抓饼','葱花饼','油饼','葱油饼','酱香饼','千层饼','公婆饼','武大郎','烧饼'], img:'./assets/dish-06-maiduo-pie.jpg'},
+  {kws:['麻辣香锅','麻辣烫','冒菜','串串','关东煮','火锅','钵钵鸡'], img:'./assets/dish-05-banmian.jpg'},
+  {kws:['煎饼','煎饺','生煎','锅贴','烙饼','灌汤包','小笼包'], img:'./assets/dish-07-steamed-bun.jpg'},
+  {kws:['炸鸡','汉堡','薯条','鸡柳','鸡排','鸡米花','炸串','烧烤','烤串','烤肉','炸货'], img:'./assets/dish-08-teriyaki-rice.jpg'},
+  {kws:['寿司','紫菜包饭','饭团','便当','日韩','料理'], img:'./assets/dish-08-teriyaki-rice.jpg'},
+  {kws:['面包','蛋糕','西点','甜品','点心','泡芙','蛋挞','饼干'], img:'./assets/dish-07-steamed-bun.jpg'},
+  {kws:['水果','捞','沙拉','轻食'], img:'./assets/dish-03-guokui.jpg'}
+];
+function imgOf(d){
+  if(!d || !d.name)return null;
+  const n = d.name;
+  for(const m of DISH_IMG_MAP){
+    for(const k of m.kws){ if(n.includes(k)) return m.img; }
+  }
+  return null;
+}
 
 let MENU=null; let CUSTOM=[]; let DEL=new Set();
 let S = {
@@ -1224,7 +1251,7 @@ let S = {
   }catch(e){}
   // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
   if('serviceWorker' in navigator){
-    const SW_VER = '?v=v2-liquidglass-20260823';
+    const SW_VER = '?v=v6-ultra-mobile-20260823';
     navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
       // 发现更新后立即激活（跳过等待），下次访问就是新版本
       if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
@@ -1453,11 +1480,13 @@ function cardList(arr){
     const shopShort = (d.shopName||'').replace(/^[一二三四五六七八九十0-9]+号\s*/,'').slice(0,9);
     const price = d.price?.display || '';
     const floorBadge = d.floor==='1F'?'一楼':'二楼';
+    const img = imgOf(d);
+    const thumbHTML = img
+      ? `<div class="thumb" style="padding:0;background:#fff"><img src="${img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;display:block"></div>`
+      : `<div class="thumb" style="background:linear-gradient(135deg,${g1},${g2})">${c.emoji}</div>`;
     h += `<div class="dish" data-id="${d.id}" data-custom="${d.custom?1:0}">
       <button class="del-x" data-id="${d.id}" data-custom="${d.custom?1:0}">×</button>
-      <div class="thumb" style="background:linear-gradient(135deg,${g1},${g2})">
-        ${c.emoji}
-      </div>
+      ${thumbHTML}
       <div class="info">
         <div class="dname">${d.name}</div>
         <div class="ddesc">${floorBadge} · ${shopShort}</div>
@@ -1559,8 +1588,12 @@ function showDetail(d){
   const c = catOf(d);
   const floorName = d.floor==='1F'?'一楼':'二楼';
   const price = d.price?.display || '';
+  const img = imgOf(d);
+  const heroHTML = img
+    ? `<img src="${img}" alt="${d.name}" style="width:100%;height:100%;object-fit:cover;display:block">`
+    : `${c.emoji}`;
   sheetHTML(`
-    <div class="shero">${c.emoji}
+    <div class="shero">${heroHTML}
       <div class="stamp">呆呆<br>推荐</div>
     </div>
     <div class="pill-row">

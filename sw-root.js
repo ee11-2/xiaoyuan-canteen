@@ -6,6 +6,7 @@ const CACHE = 'dotdotcafe-root-v20260823-ultra-mobile-v6';
 
 self.addEventListener('install', e => {
   e.waitUntil(
+    // 立刻删除所有旧缓存（peach-canteen-v1 / dotdotcafe-v1 / 任何历史版本）
     caches.keys().then(keys =>
       Promise.all(keys
         .filter(k => k !== CACHE)
@@ -42,6 +43,7 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
+// 对所有 HTML / navigate 请求强制 network-first：防止旧页面一直显示
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
@@ -67,6 +69,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
+  // 其他资源 stale-while-revalidate
   e.respondWith(
     caches.match(req).then(hit => {
       const fetchPromise = fetch(req).then(res => {
