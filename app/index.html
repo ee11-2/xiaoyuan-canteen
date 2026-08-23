@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
 <!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
-<link rel="manifest" href="manifest.webmanifest?v=v7-search-fav-notes-20260823">
+<link rel="manifest" href="manifest.webmanifest?v=v8-search-overlay-tabbar-20260823">
 <!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
-<meta name="app-version" content="7.0.0-search-fav-notes-20260823">
+<meta name="app-version" content="8.0.0-search-overlay-tabbar-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -237,6 +237,7 @@ body > .blob-b{
   animation:bob 4s ease-in-out infinite;
 }
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .kicker{
   font-size:11.5px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;
   color:var(--pink-700);margin-bottom:14px;
@@ -266,7 +267,7 @@ body > .blob-b{
 #app{
   position:fixed;inset:0;display:none;flex-direction:column;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:calc(env(safe-area-inset-bottom) + 82px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 95px);
 }
 
 /* ---- Top Header（液态玻璃顶栏 V2 · 极致紧凑移动端优化 V5） ---- */
@@ -661,25 +662,25 @@ body > .blob-b{
 /* Group separator */
 .gap{height:2px}
 
-/* ================== Tabbar (新设计 · 72px 高 · 4 项布局 · 更厚毛玻璃) ================== */
+/* ================== Tabbar (参考招商银行/App Store · 更大更舒适) ================== */
 .tabbar{
-  position:fixed;left:8px;right:8px;
-  bottom:calc(env(safe-area-inset-bottom) + 8px);
-  height:72px;border-radius:36px;z-index:80;
+  position:fixed;left:6px;right:6px;
+  bottom:calc(env(safe-area-inset-bottom) + 6px);
+  height:83px;border-radius:42px;z-index:80;
   background:
     var(--glass-aurora),
-    rgba(255,255,255,.88);
-  backdrop-filter:blur(40px) saturate(2.3);-webkit-backdrop-filter:blur(40px) saturate(2.3);
-  border:1.5px solid rgba(255,255,255,.95);
+    rgba(255,255,255,.92);
+  backdrop-filter:blur(44px) saturate(2.4);-webkit-backdrop-filter:blur(44px) saturate(2.4);
+  border:1.5px solid rgba(255,255,255,.98);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.98),
     inset 0 -1.5px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.4),
     inset -1px 0 0 rgba(255,255,255,.4),
-    0 18px 44px rgba(200,60,110,.22),
-    0 4px 14px rgba(200,60,110,.08),
-    0 0 0 1px rgba(255,159,190,.20);
-  display:flex;align-items:center;padding:0 8px;
+    0 20px 48px rgba(200,60,110,.22),
+    0 6px 18px rgba(200,60,110,.08),
+    0 0 0 1px rgba(255,159,190,.18);
+  display:flex;align-items:center;padding:0 6px;
   animation:tbFloat 7s ease-in-out infinite;
 }
 @keyframes tbFloat{
@@ -687,40 +688,45 @@ body > .blob-b{
   50%    { transform:translateY(-1.5px); }
 }
 .tb-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-  color:var(--ink-300);font-size:10px;font-weight:700;cursor:pointer;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:var(--ink-300);font-size:11px;font-weight:700;cursor:pointer;
   transition:transform .2s ease, color .2s ease;
-  padding:4px 0;
+  padding:8px 4px;position:relative;
+  border-radius:22px;
 }
-.tb-item svg{width:26px;height:26px}
+.tb-item svg{width:28px;height:28px}
 .tb-item.on{
   color:var(--pink-600);
-  transform:translateY(-2px);
+  transform:translateY(-1px);
 }
-.tb-item.on svg{filter:drop-shadow(0 4px 8px rgba(240,86,141,.3))}
-.tb-item .tb-lbl{font-size:10px;font-weight:700;margin-top:1px}
+.tb-item.on::before{
+  content:"";position:absolute;inset:3px 8px;border-radius:19px;
+  background:rgba(255,127,168,.12);
+}
+.tb-item.on svg{filter:drop-shadow(0 4px 10px rgba(240,86,141,.25))}
+.tb-item .tb-lbl{font-size:11px;font-weight:700;margin-top:1px}
 .tb-gacha{
-  width:58px;height:58px;border-radius:50%;margin:0 4px;flex-shrink:0;
+  width:62px;height:62px;border-radius:50%;margin:0 2px;flex-shrink:0;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   box-shadow:
     inset 0 2px 0 rgba(255,255,255,.55),
     inset 0 -2px 0 rgba(160,40,90,.22),
     inset 0 0 0 1px rgba(255,255,255,.2),
-    0 12px 28px rgba(240,86,141,.40);
+    0 14px 32px rgba(240,86,141,.40);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform .18s ease, box-shadow .2s ease;
   position:relative;
 }
 .tb-gacha::before{
-  content:"";position:absolute;inset:-4px;border-radius:50%;
+  content:"";position:absolute;inset:-5px;border-radius:50%;
   background:radial-gradient(circle, rgba(255,180,210,.55), rgba(255,180,210,0) 65%);
   z-index:-1;opacity:.8;
 }
 .tb-gacha:active{transform:scale(.93)}
-.tb-gacha svg{width:32px;height:32px;animation:bob 3s ease-in-out infinite}
+.tb-gacha svg{width:34px;height:34px;animation:bob 3s ease-in-out infinite}
 .tb-gacha .tb-badge{
-  position:absolute;top:-2px;right:-2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;
-  background:var(--white);color:var(--pink-600);font-size:9px;font-weight:900;
+  position:absolute;top:-2px;right:-2px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;
+  background:var(--white);color:var(--pink-600);font-size:10px;font-weight:900;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 10px rgba(240,86,141,.3);
 }
@@ -729,21 +735,21 @@ body > .blob-b{
 .g-tabbar{
   position:absolute;left:8px;right:8px;
   bottom:calc(env(safe-area-inset-bottom) + 8px);
-  height:60px;border-radius:30px;z-index:85;
+  height:68px;border-radius:34px;z-index:85;
   background:
     var(--glass-aurora),
-    rgba(255,255,255,.88);
-  backdrop-filter:blur(40px) saturate(2.3);-webkit-backdrop-filter:blur(40px) saturate(2.3);
-  border:1.5px solid rgba(255,255,255,.95);
+    rgba(255,255,255,.92);
+  backdrop-filter:blur(44px) saturate(2.4);-webkit-backdrop-filter:blur(44px) saturate(2.4);
+  border:1.5px solid rgba(255,255,255,.98);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.98),
     inset 0 -1.5px 0 rgba(255,210,228,.55),
-    0 18px 44px rgba(200,60,110,.22);
+    0 20px 48px rgba(200,60,110,.22);
   display:flex;align-items:center;padding:0 10px;gap:8px;
 }
 .g-tabbar button{
-  flex:1;height:44px;border-radius:22px;border:none;cursor:pointer;
-  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:6px;
+  flex:1;height:52px;border-radius:26px;border:none;cursor:pointer;
+  font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;
   transition:transform .15s ease, opacity .2s ease;
 }
 .g-tabbar button:active{transform:scale(.96)}
@@ -756,7 +762,77 @@ body > .blob-b{
   box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(255,200,220,.5),0 4px 12px rgba(160,40,90,.12);
 }
 
-/* 收藏按钮（详情页） */
+/* ---- Search Overlay ---- */
+.search-overlay{
+  position:fixed;inset:0;z-index:100;display:none;flex-direction:column;
+  background:
+    var(--glass-aurora),
+    rgba(255,255,255,.96);
+  backdrop-filter:blur(40px) saturate(2.2);-webkit-backdrop-filter:blur(40px) saturate(2.2);
+  animation:fadeIn .25s ease;
+}
+.search-overlay.show{display:flex}
+.search-top{
+  padding:env(safe-area-inset-top) 12px 10px;display:flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.5);
+}
+.search-top .back-btn{
+  width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.8);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.98),0 4px 10px rgba(160,40,90,.12);
+}
+.search-top .search-input-wrap{
+  flex:1;height:38px;border-radius:19px;
+  background:rgba(255,255,255,.9);border:1px solid rgba(255,210,228,.6);
+  display:flex;align-items:center;padding:0 14px;gap:8px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.98);
+}
+.search-top input{
+  flex:1;border:none;background:transparent;outline:none;
+  font-size:14px;font-weight:600;color:var(--ink-900);font-family:inherit;
+}
+.search-top input::placeholder{color:var(--ink-300);font-weight:600}
+.search-top .clear-btn{
+  width:20px;height:20px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--pink-200);color:var(--pink-700);font-size:12px;font-weight:800;
+  display:none;align-items:center;justify-content:center;flex-shrink:0;
+  line-height:1;padding:0;
+}
+.search-top .has-text .clear-btn{display:flex}
+.search-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 20px}
+.search-results .sr-item{
+  display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:6px;border-radius:16px;
+  background:rgba(255,255,255,.85);border:1px solid rgba(255,210,228,.5);
+  box-shadow:0 2px 8px rgba(160,40,90,.06);cursor:pointer;
+  transition:transform .15s ease;
+}
+.search-results .sr-item:active{transform:scale(.98)}
+.search-results .sr-thumb{
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:linear-gradient(135deg,var(--pink-100),var(--pink-200));
+}
+.search-results .sr-info{flex:1;min-width:0}
+.search-results .sr-name{font-size:14px;font-weight:800;color:var(--ink-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-results .sr-desc{font-size:11px;color:var(--ink-300);font-weight:600;margin-top:2px}
+.search-results .sr-price{font-size:14px;font-weight:900;color:var(--pink-600);flex-shrink:0}
+.search-empty-state{
+  text-align:center;padding:60px 24px;color:var(--ink-300);
+}
+.search-empty-state .emoji{font-size:48px;margin-bottom:12px}
+.search-empty-state h3{font-size:16px;font-weight:700;color:var(--ink-500);margin-bottom:6px}
+.search-empty-state p{font-size:13px;font-weight:500}
+.search-suggestions{padding:12px}
+.search-suggestions h4{font-size:12px;font-weight:700;color:var(--ink-300);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
+.search-chips{display:flex;flex-wrap:wrap;gap:8px}
+.search-chip{
+  padding:8px 14px;border-radius:var(--radius-full);font-size:12px;font-weight:700;
+  background:rgba(255,255,255,.85);color:var(--ink-500);border:1px solid rgba(255,210,228,.5);
+  cursor:pointer;transition:all .15s ease;display:flex;align-items:center;gap:5px;
+}
+.search-chip:active{transform:scale(.95)}
+
+/* ---- Fav button in detail ---- */
 .fav-btn{
   position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;
   background:rgba(255,255,255,.95);border:2px solid rgba(255,255,255,.98);
@@ -901,7 +977,7 @@ body > .blob-b{
 /* Dock (5 results) · 极致紧凑移动端优化 V5 */
 .pickbar{
   position:fixed;left:10px;right:10px;
-  bottom:calc(env(safe-area-inset-bottom) + 84px);
+  bottom:calc(env(safe-area-inset-bottom) + 98px);
   padding:5px 7px;border-radius:14px;z-index:75;
   background:rgba(255,255,255,.88);
   backdrop-filter:blur(15px) saturate(1.6);-webkit-backdrop-filter:blur(15px) saturate(1.6);
@@ -1328,6 +1404,32 @@ body > .blob-b{
   </div>
 </div>
 
+<!-- Search Overlay -->
+<div class="search-overlay" id="searchOverlay">
+  <div class="search-top">
+    <button class="back-btn" onclick="closeSearch()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A1A2A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="search-input-wrap" id="searchInputWrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B27A93" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="searchInput2" type="text" placeholder="搜一道喜欢的菜…" autocomplete="off" autofocus>
+      <button class="clear-btn" id="searchClear2" onclick="clearSearch2()" title="清除">×</button>
+    </div>
+  </div>
+  <div class="search-suggestions" id="searchSuggestions">
+    <h4>热门搜索</h4>
+    <div class="search-chips" id="searchChips">
+      <div class="search-chip" onclick="quickSearch('招牌')">🍜 招牌</div>
+      <div class="search-chip" onclick="quickSearch('便宜')">💰 10元以下</div>
+      <div class="search-chip" onclick="quickSearch('推荐')">🌟 推荐</div>
+      <div class="search-chip" onclick="quickSearch('早餐')">🥣 早餐</div>
+      <div class="search-chip" onclick="quickSearch('肉')">🍖 肉类</div>
+      <div class="search-chip" onclick="quickSearch('辣')">🌶️ 辣</div>
+    </div>
+  </div>
+  <div class="search-results" id="searchResults" style="display:none"></div>
+</div>
+
 <!-- Tabbar -->
 <div class="tabbar" id="tb">
   <div class="tb-item on" data-v="menu" onclick="switchTab('menu')">
@@ -1509,7 +1611,7 @@ let S = {
   }catch(e){}
   // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
   if('serviceWorker' in navigator){
-    const SW_VER = '?v=v7-search-fav-notes-20260823';
+    const SW_VER = '?v=v8-search-overlay-tabbar-20260823';
     navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
       // 发现更新后立即激活（跳过等待），下次访问就是新版本
       if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
@@ -1815,7 +1917,7 @@ function bindCards(){
   document.querySelectorAll('.del-x').forEach(b=>{
     b.onclick = e=>{
       e.stopPropagation();
-      delDish(b.dataset.id,b.dataset.dataset?b.dataset.custom:b.getAttribute('data-custom'));
+      delDish(b.dataset.id, b.dataset.custom);
     };
   });
 }
@@ -2127,6 +2229,17 @@ function spinGacha(){
 function bindSearch(){
   const input = document.getElementById('searchInput');
   const box = document.getElementById('searchBox');
+  // Tap on search box opens the overlay for better mobile experience
+  box.addEventListener('click', ()=>{
+    openSearch();
+  });
+  input.addEventListener('focus', e=>{
+    // On mobile, native focus works but we also open overlay for better UX
+    if(window.innerWidth < 768){
+      e.preventDefault();
+      openSearch();
+    }
+  });
   input.addEventListener('input', e=>{
     S.search = e.target.value;
     if(S.search.length>0){
@@ -2141,6 +2254,110 @@ function bindSearch(){
   input.addEventListener('keydown', e=>{
     if(e.key==='Enter') e.preventDefault();
   });
+}
+function openSearch(){
+  const overlay = document.getElementById('searchOverlay');
+  const input = document.getElementById('searchInput2');
+  overlay.classList.add('show');
+  // Reset state
+  document.getElementById('searchResults').style.display='none';
+  document.getElementById('searchSuggestions').style.display='block';
+  // Focus the input
+  setTimeout(()=>{ input.focus(); }, 100);
+  // Bind input if not already
+  if(!input._bound){
+    input._bound = true;
+    input.addEventListener('input', e=>{
+      const val = e.target.value.trim();
+      const wrap = document.getElementById('searchInputWrap');
+      if(val.length>0){
+        wrap.classList.add('has-text');
+        doSearch(val);
+      } else {
+        wrap.classList.remove('has-text');
+        document.getElementById('searchResults').style.display='none';
+        document.getElementById('searchSuggestions').style.display='block';
+      }
+    });
+    input.addEventListener('keydown', e=>{
+      if(e.key==='Enter') e.preventDefault();
+    });
+  }
+}
+function closeSearch(){
+  const overlay = document.getElementById('searchOverlay');
+  overlay.classList.remove('show');
+  const input = document.getElementById('searchInput2');
+  input.value = '';
+  document.getElementById('searchInputWrap').classList.remove('has-text');
+  document.getElementById('searchResults').style.display='none';
+  document.getElementById('searchSuggestions').style.display='block';
+}
+function clearSearch2(){
+  const input = document.getElementById('searchInput2');
+  input.value = '';
+  document.getElementById('searchInputWrap').classList.remove('has-text');
+  document.getElementById('searchResults').style.display='none';
+  document.getElementById('searchSuggestions').style.display='block';
+  input.focus();
+}
+function quickSearch(term){
+  const input = document.getElementById('searchInput2');
+  input.value = term;
+  document.getElementById('searchInputWrap').classList.add('has-text');
+  doSearch(term);
+}
+function doSearch(query){
+  const q = query.trim().toLowerCase();
+  if(!q){
+    document.getElementById('searchResults').style.display='none';
+    document.getElementById('searchSuggestions').style.display='block';
+    return;
+  }
+  document.getElementById('searchSuggestions').style.display='none';
+  document.getElementById('searchResults').style.display='block';
+  const pool = all();
+  const results = pool.filter(d=>{
+    const n = (d.name||'').toLowerCase();
+    const s = (d.shopName||'').toLowerCase();
+    const c = (d.catName||'').toLowerCase();
+    return n.includes(q) || s.includes(q) || c.includes(q);
+  });
+  const container = document.getElementById('searchResults');
+  if(results.length===0){
+    container.innerHTML = `
+      <div class="search-empty-state">
+        <div class="emoji">🔍</div>
+        <h3>没有找到相关的菜</h3>
+        <p>换个关键词试试？</p>
+      </div>`;
+    return;
+  }
+  let html = `<div style="font-size:12px;font-weight:700;color:var(--ink-300);margin-bottom:10px;padding-top:4px">找到 ${results.length} 道结果</div>`;
+  results.forEach(d=>{
+    const c = catOf(d);
+    const price = d.price?.display || '';
+    const shopShort = (d.shopName||'').replace(/^[一二三四五六七八九十0-9]+号\s*/,'').slice(0,10);
+    const floorBadge = d.floor==='1F'?'一楼':'二楼';
+    const idx = results.indexOf(d);
+    html += `<div class="sr-item" onclick="openSearchResult(${idx})">
+      <div class="sr-thumb">${c.emoji}</div>
+      <div class="sr-info">
+        <div class="sr-name">${d.name}</div>
+        <div class="sr-desc">${floorBadge} · ${shopShort} · ${c.name}</div>
+      </div>
+      <div class="sr-price"><em style="font-size:11px;font-weight:700">¥</em>${price.replace('元','')}</div>
+    </div>`;
+  });
+  // Store results for click handling
+  window._searchResults = results;
+  container.innerHTML = html;
+}
+function openSearchResult(idx){
+  const d = window._searchResults?.[idx];
+  if(!d) return;
+  closeSearch();
+  showDetail(d);
 }
 function clearSearch(){
   const input = document.getElementById('searchInput');
