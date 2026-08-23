@@ -51,9 +51,15 @@ body{
   background-size:28px 28px;background-position:0 0;
 }
 .pattern-dots-lg{
-  background-color:var(--pink-500);
-  background-image:radial-gradient(rgba(255,255,255,.32) 4px,transparent 4.2px);
-  background-size:40px 40px;
+  background:
+    radial-gradient(rgba(255,255,255,.55) 5px,transparent 5.2px) 0 0/48px 48px,
+    linear-gradient(180deg,#FFB6CE 0%,#FF9FBE 52%,#FF8DB2 100%);
+  position:relative;
+}
+.pattern-dots-lg::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:40px;
+  background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.18) 60%,#fff 100%);
+  pointer-events:none;
 }
 
 /* ================== WELCOME ================== */
@@ -111,22 +117,37 @@ body{
 
 /* ---- Top Header ---- */
 .head{
-  padding:16px 20px 14px;flex-shrink:0;
+  padding:18px 20px 22px;flex-shrink:0;position:relative;z-index:1;overflow:hidden;
 }
-.greet{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.g-lbl{font-size:11px;font-weight:800;letter-spacing:.22em;color:var(--pink-700)}
-.g-title{font-size:23px;font-weight:800;letter-spacing:-.01em;color:var(--ink-900);margin-top:4px}
+.head::before{
+  content:"";position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.22);filter:blur(6px);
+  width:160px;height:160px;right:-44px;top:-56px;
+}
+.head::after{
+  content:"";position:absolute;border-radius:50%;
+  background:rgba(255,255,255,.14);filter:blur(4px);
+  width:96px;height:96px;left:-22px;bottom:-22px;
+}
+.greet{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:2}
+.g-lbl{font-size:11px;font-weight:800;letter-spacing:.22em;color:rgba(255,255,255,.92);text-shadow:0 1px 0 rgba(240,86,141,.14)}
+.g-title{font-size:24px;font-weight:900;letter-spacing:-.01em;color:#fff;margin-top:6px;text-shadow:0 2px 10px rgba(200,60,110,.24)}
 .ava{
-  width:44px;height:44px;border-radius:50%;background:var(--white);
-  box-shadow:var(--shadow-md),inset 0 0 0 2px var(--pink-200);
+  width:46px;height:46px;border-radius:50%;
+  background:rgba(255,255,255,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  box-shadow:0 10px 22px rgba(200,60,110,.22),inset 0 0 0 2px rgba(255,255,255,.7);
   display:flex;align-items:center;justify-content:center;
   font-size:17px;font-weight:900;color:var(--pink-600);flex-shrink:0;
 }
 .search{
-  margin-top:14px;height:44px;border-radius:22px;background:var(--white);
-  box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:10px;
-  padding:0 16px;color:var(--ink-300);font-size:13.5px;font-weight:500;
+  margin-top:16px;height:48px;border-radius:24px;
+  background:rgba(255,255,255,.82);backdrop-filter:blur(18px) saturate(1.6);-webkit-backdrop-filter:blur(18px) saturate(1.6);
+  box-shadow:0 12px 28px rgba(200,60,110,.18),inset 0 0 0 1.5px rgba(255,255,255,.75);
+  display:flex;align-items:center;gap:10px;
+  padding:0 18px;color:var(--ink-500);font-size:14px;font-weight:600;position:relative;z-index:2;
+  transition:transform .18s ease, box-shadow .2s ease;
 }
+.search:active{transform:scale(.995);box-shadow:0 8px 18px rgba(200,60,110,.16)}
 
 /* ---- Content Card ---- */
 .body{
@@ -350,8 +371,17 @@ body{
   transform:translateY(100%);transition:transform .45s cubic-bezier(.2,.9,.2,1);
   display:flex;flex-direction:column;
   padding-top:env(safe-area-inset-top);
+  overflow:hidden;
 }
 #gacha.open{transform:translateY(0)}
+#gacha > .pattern-dots{position:absolute;inset:0;opacity:.82;pointer-events:none}
+#gacha > div[style*="position:relative"]{
+  flex:1;min-height:0;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+}
+#gacha > div[style*="position:relative"]::-webkit-scrollbar{width:0}
+/* 让顶部与机器等保持 sticky，结果卡 + 历史区域跟着滚 */
+.g-top,.g-kicker,.g-h1,.g-h2,.gm,.gresult,.gbutton,.ghint,.gcount{flex-shrink:0}
 .g-top{
   padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
 }
