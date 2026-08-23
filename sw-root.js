@@ -2,7 +2,7 @@
  * 根作用域 — 防止旧缓存一直卡住
  * V5 极致紧凑移动端版本 — 安装时清理所有历史缓存，HTML 走 network-first
  */
-const CACHE = 'dotdotcafe-root-v20260823-search-tabbar-fav-notes-v14';
+const CACHE = 'dotdotcafe-root-v20260823-tabbar-search-notes-v15';
 
 self.addEventListener('install', e => {
   e.waitUntil(

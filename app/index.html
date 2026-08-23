@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
 <!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
-<link rel="manifest" href="manifest.webmanifest?v=v14-search-tabbar-fav-notes-20260823">
+<link rel="manifest" href="manifest.webmanifest?v=v15-tabbar-search-notes-20260823">
 <!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
-<meta name="app-version" content="14.0.0-search-tabbar-fav-notes-20260823">
+<meta name="app-version" content="15.0.0-tabbar-search-notes-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -273,7 +273,7 @@ body > .blob-b{
 #app{
   position:fixed;inset:0;display:none;flex-direction:column;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:calc(env(safe-area-inset-bottom) + 142px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 104px);
 }
 
 /* ---- Top Header（液态玻璃顶栏 V2 · 极致紧凑移动端优化 V5） ---- */
@@ -675,14 +675,14 @@ body > .blob-b{
 /* Group separator */
 .gap{height:2px}
 
-/* ================== Tabbar (参考招商银行/App Store · 宽空间 V6) ================== */
+/* ================== Tabbar (参考招商银行/App Store · 5 均分布局 V7) ================== */
 .tabbar{
-  position:fixed;left:10px;right:10px;
-  bottom:calc(env(safe-area-inset-bottom) + 8px);
-  height:110px;border-radius:56px;z-index:80;
+  position:fixed;left:8px;right:8px;
+  bottom:calc(env(safe-area-inset-bottom) + 6px);
+  height:92px;border-radius:40px;z-index:80;
   background:
     var(--glass-aurora),
-    rgba(255,255,255,.94);
+    rgba(255,255,255,.95);
   backdrop-filter:blur(48px) saturate(2.5);-webkit-backdrop-filter:blur(48px) saturate(2.5);
   border:1.5px solid rgba(255,255,255,.98);
   box-shadow:
@@ -690,10 +690,10 @@ body > .blob-b{
     inset 0 -1.5px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.4),
     inset -1px 0 0 rgba(255,255,255,.4),
-    0 24px 56px rgba(200,60,110,.24),
-    0 6px 18px rgba(200,60,110,.10),
-    0 0 0 1px rgba(255,159,190,.16);
-  display:flex;align-items:flex-end;padding:10px 8px 16px;
+    0 20px 48px rgba(200,60,110,.22),
+    0 4px 14px rgba(200,60,110,.08),
+    0 0 0 1px rgba(255,159,190,.14);
+  display:flex;align-items:center;padding:6px 4px;
   animation:tbFloat 7s ease-in-out infinite;
 }
 @keyframes tbFloat{
@@ -701,53 +701,52 @@ body > .blob-b{
   50%    { transform:translateY(-1px); }
 }
 .tb-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
   color:var(--ink-300);font-size:11px;font-weight:700;cursor:pointer;
   transition:transform .2s ease, color .2s ease;
-  padding:10px 6px;position:relative;
-  border-radius:22px;
+  padding:8px 4px;border-radius:20px;
   justify-content:center;min-width:0;
+  height:100%;position:relative;
 }
-.tb-item svg{width:30px;height:30px}
+.tb-item svg{width:28px;height:28px}
 .tb-item.on{
   color:var(--pink-600);
-  transform:translateY(-2px);
 }
 .tb-item.on::before{
-  content:"";position:absolute;inset:4px 8px;border-radius:18px;
-  background:linear-gradient(180deg,rgba(255,127,168,.22),rgba(255,127,168,.10));
+  content:"";position:absolute;inset:2px 6px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(255,127,168,.18),rgba(255,127,168,.08));
   box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
 }
 .tb-item.on::after{
-  content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:16px;height:3.5px;border-radius:3px;
+  content:"";position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);
+  width:14px;height:3px;border-radius:3px;
   background:linear-gradient(90deg,var(--pink-400),var(--pink-600));
   box-shadow:0 2px 6px rgba(240,86,141,.45);
 }
 .tb-item.on svg{filter:drop-shadow(0 4px 10px rgba(240,86,141,.22))}
 .tb-item .tb-lbl{font-size:11px;font-weight:700}
 .tb-gacha{
-  width:70px;height:70px;border-radius:50%;margin:0 4px 16px;flex-shrink:0;
+  flex:0 0 auto;width:60px;height:60px;border-radius:50%;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   box-shadow:
     inset 0 2px 0 rgba(255,255,255,.55),
     inset 0 -2px 0 rgba(160,40,90,.22),
     inset 0 0 0 1px rgba(255,255,255,.2),
-    0 18px 38px rgba(240,86,141,.48);
+    0 14px 32px rgba(240,86,141,.42);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform .18s ease, box-shadow .2s ease;
-  position:relative;
+  position:relative;margin:0 6px;
 }
 .tb-gacha::before{
-  content:"";position:absolute;inset:-7px;border-radius:50%;
+  content:"";position:absolute;inset:-8px;border-radius:50%;
   background:radial-gradient(circle, rgba(255,180,210,.50), rgba(255,180,210,0) 65%);
   z-index:-1;opacity:.75;
 }
 .tb-gacha:active{transform:scale(.93)}
-.tb-gacha svg{width:38px;height:38px;animation:bob 3s ease-in-out infinite}
+.tb-gacha svg{width:32px;height:32px;animation:bob 3s ease-in-out infinite}
 .tb-gacha .tb-badge{
-  position:absolute;top:-2px;right:-2px;min-width:24px;height:24px;padding:0 7px;border-radius:12px;
-  background:var(--white);color:var(--pink-600);font-size:11px;font-weight:900;
+  position:absolute;top:-4px;right:-4px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;
+  background:var(--white);color:var(--pink-600);font-size:10px;font-weight:900;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 10px rgba(240,86,141,.28);
 }
@@ -1000,7 +999,7 @@ body > .blob-b{
 /* Dock (5 results) · 极致紧凑移动端优化 V5 */
 .pickbar{
   position:fixed;left:10px;right:10px;
-  bottom:calc(env(safe-area-inset-bottom) + 132px);
+  bottom:calc(env(safe-area-inset-bottom) + 104px);
   padding:5px 7px;border-radius:14px;z-index:75;
   background:rgba(255,255,255,.88);
   backdrop-filter:blur(15px) saturate(1.6);-webkit-backdrop-filter:blur(15px) saturate(1.6);
@@ -1468,20 +1467,27 @@ body > .blob-b{
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
     <span class="tb-lbl">菜单</span>
   </div>
+  <div class="tb-item" data-v="collection" onclick="switchTab('collection')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h9a2 2 0 0 1 2 2v16l-5-3-5 3-5-3-1 3V5a2 2 0 0 1 2-2h3z"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+    <span class="tb-lbl">清单</span>
+  </div>
+  <div class="tb-gacha-wrap" style="display:flex;flex:1;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;margin-bottom:4px;">
+    <div class="tb-gacha" onclick="openGacha()" title="今天吃什么">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 3h10a3 3 0 0 1 3 3v2H4V6a3 3 0 0 1 3-3Z"/>
+        <rect x="3" y="8" width="18" height="10" rx="3"/>
+        <circle cx="8.5" cy="13" r="1.3" fill="#fff"/>
+        <circle cx="12" cy="15" r="1.3" fill="#fff"/>
+        <circle cx="15.5" cy="12" r="1.3" fill="#fff"/>
+        <path d="M12 18v2M9 20h6"/>
+      </svg>
+      <span class="tb-badge" id="gachaBadge" style="display:none">0</span>
+    </div>
+    <span class="tb-lbl" style="color:var(--ink-500)">扭蛋机</span>
+  </div>
   <div class="tb-item" data-v="favorites" onclick="switchTab('favorites')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     <span class="tb-lbl">收藏</span>
-  </div>
-  <div class="tb-gacha" onclick="openGacha()" title="今天吃什么">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M7 3h10a3 3 0 0 1 3 3v2H4V6a3 3 0 0 1 3-3Z"/>
-      <rect x="3" y="8" width="18" height="10" rx="3"/>
-      <circle cx="8.5" cy="13" r="1.3" fill="#fff"/>
-      <circle cx="12" cy="15" r="1.3" fill="#fff"/>
-      <circle cx="15.5" cy="12" r="1.3" fill="#fff"/>
-      <path d="M12 18v2M9 20h6"/>
-    </svg>
-    <span class="tb-badge" id="gachaBadge" style="display:none">0</span>
   </div>
   <div class="tb-item" data-v="profile" onclick="switchTab('profile')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -1643,7 +1649,7 @@ let S = {
   }catch(e){}
   // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
   if('serviceWorker' in navigator){
-    const SW_VER = '?v=v14-search-tabbar-fav-notes-20260823';
+    const SW_VER = '?v=v15-tabbar-search-notes-20260823';
     navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
       // 发现更新后立即激活（跳过等待），下次访问就是新版本
       if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
@@ -2301,17 +2307,37 @@ function bindSearch(){
 function openSearch(){
   const overlay = document.getElementById('searchOverlay');
   const input = document.getElementById('searchInput2');
+  const mainInput = document.getElementById('searchInput');
+  const mainBox = document.getElementById('searchBox');
+  
+  // Blur the main input first to prevent it from capturing focus
+  if(document.activeElement === mainInput){
+    mainInput.blur();
+  }
+  
   overlay.classList.add('show');
+  
   // Sync current search value if any
   if(S.search){
     input.value = S.search;
     document.getElementById('searchInputWrap').classList.add('has-text');
   }
+  
   // Reset results
   document.getElementById('searchResults').style.display='none';
   document.getElementById('searchSuggestions').style.display='flex';
-  // Focus the input
-  setTimeout(()=>{ input.focus(); }, 300);
+  
+  // Focus the overlay input - use immediate focus + delayed focus for mobile
+  input.focus();
+  setTimeout(()=>{ 
+    input.focus(); 
+    input.select();
+  }, 50);
+  setTimeout(()=>{ 
+    input.focus(); 
+    input.select();
+  }, 350);
+  
   // Bind input if not already
   if(!input._bound){
     input._bound = true;
