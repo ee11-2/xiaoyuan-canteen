@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
 <!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
-<link rel="manifest" href="manifest.webmanifest?v=v8-search-overlay-tabbar-20260823">
+<link rel="manifest" href="manifest.webmanifest?v=v14-search-tabbar-fav-notes-20260823">
 <!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
-<meta name="app-version" content="8.0.0-search-overlay-tabbar-20260823">
+<meta name="app-version" content="14.0.0-search-tabbar-fav-notes-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -219,6 +219,12 @@ body > .blob-b{
 /* ================== WELCOME ================== */
 #welcome{
   position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;
+  background:
+    radial-gradient(60% 55% at 12% 8%,  #FFD1E1 0%, rgba(255,209,225,0) 60%),
+    radial-gradient(50% 50% at 88% 4%,  #FFC6DA 0%, rgba(255,198,218,0) 55%),
+    radial-gradient(62% 60% at 100% 92%,#FFE3C9 0%, rgba(255,227,201,0) 60%),
+    radial-gradient(55% 45% at 0% 100%,  #F4D4FF 0%, rgba(244,212,255,0) 60%),
+    radial-gradient(60% 55% at 50% 50%,  #FFF4F8 0%, #FFEDF3 60%, #FFE3ED 100%);
   transition:opacity .55s cubic-bezier(.2,.8,.2,1),transform .55s cubic-bezier(.2,.8,.2,1);
 }
 #welcome.fade{opacity:0;transform:scale(1.03);pointer-events:none}
@@ -267,7 +273,7 @@ body > .blob-b{
 #app{
   position:fixed;inset:0;display:none;flex-direction:column;
   padding-top:env(safe-area-inset-top);
-  padding-bottom:calc(env(safe-area-inset-bottom) + 95px);
+  padding-bottom:calc(env(safe-area-inset-bottom) + 142px);
 }
 
 /* ---- Top Header（液态玻璃顶栏 V2 · 极致紧凑移动端优化 V5） ---- */
@@ -276,10 +282,10 @@ body > .blob-b{
   box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
 }
 .edit-btn{
-  width:30px;height:30px;border-radius:50%;position:relative;flex-shrink:0;
-  background:rgba(255,255,255,.72);
+  width:32px;height:32px;border-radius:50%;position:relative;flex-shrink:0;
+  background:rgba(255,255,255,.78);
   backdrop-filter:blur(22px) saturate(1.95);-webkit-backdrop-filter:blur(22px) saturate(1.95);
-  border:1px solid rgba(255,255,255,.88);
+  border:1px solid rgba(255,255,255,.92);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.98),
     inset 0 -1px 0 rgba(255,210,228,.55),
@@ -292,6 +298,13 @@ body > .blob-b{
 .edit-btn.on{
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   color:#fff;
+  border:1px solid rgba(255,255,255,.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.52),
+    inset 0 -1px 0 rgba(160,40,90,.18),
+    0 10px 22px rgba(240,86,141,.32),
+    0 0 0 2px rgba(255,127,168,.28);
+  transform:scale(1.05);
 }
 .head::before,.head::after{display:none}
 .greet{display:flex;align-items:center;justify-content:space-between;gap:6px;position:relative;z-index:2}
@@ -662,73 +675,81 @@ body > .blob-b{
 /* Group separator */
 .gap{height:2px}
 
-/* ================== Tabbar (参考招商银行/App Store · 更大更舒适) ================== */
+/* ================== Tabbar (参考招商银行/App Store · 宽空间 V6) ================== */
 .tabbar{
-  position:fixed;left:6px;right:6px;
-  bottom:calc(env(safe-area-inset-bottom) + 6px);
-  height:83px;border-radius:42px;z-index:80;
+  position:fixed;left:10px;right:10px;
+  bottom:calc(env(safe-area-inset-bottom) + 8px);
+  height:110px;border-radius:56px;z-index:80;
   background:
     var(--glass-aurora),
-    rgba(255,255,255,.92);
-  backdrop-filter:blur(44px) saturate(2.4);-webkit-backdrop-filter:blur(44px) saturate(2.4);
+    rgba(255,255,255,.94);
+  backdrop-filter:blur(48px) saturate(2.5);-webkit-backdrop-filter:blur(48px) saturate(2.5);
   border:1.5px solid rgba(255,255,255,.98);
   box-shadow:
     inset 0 1.5px 0 rgba(255,255,255,.98),
     inset 0 -1.5px 0 rgba(255,210,228,.55),
     inset 1px 0 0 rgba(255,255,255,.4),
     inset -1px 0 0 rgba(255,255,255,.4),
-    0 20px 48px rgba(200,60,110,.22),
-    0 6px 18px rgba(200,60,110,.08),
-    0 0 0 1px rgba(255,159,190,.18);
-  display:flex;align-items:center;padding:0 6px;
+    0 24px 56px rgba(200,60,110,.24),
+    0 6px 18px rgba(200,60,110,.10),
+    0 0 0 1px rgba(255,159,190,.16);
+  display:flex;align-items:flex-end;padding:10px 8px 16px;
   animation:tbFloat 7s ease-in-out infinite;
 }
 @keyframes tbFloat{
   0%,100%{ transform:translateY(0); }
-  50%    { transform:translateY(-1.5px); }
+  50%    { transform:translateY(-1px); }
 }
 .tb-item{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
   color:var(--ink-300);font-size:11px;font-weight:700;cursor:pointer;
   transition:transform .2s ease, color .2s ease;
-  padding:8px 4px;position:relative;
+  padding:10px 6px;position:relative;
   border-radius:22px;
+  justify-content:center;min-width:0;
 }
-.tb-item svg{width:28px;height:28px}
+.tb-item svg{width:30px;height:30px}
 .tb-item.on{
   color:var(--pink-600);
-  transform:translateY(-1px);
+  transform:translateY(-2px);
 }
 .tb-item.on::before{
-  content:"";position:absolute;inset:3px 8px;border-radius:19px;
-  background:rgba(255,127,168,.12);
+  content:"";position:absolute;inset:4px 8px;border-radius:18px;
+  background:linear-gradient(180deg,rgba(255,127,168,.22),rgba(255,127,168,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
 }
-.tb-item.on svg{filter:drop-shadow(0 4px 10px rgba(240,86,141,.25))}
-.tb-item .tb-lbl{font-size:11px;font-weight:700;margin-top:1px}
+.tb-item.on::after{
+  content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:16px;height:3.5px;border-radius:3px;
+  background:linear-gradient(90deg,var(--pink-400),var(--pink-600));
+  box-shadow:0 2px 6px rgba(240,86,141,.45);
+}
+.tb-item.on svg{filter:drop-shadow(0 4px 10px rgba(240,86,141,.22))}
+.tb-item .tb-lbl{font-size:11px;font-weight:700}
 .tb-gacha{
-  width:62px;height:62px;border-radius:50%;margin:0 2px;flex-shrink:0;
+  width:70px;height:70px;border-radius:50%;margin:0 4px 16px;flex-shrink:0;
   background:linear-gradient(150deg,var(--pink-400),var(--pink-600));
   box-shadow:
     inset 0 2px 0 rgba(255,255,255,.55),
     inset 0 -2px 0 rgba(160,40,90,.22),
     inset 0 0 0 1px rgba(255,255,255,.2),
-    0 14px 32px rgba(240,86,141,.40);
+    0 18px 38px rgba(240,86,141,.48);
   display:flex;align-items:center;justify-content:center;cursor:pointer;
   transition:transform .18s ease, box-shadow .2s ease;
   position:relative;
 }
 .tb-gacha::before{
-  content:"";position:absolute;inset:-5px;border-radius:50%;
-  background:radial-gradient(circle, rgba(255,180,210,.55), rgba(255,180,210,0) 65%);
-  z-index:-1;opacity:.8;
+  content:"";position:absolute;inset:-7px;border-radius:50%;
+  background:radial-gradient(circle, rgba(255,180,210,.50), rgba(255,180,210,0) 65%);
+  z-index:-1;opacity:.75;
 }
 .tb-gacha:active{transform:scale(.93)}
-.tb-gacha svg{width:34px;height:34px;animation:bob 3s ease-in-out infinite}
+.tb-gacha svg{width:38px;height:38px;animation:bob 3s ease-in-out infinite}
 .tb-gacha .tb-badge{
-  position:absolute;top:-2px;right:-2px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;
-  background:var(--white);color:var(--pink-600);font-size:10px;font-weight:900;
+  position:absolute;top:-2px;right:-2px;min-width:24px;height:24px;padding:0 7px;border-radius:12px;
+  background:var(--white);color:var(--pink-600);font-size:11px;font-weight:900;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 10px rgba(240,86,141,.3);
+  box-shadow:0 4px 10px rgba(240,86,141,.28);
 }
 
 /* Gacha 专属底部栏 */
@@ -745,8 +766,9 @@ body > .blob-b{
     inset 0 1.5px 0 rgba(255,255,255,.98),
     inset 0 -1.5px 0 rgba(255,210,228,.55),
     0 20px 48px rgba(200,60,110,.22);
-  display:flex;align-items:center;padding:0 10px;gap:8px;
+  display:none;align-items:center;padding:0 10px;gap:8px;
 }
+#gacha.open .g-tabbar{display:flex}
 .g-tabbar button{
   flex:1;height:52px;border-radius:26px;border:none;cursor:pointer;
   font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:7px;
@@ -798,8 +820,8 @@ body > .blob-b{
   display:none;align-items:center;justify-content:center;flex-shrink:0;
   line-height:1;padding:0;
 }
-.search-top .has-text .clear-btn{display:flex}
-.search-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 20px}
+.search-input-wrap.has-text .clear-btn{display:flex}
+.search-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 20px;display:none;flex-direction:column}
 .search-results .sr-item{
   display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:6px;border-radius:16px;
   background:rgba(255,255,255,.85);border:1px solid rgba(255,210,228,.5);
@@ -822,7 +844,7 @@ body > .blob-b{
 .search-empty-state .emoji{font-size:48px;margin-bottom:12px}
 .search-empty-state h3{font-size:16px;font-weight:700;color:var(--ink-500);margin-bottom:6px}
 .search-empty-state p{font-size:13px;font-weight:500}
-.search-suggestions{padding:12px}
+.search-suggestions{padding:12px;display:none;flex-direction:column}
 .search-suggestions h4{font-size:12px;font-weight:700;color:var(--ink-300);margin-bottom:10px;text-transform:uppercase;letter-spacing:.05em}
 .search-chips{display:flex;flex-wrap:wrap;gap:8px}
 .search-chip{
@@ -897,6 +919,7 @@ body > .blob-b{
   display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;
 }
 .fav-item .fi-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.fav-item .fi-tags-row{display:flex;gap:4px;flex-wrap:wrap}
 .fav-item .fi-tag{
   font-size:8.5px;font-weight:700;padding:2px 6px;border-radius:var(--radius-full);
   background:var(--pink-100);color:var(--pink-700);
@@ -977,14 +1000,14 @@ body > .blob-b{
 /* Dock (5 results) · 极致紧凑移动端优化 V5 */
 .pickbar{
   position:fixed;left:10px;right:10px;
-  bottom:calc(env(safe-area-inset-bottom) + 98px);
+  bottom:calc(env(safe-area-inset-bottom) + 132px);
   padding:5px 7px;border-radius:14px;z-index:75;
   background:rgba(255,255,255,.88);
   backdrop-filter:blur(15px) saturate(1.6);-webkit-backdrop-filter:blur(15px) saturate(1.6);
   border:1.1px solid var(--white);
   box-shadow:0 6px 20px rgba(200,60,110,.11);
   display:flex;align-items:center;gap:5.5px;
-  transform:translateY(140%);transition:transform .4s cubic-bezier(.2,.9,.25,1.1);
+  transform:translateY(calc(100% + 200px));transition:transform .4s cubic-bezier(.2,.9,.25,1.1);
   pointer-events:none;
 }
 .pickbar.show{transform:translateY(0);pointer-events:auto}
@@ -1354,7 +1377,7 @@ body > .blob-b{
     <div class="search" id="searchBox">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input id="searchInput" type="text" placeholder="搜一道喜欢的菜…" autocomplete="off">
-      <button class="clear-btn" id="searchClear" onclick="clearSearch()" title="清除">×</button>
+      <button class="clear-btn" id="searchClear" onclick="event.stopPropagation();clearSearch()" title="清除">×</button>
     </div>
   </div>
 
@@ -1397,6 +1420,15 @@ body > .blob-b{
       <div class="fav-list" id="favList"></div>
     </div>
 
+    <!-- 我的清单视图（汇总所有有备注的菜） -->
+    <div id="viewCollection" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
+      <div class="sec-head" style="margin-top:4px">
+        <b><span class="dot-trio"><i></i><i></i><i></i></span><span>我的清单</span></b>
+        <span id="colCount"></span>
+      </div>
+      <div class="col-list" id="colList"></div>
+    </div>
+
     <!-- 我的页面视图 -->
     <div id="viewProfile" style="display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch">
       <div class="profile-page" id="profilePage"></div>
@@ -1433,15 +1465,15 @@ body > .blob-b{
 <!-- Tabbar -->
 <div class="tabbar" id="tb">
   <div class="tb-item on" data-v="menu" onclick="switchTab('menu')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
     <span class="tb-lbl">菜单</span>
   </div>
   <div class="tb-item" data-v="favorites" onclick="switchTab('favorites')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     <span class="tb-lbl">收藏</span>
   </div>
   <div class="tb-gacha" onclick="openGacha()" title="今天吃什么">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
       <path d="M7 3h10a3 3 0 0 1 3 3v2H4V6a3 3 0 0 1 3-3Z"/>
       <rect x="3" y="8" width="18" height="10" rx="3"/>
       <circle cx="8.5" cy="13" r="1.3" fill="#fff"/>
@@ -1452,7 +1484,7 @@ body > .blob-b{
     <span class="tb-badge" id="gachaBadge" style="display:none">0</span>
   </div>
   <div class="tb-item" data-v="profile" onclick="switchTab('profile')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     <span class="tb-lbl">我的</span>
   </div>
 </div>
@@ -1611,7 +1643,7 @@ let S = {
   }catch(e){}
   // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
   if('serviceWorker' in navigator){
-    const SW_VER = '?v=v8-search-overlay-tabbar-20260823';
+    const SW_VER = '?v=v14-search-tabbar-fav-notes-20260823';
     navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
       // 发现更新后立即激活（跳过等待），下次访问就是新版本
       if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
@@ -1636,7 +1668,7 @@ let S = {
       if (!refreshing) { refreshing = true; try { location.reload(); } catch(e) {} }
     });
   }
-  renderSeg(); renderChips(); renderList(); renderFavorites(); renderProfile(); bindSearch(); updateTabbar(); updateGachaBadge();
+  renderSeg(); renderChips(); renderList(); renderFavorites(); renderProfile(); renderCollection(); bindSearch(); updateTabbar(); updateGachaBadge();
 })();
 
 /* ========== HELPERS ========== */
@@ -1764,6 +1796,12 @@ function switchTab(v){
     document.getElementById('pageTitle').textContent='我的收藏清单 💗';
     showView('viewFavorites');
     renderFavorites();
+  } else if(v==='collection'){
+    if(S.edit)toggleEdit();
+    S.view='collection';
+    document.getElementById('pageTitle').textContent='我的清单 📝';
+    showView('viewCollection');
+    renderCollection();
   } else if(v==='profile'){
     if(S.edit)toggleEdit();
     S.view='profile';
@@ -1774,7 +1812,7 @@ function switchTab(v){
   updateTabbar();
 }
 function showView(id){
-  ['viewMenu','viewFavorites','viewProfile'].forEach(v=>{
+  ['viewMenu','viewFavorites','viewCollection','viewProfile'].forEach(v=>{
     document.getElementById(v).style.display = v===id?'':'none';
   });
 }
@@ -2146,11 +2184,13 @@ function chooseW(d){
 function openGacha(){
   document.getElementById('gacha').classList.add('open');
   document.getElementById('tb').classList.add('hidden-tabbar');
+  document.getElementById('pkbar').classList.remove('show');
   refreshGacha();
 }
 function closeGacha(){
   document.getElementById('gacha').classList.remove('open');
   document.getElementById('tb').classList.remove('hidden-tabbar');
+  updatePicks();
 }
 
 function refreshGacha(){
@@ -2229,46 +2269,54 @@ function spinGacha(){
 function bindSearch(){
   const input = document.getElementById('searchInput');
   const box = document.getElementById('searchBox');
-  // Tap on search box opens the overlay for better mobile experience
-  box.addEventListener('click', ()=>{
+  
+  box.addEventListener('click', (e)=>{
     openSearch();
   });
-  input.addEventListener('focus', e=>{
-    // On mobile, native focus works but we also open overlay for better UX
-    if(window.innerWidth < 768){
+  
+  box.addEventListener('touchstart', ()=>{
+    openSearch();
+  }, {passive:true});
+  
+  input.addEventListener('focus', ()=>{
+    openSearch();
+  });
+  
+  input.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){
       e.preventDefault();
       openSearch();
     }
   });
-  input.addEventListener('input', e=>{
-    S.search = e.target.value;
-    if(S.search.length>0){
-      box.classList.add('has-text');
-    } else {
-      box.classList.remove('has-text');
+
+  document.addEventListener('keydown', e=>{
+    if(e.key==='Escape'){
+      const overlay = document.getElementById('searchOverlay');
+      if(overlay.classList.contains('show')){
+        closeSearch();
+      }
     }
-    if(S.view==='menu'){
-      renderList();
-    }
-  });
-  input.addEventListener('keydown', e=>{
-    if(e.key==='Enter') e.preventDefault();
   });
 }
 function openSearch(){
   const overlay = document.getElementById('searchOverlay');
   const input = document.getElementById('searchInput2');
   overlay.classList.add('show');
-  // Reset state
+  // Sync current search value if any
+  if(S.search){
+    input.value = S.search;
+    document.getElementById('searchInputWrap').classList.add('has-text');
+  }
+  // Reset results
   document.getElementById('searchResults').style.display='none';
-  document.getElementById('searchSuggestions').style.display='block';
+  document.getElementById('searchSuggestions').style.display='flex';
   // Focus the input
-  setTimeout(()=>{ input.focus(); }, 100);
+  setTimeout(()=>{ input.focus(); }, 300);
   // Bind input if not already
   if(!input._bound){
     input._bound = true;
-    input.addEventListener('input', e=>{
-      const val = e.target.value.trim();
+    const handleInput = () => {
+      const val = input.value.trim();
       const wrap = document.getElementById('searchInputWrap');
       if(val.length>0){
         wrap.classList.add('has-text');
@@ -2276,9 +2324,11 @@ function openSearch(){
       } else {
         wrap.classList.remove('has-text');
         document.getElementById('searchResults').style.display='none';
-        document.getElementById('searchSuggestions').style.display='block';
+        document.getElementById('searchSuggestions').style.display='flex';
       }
-    });
+    };
+    input.addEventListener('input', handleInput);
+    input.addEventListener('compositionend', handleInput);
     input.addEventListener('keydown', e=>{
       if(e.key==='Enter') e.preventDefault();
     });
@@ -2286,19 +2336,32 @@ function openSearch(){
 }
 function closeSearch(){
   const overlay = document.getElementById('searchOverlay');
-  overlay.classList.remove('show');
   const input = document.getElementById('searchInput2');
+  overlay.classList.remove('show');
+  // Sync back to main search
+  const val = input.value.trim();
+  S.search = val;
+  const mainInput = document.getElementById('searchInput');
+  mainInput.value = val;
+  if(val){
+    document.getElementById('searchBox').classList.add('has-text');
+  } else {
+    document.getElementById('searchBox').classList.remove('has-text');
+  }
+  // Update list if on menu view
+  if(S.view==='menu') renderList();
+  // Reset overlay state
   input.value = '';
   document.getElementById('searchInputWrap').classList.remove('has-text');
   document.getElementById('searchResults').style.display='none';
-  document.getElementById('searchSuggestions').style.display='block';
+  document.getElementById('searchSuggestions').style.display='flex';
 }
 function clearSearch2(){
   const input = document.getElementById('searchInput2');
   input.value = '';
   document.getElementById('searchInputWrap').classList.remove('has-text');
   document.getElementById('searchResults').style.display='none';
-  document.getElementById('searchSuggestions').style.display='block';
+  document.getElementById('searchSuggestions').style.display='flex';
   input.focus();
 }
 function quickSearch(term){
@@ -2311,11 +2374,11 @@ function doSearch(query){
   const q = query.trim().toLowerCase();
   if(!q){
     document.getElementById('searchResults').style.display='none';
-    document.getElementById('searchSuggestions').style.display='block';
+    document.getElementById('searchSuggestions').style.display='flex';
     return;
   }
   document.getElementById('searchSuggestions').style.display='none';
-  document.getElementById('searchResults').style.display='block';
+  document.getElementById('searchResults').style.display='flex';
   const pool = all();
   const results = pool.filter(d=>{
     const n = (d.name||'').toLowerCase();
@@ -2334,13 +2397,12 @@ function doSearch(query){
     return;
   }
   let html = `<div style="font-size:12px;font-weight:700;color:var(--ink-300);margin-bottom:10px;padding-top:4px">找到 ${results.length} 道结果</div>`;
-  results.forEach(d=>{
+  results.forEach((d,i)=>{
     const c = catOf(d);
     const price = d.price?.display || '';
     const shopShort = (d.shopName||'').replace(/^[一二三四五六七八九十0-9]+号\s*/,'').slice(0,10);
     const floorBadge = d.floor==='1F'?'一楼':'二楼';
-    const idx = results.indexOf(d);
-    html += `<div class="sr-item" onclick="openSearchResult(${idx})">
+    html += `<div class="sr-item" onclick="openSearchResult(${i})">
       <div class="sr-thumb">${c.emoji}</div>
       <div class="sr-info">
         <div class="sr-name">${d.name}</div>
@@ -2349,7 +2411,6 @@ function doSearch(query){
       <div class="sr-price"><em style="font-size:11px;font-weight:700">¥</em>${price.replace('元','')}</div>
     </div>`;
   });
-  // Store results for click handling
   window._searchResults = results;
   container.innerHTML = html;
 }
@@ -2364,10 +2425,6 @@ function clearSearch(){
   input.value = '';
   S.search = '';
   document.getElementById('searchBox').classList.remove('has-text');
-  if(S.view==='menu'){
-    renderList();
-  }
-  input.focus();
 }
 
 /* ========== FAVORITES ========== */
@@ -2462,6 +2519,73 @@ function removeFav(id){
   toast('已从收藏中移除 💔');
   renderFavorites();
   updateGachaBadge();
+}
+
+/* ========== COLLECTION PAGE（有备注的菜 + 收藏的菜 + 自定义菜汇总） ========== */
+let colDishes = [];
+function renderCollection(){
+  const list = document.getElementById('colList');
+  const count = document.getElementById('colCount');
+  const allPool = all();
+  
+  // 汇总所有有备注或收藏或自定义的菜
+  const result = [];
+  const seen = new Set();
+  
+  // 收藏
+  [...FAVORITES].forEach(id=>{
+    if(seen.has(id))return;
+    const d = CUSTOM.find(x=>x.id===id) || allPool.find(x=>x.id===id);
+    if(d){result.push({d, reason:'fav'}); seen.add(id);}
+  });
+  
+  // 有备注
+  Object.entries(NOTES).forEach(([id,n])=>{
+    if(seen.has(id))return;
+    if(!n || (!n.text && (!n.tags || n.tags.length===0)))return;
+    const d = CUSTOM.find(x=>x.id===id) || allPool.find(x=>x.id===id);
+    if(d){result.push({d, reason:'note'}); seen.add(id);}
+  });
+  
+  // 自定义菜
+  CUSTOM.forEach(d=>{
+    if(seen.has(d.id))return;
+    result.push({d, reason:'custom'}); seen.add(d.id);
+  });
+  
+  colDishes = result.map(r=>r.d);
+  count.textContent = result.length>0? result.length+' 道' : '';
+  
+  if(result.length===0){
+    list.innerHTML = `<div class="empty" style="padding:40px 20px"><div class="ei">📝</div><p>还没有任何记录<br/>去菜单页收藏或备注菜品吧～</p></div>`;
+    return;
+  }
+  
+  let html = '';
+  result.forEach((r,idx)=>{
+    const d = r.d;
+    const c = catOf(d);
+    const note = NOTES[d.id] || {tags:[], text:''};
+    const noteTags = (note?.tags||[]).map(k=>NOTE_TAG_LABELS[k]||k);
+    const price = d.price?.display || '';
+    const shopShort = (d.shopName||'').replace(/^[一二三四五六七八九十0-9]+号\s*/,'').slice(0,8);
+    const isFav = FAVORITES.has(d.id);
+    const reasonBadge = r.reason==='fav' ? '<span class="fi-tag" style="background:rgba(255,127,168,.15);color:#E8447C">💗 收藏</span>' 
+                      : r.reason==='note' ? '<span class="fi-tag" style="background:rgba(127,168,255,.15);color:#446BE8">📝 有备注</span>'
+                      : '<span class="fi-tag" style="background:rgba(127,200,127,.15);color:#448C44">✏️ 我添加的</span>';
+    html += `<div class="fav-item" onclick="showDetail(colDishes[${idx}])">
+      <div class="thumb" style="width:44px;height:44px;font-size:19px">${c.emoji}</div>
+      <div class="info" style="flex:1;min-width:0">
+        <div class="dname">${d.name}</div>
+        <div class="ddesc">${d.floor==='1F'?'一楼':'二楼'} · ${shopShort} · ¥${price.replace('元','')}</div>
+        <div class="fi-tags-row" style="margin-top:4px">${reasonBadge}${isFav && r.reason!=='fav'?'<span class="fi-tag" style="background:rgba(255,127,168,.15);color:#E8447C">💗 收藏</span>':''}</div>
+        ${noteTags.length>0? `<div class="fi-tags" style="margin-top:4px">${noteTags.map(t=>`<span class="fi-tag">${t}</span>`).join('')}</div>`:''}
+        ${note.text? `<div class="fi-note">📝 ${note.text}</div>`:''}
+      </div>
+      <button class="fi-del" onclick="event.stopPropagation();removeFav('${d.id}')">×</button>
+    </div>`;
+  });
+  list.innerHTML = html;
 }
 
 /* ========== PROFILE PAGE ========== */
