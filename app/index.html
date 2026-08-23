@@ -7,7 +7,10 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="食堂小馆">
 <meta name="theme-color" content="#FF7FA8">
-<link rel="manifest" href="manifest.webmanifest">
+<!-- 加版本号 cache-bust，强制浏览器 / PWA 重新读取 manifest -->
+<link rel="manifest" href="manifest.webmanifest?v=v2-liquidglass-20260823">
+<!-- iOS 下缓存更顽固：再加一个 rel=alternate 提示更新，meta 标记页面版本号 -->
+<meta name="app-version" content="2.0.0-liquidglass-20260823">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><pattern id='p' width='22' height='22' patternUnits='userSpaceOnUse'><circle cx='11' cy='11' r='3' fill='%23FFC9DB'/></pattern></defs><rect width='180' height='180' rx='40' fill='%23FFF3F7'/><rect width='180' height='180' rx='40' fill='url(%23p)'/><circle cx='90' cy='90' r='50' fill='white' stroke='%23FFD9E5' stroke-width='3'/><path d='M62 72 C57 80 68 82 63 88 M90 68 C85 76 96 78 91 84 M118 72 C113 80 124 82 119 88' stroke='%23FFB3CC' stroke-width='4.5' fill='none' stroke-linecap='round'/><path d='M46 100 A36 36 0 0 0 134 100 Z' fill='%23FF7FA8'/><circle cx='70' cy='114' r='3.5' fill='white'/><circle cx='110' cy='114' r='3.5' fill='white'/></svg>">
 <title>呆呆大王的食堂小馆 · Dot Dot Café</title>
 <style>
@@ -1219,7 +1222,33 @@ let S = {
     CUSTOM = JSON.parse(localStorage.getItem('dot_custom')||'[]');
     DEL = new Set(JSON.parse(localStorage.getItem('dot_del')||'[]'));
   }catch(e){}
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  // Service Worker: 加时间戳 cache-bust + 发现新版本立即 SKIP_WAITING 并刷新
+  if('serviceWorker' in navigator){
+    const SW_VER = '?v=v2-liquidglass-20260823';
+    navigator.serviceWorker.register('./sw.js' + SW_VER).then(reg => {
+      // 发现更新后立即激活（跳过等待），下次访问就是新版本
+      if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            nw.postMessage('SKIP_WAITING');
+            // 直接刷新一次让用户看到新版本
+            try { location.reload(); } catch(e) {}
+          }
+        });
+      });
+      // 每次启动主动检查一次 SW 是否有更新
+      try { reg.update(); } catch(e) {}
+    }).catch(()=>{});
+
+    // 上一个版本的 SW 激活了：claim 完成后刷新一下页面
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) { refreshing = true; try { location.reload(); } catch(e) {} }
+    });
+  }
   renderSeg(); renderChips(); renderList();
 })();
 
